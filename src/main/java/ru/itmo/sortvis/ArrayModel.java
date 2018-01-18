@@ -11,8 +11,8 @@ public class ArrayModel {
 
     public ArrayModel(int[] array) {
         this.array = array;
-
         this.listeners = new ArrayList<>();
+
     }
 
     public void swap(int i, int j) {
