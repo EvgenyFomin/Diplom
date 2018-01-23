@@ -58,7 +58,7 @@ class Graph {
         giveCoordinates();
         graphInitialized();
 //        print();
-        
+
     }
 
     private void sqrSearch() {

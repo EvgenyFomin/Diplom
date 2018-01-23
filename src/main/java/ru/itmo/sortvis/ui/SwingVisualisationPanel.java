@@ -22,7 +22,7 @@ public class SwingVisualisationPanel extends JPanel implements GraphModelListene
     @Override
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
-        g.setColor(Color.BLACK);
+        g.setColor(Color.WHITE);
         int i = 0, N = 20;
         int x0 = getSize().width / 2, y0 = getSize().height / 2;
 
@@ -58,7 +58,8 @@ public class SwingVisualisationPanel extends JPanel implements GraphModelListene
         for (i = 0; i < coord.length / 2; i++) {
             for (int j = 0; j < coord.length / 2; j++) {
                 if (matrix[i][j] == 1) {
-                    g.drawLine(getCoordX(i) * N + x0, getCoordY(i) * N + y0, getCoordX(j) * N + x0, getCoordY(j) * N + y0);
+                    g.drawLine(getCoordX(i) * 2 * N + x0, getCoordY(i) * 2 * N + y0,
+                            getCoordX(j) * 2 * N + x0, getCoordY(j) * 2 * N + y0);
 
                 }
 

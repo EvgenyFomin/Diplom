@@ -2,6 +2,7 @@ package ru.itmo.sortvis;
 import ru.itmo.sortvis.ui.SwingVisualisationPanel;
 
 import javax.swing.*;
+import java.awt.*;
 
 public class Launcher {
     public static void main(String[] args) {
@@ -15,6 +16,7 @@ public class Launcher {
                 frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
                 frame.setLocationByPlatform(true);
                 frame.setTitle("Graph Visualisation");
+                swingVisualisationPanel.setBackground(Color.BLACK);
 
                 frame.add(swingVisualisationPanel);
 
