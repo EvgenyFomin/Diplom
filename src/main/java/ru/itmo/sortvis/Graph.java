@@ -2,7 +2,7 @@ package ru.itmo.sortvis;
 
 import java.util.*;
 
-class Graph {
+public class Graph {
     private static final int N = 20;
     private byte[][] matrix;
     private final List<GraphModelListener> listenerList;
@@ -69,8 +69,16 @@ class Graph {
 
     private void graphInitialized() {
         for (GraphModelListener obj : listenerList) {
-            obj.someChanges(matrix, coord);
+            obj.modelChanged();
         }
+    }
+
+    public int getVertexCount() {
+        return N;
+    }
+
+    public byte getEdge(int i, int j) {
+        return matrix[i][j];
     }
 
     private double getCoordX(int vertex) {
