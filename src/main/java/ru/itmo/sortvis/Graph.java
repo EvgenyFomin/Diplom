@@ -3,7 +3,7 @@ package ru.itmo.sortvis;
 import java.util.*;
 
 class Graph {
-    private static final int N = 20;
+    private static final int N = 5;
     private byte[][] matrix;
     private final List<GraphModelListener> listenerList;
     private double[] coord;
@@ -26,13 +26,18 @@ class Graph {
             }
         }
         giveCoordinates();
-        print();
+//        print();
         graphInitialized();
     }
 
     private void giveCoordinates() {
-        setCoordX(0, N / 2);
-        setCoordY(0, N / 2);
+
+        // Просто начальные координаты первой вершины. Могут быть любыми, однако в зависимости от них меняется общий размер графа.
+
+        setCoordX(0, 15);
+        setCoordY(0, 0);
+
+        // Для равномерного распределения вершин по окружности используется матрица поворота вектора на угол angle.
 
         double angle = 2 * Math.PI / N;
         for (int i = 1; i < N; i++) {
@@ -63,7 +68,7 @@ class Graph {
         }
     }
 
-    public void addModelListener(GraphModelListener gr) {
+    void addModelListener(GraphModelListener gr) {
         listenerList.add(gr);
     }
 

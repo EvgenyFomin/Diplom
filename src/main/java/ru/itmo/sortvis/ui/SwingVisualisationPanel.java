@@ -59,8 +59,18 @@ public class SwingVisualisationPanel extends JPanel implements GraphModelListene
                 if (matrix[i][j] == 1) {
                     g.drawLine(getCoordX(i) * N + x0, getCoordY(i) * N + y0,
                             getCoordX(j) * N + x0, getCoordY(j) * N + y0);
+
                 }
             }
+        }
+
+        g.setColor(Color.RED);
+        g.setStroke(new BasicStroke(5));
+
+        for (int i = 0; i < coord.length / 2; i++) {
+            g.drawLine(getCoordX(i) * N + x0, getCoordY(i) * N + y0,
+                    getCoordX(i) * N + x0, getCoordY(i) * N + y0);
+
         }
     }
 
