@@ -15,16 +15,17 @@ public class SwingVisualisationPanel extends JPanel implements GraphModelListene
     private static final int sizeOfGrid = 20;
 
     private Graph graph;
+    private int vertexCount;
     private Map<Integer, Pair<Double, Double>> coord;
 
     public SwingVisualisationPanel(Graph graph) {
         this.graph = graph;
         this.coord = new HashMap<>();
+        this.vertexCount = graph.getVertexCount();
         calculateCoords();
     }
 
     private void calculateCoords() {
-        int vertexCount = graph.getVertexCount();
         coord.put(0, new Pair(vertexCount / 2.0, vertexCount / 2.0));
         double angle = 2 * Math.PI / vertexCount;
         for (int i = 1; i < vertexCount; i++) {
@@ -79,13 +80,29 @@ public class SwingVisualisationPanel extends JPanel implements GraphModelListene
 
         g.setStroke(new BasicStroke(1));
 
-        for (int i = 0; i < graph.getVertexCount(); i++) {
-            for (int j = i + 1; j < graph.getVertexCount(); j++) {
+        for (int i = 0; i < vertexCount; i++) {
+            for (int j = i + 1; j < vertexCount; j++) {
                 if (graph.getEdge(i, j) == 1) {
-                    g.drawLine((int) Math.round(coord.get(i).getKey() * sizeOfGrid + x0), (int) Math.round(coord.get(i).getValue() * sizeOfGrid + y0),
-                            (int) Math.round(coord.get(j).getKey() * sizeOfGrid + x0), (int) Math.round(coord.get(j).getValue() * sizeOfGrid + y0));
+                    g.drawLine(
+                            (int) Math.round(coord.get(i).getKey() * sizeOfGrid + x0),
+                            (int) Math.round(coord.get(i).getValue() * sizeOfGrid + y0),
+                            (int) Math.round(coord.get(j).getKey() * sizeOfGrid + x0),
+                            (int) Math.round(coord.get(j).getValue() * sizeOfGrid + y0)
+                    );
                 }
             }
+        }
+
+        g.setStroke(new BasicStroke(4));
+        g.setColor(Color.RED);
+
+        for (int i = 0; i < vertexCount; i++) {
+            g.drawLine(
+                    (int) Math.round(coord.get(i).getKey() * sizeOfGrid + x0),
+                    (int) Math.round(coord.get(i).getValue() * sizeOfGrid + y0),
+                    (int) Math.round(coord.get(i).getKey() * sizeOfGrid + x0),
+                    (int) Math.round(coord.get(i).getValue() * sizeOfGrid + y0)
+            );
         }
     }
 }
