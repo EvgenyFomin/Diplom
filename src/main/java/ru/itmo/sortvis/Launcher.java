@@ -8,7 +8,10 @@ public class Launcher {
         SwingUtilities.invokeLater(new Runnable() {
             @Override
             public void run() {
-                SwingVisualisationPanel swingVisualisationPanel = new SwingVisualisationPanel();
+                Graph graph = new Graph();
+                graph.initGraph();
+
+                SwingVisualisationPanel swingVisualisationPanel = new SwingVisualisationPanel(graph);
                 JFrame frame = new JFrame();
                 frame.setSize(640, 480);
                 frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -18,9 +21,8 @@ public class Launcher {
                 frame.add(swingVisualisationPanel);
                 frame.setVisible(true);
 
-                Graph graph = new Graph();
                 graph.addModelListener(swingVisualisationPanel);
-                graph.initGraph();
+
             }
         });
     }
