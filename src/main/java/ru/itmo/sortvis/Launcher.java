@@ -8,7 +8,8 @@ public class Launcher {
         SwingUtilities.invokeLater(new Runnable() {
             @Override
             public void run() {
-                Graph graph = new Graph();
+//                Graph graph = new MatrixGraph();
+                Graph graph = new AdjListGraph();
                 graph.initGraph();
 
                 SwingVisualisationPanel swingVisualisationPanel = new SwingVisualisationPanel(graph);
