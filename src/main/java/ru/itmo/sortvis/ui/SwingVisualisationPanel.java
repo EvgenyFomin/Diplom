@@ -17,20 +17,26 @@ public class SwingVisualisationPanel extends JPanel implements GraphModelListene
     private Graph graph;
     private int vertexCount;
     private Map<Integer, Pair<Double, Double>> coord;
+    // координаты для вершин, чтобы не залазили на граф, как если использовать координаты самих точек
+    private Map<Integer, Pair<Double, Double>> vertexCoord;
 
     public SwingVisualisationPanel(Graph graph) {
         this.graph = graph;
         this.coord = new HashMap<>();
+        this.vertexCoord = new HashMap<>();
         this.vertexCount = graph.getVertexCount();
         calculateCoords();
     }
 
     private void calculateCoords() {
         coord.put(0, new Pair(vertexCount / 2.0, vertexCount / 2.0));
+        vertexCoord.put(0, new Pair(vertexCount / 2.0 + 0.4, vertexCount / 2.0 + 0.4));
         double angle = 2 * Math.PI / vertexCount;
         for (int i = 1; i < vertexCount; i++) {
             coord.put(i, new Pair<>(Math.cos(angle) * coord.get(i - 1).getKey() - Math.sin(angle) * coord.get(i - 1).getValue(),
                     Math.sin(angle) * coord.get(i - 1).getKey() + Math.cos(angle) * coord.get(i - 1).getValue()));
+            vertexCoord.put(i, new Pair<>(Math.cos(angle) * vertexCoord.get(i - 1).getKey() - Math.sin(angle) * vertexCoord.get(i - 1).getValue(),
+                    Math.sin(angle) * vertexCoord.get(i - 1).getKey() + Math.cos(angle) * vertexCoord.get(i - 1).getValue()));
         }
     }
 
@@ -64,8 +70,6 @@ public class SwingVisualisationPanel extends JPanel implements GraphModelListene
             g.drawLine(i, 0, i, getSize().height);
         }
 
-        // Граф
-
         g.setColor(Color.BLACK);
 
         // Определение ближайших начальных координат, которые делятся на N
@@ -77,6 +81,8 @@ public class SwingVisualisationPanel extends JPanel implements GraphModelListene
         while (y0 % sizeOfGrid != 0) {
             y0 += 1;
         }
+
+        // Граф
 
         g.setStroke(new BasicStroke(1));
 
@@ -102,6 +108,10 @@ public class SwingVisualisationPanel extends JPanel implements GraphModelListene
                     (int) Math.round(coord.get(i).getValue() * sizeOfGrid + y0),
                     (int) Math.round(coord.get(i).getKey() * sizeOfGrid + x0),
                     (int) Math.round(coord.get(i).getValue() * sizeOfGrid + y0)
+            );
+            g.drawString(Integer.toString(i + 1),
+                    (int) Math.round(vertexCoord.get(i).getKey() * sizeOfGrid + x0) - 4,
+                    (int) Math.round(vertexCoord.get(i).getValue() * sizeOfGrid + y0) + 4
             );
         }
     }

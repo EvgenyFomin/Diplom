@@ -6,14 +6,9 @@ public class Graph {
     private static final int N = 20;
     private byte[][] matrix;
     private final List<GraphModelListener> listenerList;
-    private double[] coord;
 
     public Graph() {
         listenerList = new ArrayList<>();
-        coord = new double[2 * N];
-        for (int i = 0; i < coord.length; i++) {
-            coord[i] = N + 1;
-        }
     }
 
     void initGraph() {
