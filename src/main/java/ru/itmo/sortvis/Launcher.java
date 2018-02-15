@@ -8,8 +8,8 @@ public class Launcher {
         SwingUtilities.invokeLater(new Runnable() {
             @Override
             public void run() {
-//                Graph graph = new MatrixGraph();
-                Graph graph = new AdjListGraph();
+                Graph graph = new MatrixGraph();
+//                Graph graph = new AdjListGraph();
                 graph.initGraph();
                 GraphWalker graphWalker = new GraphWalker(graph);
 
@@ -25,8 +25,10 @@ public class Launcher {
 
                 graph.addModelListener(swingVisualisationPanel);
 
-                // обход вглубину
-                graphWalker.dfs(0);
+                // обход в глубину
+//                graphWalker.dfs(0);
+                // обход в ширину
+//                graphWalker.bfs(0, 3);
             }
         });
     }
