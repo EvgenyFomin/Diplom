@@ -88,7 +88,7 @@ public class SwingVisualisationPanel extends JPanel implements GraphModelListene
 
         for (int i = 0; i < vertexCount; i++) {
             for (int j = i + 1; j < vertexCount; j++) {
-                if (graph.getEdge(i, j) != 1) {
+                if (graph.getEdge(i, j) != 0) {
                     g.drawLine(
                             (int) Math.round(coord.get(i).getKey() * sizeOfGrid + x0),
                             (int) Math.round(coord.get(i).getValue() * sizeOfGrid + y0),
@@ -109,7 +109,7 @@ public class SwingVisualisationPanel extends JPanel implements GraphModelListene
                     (int) Math.round(coord.get(i).getKey() * sizeOfGrid + x0),
                     (int) Math.round(coord.get(i).getValue() * sizeOfGrid + y0)
             );
-            g.drawString(Integer.toString(i + 1),
+            g.drawString(Integer.toString(i),
                     (int) Math.round(vertexCoord.get(i).getKey() * sizeOfGrid + x0) - 4,
                     (int) Math.round(vertexCoord.get(i).getValue() * sizeOfGrid + y0) + 4
             );

@@ -3,7 +3,7 @@ package ru.itmo.sortvis;
 import java.util.*;
 
 public class MatrixGraph implements Graph {
-    private static final int N = 20;
+    private static final int N = 6;
     private int[][] matrix;
     private final List<GraphModelListener> listenerList;
 
@@ -22,6 +22,7 @@ public class MatrixGraph implements Graph {
             }
         }
         graphInitialized();
+        print();
     }
 
     public void addModelListener(GraphModelListener gr) {
@@ -38,28 +39,29 @@ public class MatrixGraph implements Graph {
         return matrix[i][j];
     }
 
+    @Override
+    public LinkedList<Integer> getNeighbours(int i) {
+        LinkedList<Integer> neighbourList = new LinkedList<>();
+        for (int j = 0; j < N; j++) {
+            if (matrix[i][j] >= 1) {
+                neighbourList.add(j);
+            }
+        }
+        return neighbourList;
+    }
+
     private void graphInitialized() {
         for (GraphModelListener obj : listenerList) {
             obj.modelChanged();
         }
     }
 
-    //    void print() {
-//        for (int i = 0; i < N; i++) {
-//            for (int j = 0; j < N; j++) {
-//                System.out.print(matrix[i][j] + " ");
-//            }
-//            System.out.println();
-//        }
-//
-//        for (int i = 0; i < N; i++) {
-//            System.out.println("Координаты вершины " + i + " (" + getCoordX(i) + ", " + getCoordY(i) + ")");
-//        }
-//
-//        System.out.println();
-//
-//        for (int i = 0; i < N; i++) {
-//            System.out.println("Координаты вершины " + i + " (" + Math.round(getCoordX(i)) + ", " + Math.round(getCoordY(i)) + ")");
-//        }
-//    }
+        void print() {
+        for (int i = 0; i < N; i++) {
+            for (int j = 0; j < N; j++) {
+                System.out.print(matrix[i][j] + " ");
+            }
+            System.out.println();
+        }
+    }
 }

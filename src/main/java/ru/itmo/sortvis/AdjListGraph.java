@@ -3,7 +3,7 @@ package ru.itmo.sortvis;
 import java.util.*;
 
 public class AdjListGraph implements Graph {
-    private static final int N = 20;
+    private static final int N = 6;
     private LinkedList<Integer>[] adjList;
     private final List<GraphModelListener> listenerList;
     private Map<Integer, Integer> weight;
@@ -47,6 +47,11 @@ public class AdjListGraph implements Graph {
     @Override
     public void addModelListener(GraphModelListener gr) {
         listenerList.add(gr);
+    }
+
+    @Override
+    public LinkedList<Integer> getNeighbours(int i) {
+        return adjList[i];
     }
 
     private void graphInitialized() {

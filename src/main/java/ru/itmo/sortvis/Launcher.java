@@ -11,6 +11,7 @@ public class Launcher {
 //                Graph graph = new MatrixGraph();
                 Graph graph = new AdjListGraph();
                 graph.initGraph();
+                GraphWalker graphWalker = new GraphWalker(graph);
 
                 SwingVisualisationPanel swingVisualisationPanel = new SwingVisualisationPanel(graph);
                 JFrame frame = new JFrame();
@@ -24,6 +25,8 @@ public class Launcher {
 
                 graph.addModelListener(swingVisualisationPanel);
 
+                // обход вглубину
+                graphWalker.dfs(0);
             }
         });
     }
