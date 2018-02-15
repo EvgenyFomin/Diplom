@@ -27,8 +27,7 @@ public class AdjListGraph implements Graph {
                     adjList[i].add(j);
                     adjList[j].add(i);
                     weight.put(hashing(i, j), n);
-                }
-                else weight.put(hashing(i, j), 0);
+                } else weight.put(hashing(i, j), 0);
             }
         }
         graphInitialized();

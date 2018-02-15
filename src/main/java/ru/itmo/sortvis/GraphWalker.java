@@ -23,7 +23,7 @@ public class GraphWalker {
         System.out.println("in " + i);
         color[i] = 1;
         LinkedList<Integer> neighbours = graph.getNeighbours(i);
-        for (Integer obj: neighbours) {
+        for (Integer obj : neighbours) {
             if (color[obj] == 0) {
                 dfs(obj);
             }
@@ -33,30 +33,30 @@ public class GraphWalker {
     }
 
     public void bfs(int u, int v) {
-        int[] from = new int[vertexCount];
-        LinkedList<Integer> way = new LinkedList<>();
+        int[] from = new int[vertexCount]; // вспомогательный массив, который хранит вершины, откуда мы пришли. Это чтобы путь крч построить
+        LinkedList<Integer> way = new LinkedList<>(); // путь от u до v. Сюда кладем уже верный путь от u до v.
         boolean isWayExists = false;
-        Queue<Integer> currantVertexQueue = new LinkedList<>();
-        currantVertexQueue.add(u);
+        Queue<Integer> currentVertexQueue = new LinkedList<>();
+        currentVertexQueue.add(u);
         color[u] = 1;
         distances[u] = 0;
 
-        while (!currantVertexQueue.isEmpty()) {
-            if (currantVertexQueue.peek() == v) {
+        while (!currentVertexQueue.isEmpty()) {
+            if (currentVertexQueue.peek() == v) {
                 isWayExists = true;
                 break;
             }
 
-            for (Integer obj: graph.getNeighbours(currantVertexQueue.peek())) {
+            for (Integer obj : graph.getNeighbours(currentVertexQueue.peek())) {
                 if (color[obj] == 0) {
                     color[obj] = 1;
-                    distances[obj] = distances[currantVertexQueue.peek()] + 1;
-                    currantVertexQueue.add(obj);
-                    from[obj] = currantVertexQueue.peek();
+                    distances[obj] = distances[currentVertexQueue.peek()] + 1;
+                    currentVertexQueue.add(obj);
+                    from[obj] = currentVertexQueue.peek();
                 }
             }
 
-            currantVertexQueue.poll();
+            currentVertexQueue.poll();
         }
 
         if (isWayExists) {
@@ -69,14 +69,13 @@ public class GraphWalker {
 
             System.out.print("The way is [ ");
 
-            for (Integer obj: way) {
+            for (Integer obj : way) {
                 System.out.print(obj + " ");
             }
 
             System.out.println("]");
             System.out.println("distance = " + way.size());
-        }
-        else {
+        } else {
             System.out.println("The way doesn't exists");
         }
     }

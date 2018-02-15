@@ -1,4 +1,5 @@
 package ru.itmo.sortvis;
+
 import ru.itmo.sortvis.ui.SwingVisualisationPanel;
 
 import javax.swing.*;
