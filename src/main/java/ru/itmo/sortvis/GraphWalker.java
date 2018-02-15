@@ -20,12 +20,21 @@ public class GraphWalker {
     }
 
     public void dfs(int i) {
+        depthFirstSearch(i);
+        for (int j = 0; i < color.length; i++) {
+            if (color[j] == 0) {
+                dfs(j);
+            }
+        }
+    }
+
+    private void depthFirstSearch(int i) {
         System.out.println("in " + i);
         color[i] = 1;
         LinkedList<Integer> neighbours = graph.getNeighbours(i);
         for (Integer obj : neighbours) {
             if (color[obj] == 0) {
-                dfs(obj);
+                depthFirstSearch(obj);
             }
         }
         color[i] = 2;
