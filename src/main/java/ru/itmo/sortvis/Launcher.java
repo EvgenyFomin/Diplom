@@ -30,6 +30,8 @@ public class Launcher {
 //                graphWalker.dfs(0);
                 // обход в ширину
 //                graphWalker.bfs(0, 3);
+                // Дейкстра
+//                graphWalker.dijkstra(2);
             }
         });
     }
