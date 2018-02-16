@@ -17,10 +17,11 @@ public class MatrixGraph implements Graph {
         for (int i = 0; i < N; i++) {
             matrix[i][i] = -1;
             for (int j = i + 1; j < N; j++) {
-                matrix[i][j] = new Random().nextInt(2);
+                matrix[i][j] = new Random().nextInt(20);
                 matrix[j][i] = matrix[i][j];
             }
         }
+
         graphInitialized();
         print();
     }
@@ -59,7 +60,7 @@ public class MatrixGraph implements Graph {
     void print() {
         for (int i = 0; i < N; i++) {
             for (int j = 0; j < N; j++) {
-                System.out.print(matrix[i][j] + " ");
+                System.out.printf("%4d", matrix[i][j]);
             }
             System.out.println();
         }
