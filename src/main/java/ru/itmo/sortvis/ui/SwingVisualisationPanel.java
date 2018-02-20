@@ -109,7 +109,7 @@ public class SwingVisualisationPanel extends JPanel implements GraphModelListene
                     (int) Math.round(coord.get(i).getKey() * sizeOfGrid + x0),
                     (int) Math.round(coord.get(i).getValue() * sizeOfGrid + y0)
             );
-            g.drawString(Integer.toString(i),
+            g.drawString(graph.getData(i).toString(),
                     (int) Math.round(vertexCoord.get(i).getKey() * sizeOfGrid + x0) - 4,
                     (int) Math.round(vertexCoord.get(i).getValue() * sizeOfGrid + y0) + 4
             );

@@ -1,14 +1,18 @@
 package ru.itmo.sortvis;
 
+import org.apache.commons.lang3.RandomStringUtils;
+
 import java.util.*;
 
-public class MatrixGraph implements Graph {
+public class MatrixGraph implements Graph<String> {
     private static final int N = 6;
     private int[][] matrix;
+    private final String[] data;
     private final List<GraphModelListener> listenerList;
 
     public MatrixGraph() {
-        listenerList = new ArrayList<>();
+        this.listenerList = new ArrayList<>();
+        this.data = new String[N];
     }
 
     @Override
@@ -16,6 +20,7 @@ public class MatrixGraph implements Graph {
         matrix = new int[N][N];
         for (int i = 0; i < N; i++) {
             matrix[i][i] = -1;
+            data[i] = RandomStringUtils.randomAlphabetic(3).toUpperCase();
             for (int j = i + 1; j < N; j++) {
                 matrix[i][j] = new Random().nextInt(20);
                 matrix[j][i] = matrix[i][j];
@@ -33,6 +38,11 @@ public class MatrixGraph implements Graph {
     @Override
     public int getVertexCount() {
         return N;
+    }
+
+    @Override
+    public String getData(int i) {
+        return data[i];
     }
 
     @Override

@@ -1,15 +1,17 @@
 package ru.itmo.sortvis;
 
-import java.util.LinkedList;
+import java.util.List;
 
-public interface Graph {
+public interface Graph<T> {
     void initGraph();
 
     int getVertexCount();
+
+    T getData(int i);
 
     int getEdge(int i, int j);
 
     void addModelListener(GraphModelListener gr);
 
-    LinkedList<Integer> getNeighbours(int i);
+    List<Integer> getNeighbours(int i);
 }

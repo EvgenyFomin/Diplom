@@ -1,9 +1,6 @@
 package ru.itmo.sortvis;
 
-import java.util.Comparator;
-import java.util.LinkedList;
-import java.util.PriorityQueue;
-import java.util.Queue;
+import java.util.*;
 
 // Сравнение двух вершин по дистанции
 
@@ -22,13 +19,13 @@ class CompareByDistance implements Comparator<Integer> {
     }
 }
 
-public class GraphWalker {
-    private Graph graph;
+public class GraphWalker<T> {
+    private Graph<T> graph;
     private byte[] color;
     private int[] distance;
     private int[] from;
 
-    GraphWalker(Graph graph) {
+    GraphWalker(Graph<T> graph) {
         this.graph = graph;
         int vertexCount = graph.getVertexCount();
         color = new byte[vertexCount];
@@ -51,7 +48,7 @@ public class GraphWalker {
     private void depthFirstSearch(int i) {
         System.out.println("in " + i);
         color[i] = 1;
-        LinkedList<Integer> neighbours = graph.getNeighbours(i);
+        List<Integer> neighbours = graph.getNeighbours(i);
         for (Integer obj : neighbours) {
             if (color[obj] == 0) {
                 depthFirstSearch(obj);
