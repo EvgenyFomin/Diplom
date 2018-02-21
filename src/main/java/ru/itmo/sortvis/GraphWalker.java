@@ -1,34 +1,16 @@
 package ru.itmo.sortvis;
 
-import java.util.Comparator;
-import java.util.LinkedList;
-import java.util.PriorityQueue;
-import java.util.Queue;
+import java.util.*;
 
-// Сравнение двух вершин по дистанции
-
-class CompareByDistance implements Comparator<Integer> {
-    int[] distance;
-
-    public CompareByDistance(int[] distance) {
-        this.distance = distance;
-    }
-
-    @Override
-    public int compare(Integer obj1, Integer obj2) {
-        return distance[obj1] - distance[obj2];
-    }
-}
-
-public class GraphWalker {
-    private Graph graph;
+public class GraphWalker<T> {
+    private GraphModel<T> graphModel;
     private byte[] color;
     private int[] distance;
     private int[] from;
 
-    GraphWalker(Graph graph) {
-        this.graph = graph;
-        int vertexCount = graph.getVertexCount();
+    GraphWalker(GraphModel<T> graphModel) {
+        this.graphModel = graphModel;
+        int vertexCount = graphModel.getVertexCount();
         color = new byte[vertexCount];
         for (int i = 0; i < vertexCount; i++) {
             color[i] = 0;
@@ -49,7 +31,7 @@ public class GraphWalker {
     private void depthFirstSearch(int i) {
         System.out.println("in " + i);
         color[i] = 1;
-        LinkedList<Integer> neighbours = graph.getNeighbours(i);
+        List<Integer> neighbours = graphModel.getNeighbours(i);
         for (Integer obj : neighbours) {
             if (color[obj] == 0) {
                 depthFirstSearch(obj);
@@ -73,7 +55,7 @@ public class GraphWalker {
                 break;
             }
 
-            for (Integer obj : graph.getNeighbours(currentVertexQueue.peek())) {
+            for (Integer obj : graphModel.getNeighbours(currentVertexQueue.peek())) {
                 if (color[obj] == 0) {
                     color[obj] = 1;
                     distance[obj] = distance[currentVertexQueue.peek()] + 1;
@@ -118,15 +100,15 @@ public class GraphWalker {
         while (!vertexPriorityQueue.isEmpty()) {
             int currentVertex = vertexPriorityQueue.poll();
             color[currentVertex] = 1;
-            for (Integer obj : graph.getNeighbours(currentVertex)) {
+            for (Integer obj : graphModel.getNeighbours(currentVertex)) {
                 if (color[obj] == 0) {
                     neighbours.add(obj);
                 }
             }
 
             for (Integer obj : neighbours) {
-                if (distance[obj] > distance[currentVertex] + graph.getEdge(obj, currentVertex)) {
-                    distance[obj] = distance[currentVertex] + graph.getEdge(obj, currentVertex);
+                if (distance[obj] > distance[currentVertex] + graphModel.getEdge(obj, currentVertex)) {
+                    distance[obj] = distance[currentVertex] + graphModel.getEdge(obj, currentVertex);
                     from[obj] = currentVertex;
                 }
             }

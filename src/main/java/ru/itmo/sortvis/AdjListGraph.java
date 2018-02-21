@@ -2,7 +2,7 @@ package ru.itmo.sortvis;
 
 import java.util.*;
 
-public class AdjListGraph implements Graph {
+public class AdjListGraph implements GraphModel<String> {
     private static final int N = 6;
     private LinkedList<Integer>[] adjList;
     private final List<GraphModelListener> listenerList;
@@ -36,6 +36,11 @@ public class AdjListGraph implements Graph {
     @Override
     public int getVertexCount() {
         return N;
+    }
+
+    @Override
+    public String getData(int i) {
+        return null;
     }
 
     @Override

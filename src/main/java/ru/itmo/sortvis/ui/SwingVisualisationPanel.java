@@ -2,7 +2,7 @@ package ru.itmo.sortvis.ui;
 
 import com.google.common.collect.ImmutableMap;
 import javafx.util.Pair;
-import ru.itmo.sortvis.Graph;
+import ru.itmo.sortvis.GraphModel;
 import ru.itmo.sortvis.GraphModelListener;
 
 import javax.swing.*;
@@ -14,17 +14,17 @@ public class SwingVisualisationPanel extends JPanel implements GraphModelListene
 
     private static final int sizeOfGrid = 20;
 
-    private Graph graph;
+    private GraphModel graphModel;
     private int vertexCount;
     private Map<Integer, Pair<Double, Double>> coord;
     // координаты для вершин, чтобы не залазили на граф, как если использовать координаты самих точек
     private Map<Integer, Pair<Double, Double>> vertexCoord;
 
-    public SwingVisualisationPanel(Graph graph) {
-        this.graph = graph;
+    public SwingVisualisationPanel(GraphModel graphModel) {
+        this.graphModel = graphModel;
         this.coord = new HashMap<>();
         this.vertexCoord = new HashMap<>();
-        this.vertexCount = graph.getVertexCount();
+        this.vertexCount = graphModel.getVertexCount();
         calculateCoords();
     }
 
@@ -88,7 +88,7 @@ public class SwingVisualisationPanel extends JPanel implements GraphModelListene
 
         for (int i = 0; i < vertexCount; i++) {
             for (int j = i + 1; j < vertexCount; j++) {
-                if (graph.getEdge(i, j) != 0) {
+                if (graphModel.getEdge(i, j) != 0) {
                     g.drawLine(
                             (int) Math.round(coord.get(i).getKey() * sizeOfGrid + x0),
                             (int) Math.round(coord.get(i).getValue() * sizeOfGrid + y0),
