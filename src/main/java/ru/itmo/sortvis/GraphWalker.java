@@ -15,10 +15,8 @@ class CompareByDistance implements Comparator<Integer> {
     }
 
     @Override
-    public int compare(Integer o1, Integer o2) {
-        int i = distance[o1];
-        int j = distance[o2];
-        return i - j;
+    public int compare(Integer obj1, Integer obj2) {
+        return distance[obj1] - distance[obj2];
     }
 }
 
