@@ -29,14 +29,37 @@ public class GraphWalker<T> {
     }
 
     private void depthFirstSearch(int i) {
+        // Тут я пытаюсь спать 1 секунду, чтобы закрасить вершину, в которую я вхожу
+
+        try {
+            Thread.sleep(1000);
+            Bridge.nodeIn(Integer.toString(i));
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
         System.out.println("in " + i);
+
         color[i] = 1;
         List<Integer> neighbours = graphModel.getNeighbours(i);
         for (Integer obj : neighbours) {
             if (color[obj] == 0) {
+//                Bridge.edgeForward(i, obj);
+//                from[i] = obj;
                 depthFirstSearch(obj);
             }
         }
+
+//         Тут я пытаюсь спать 1 секунду, чтобы закрасить вершину, из которой я выхожу
+
+        try {
+            Thread.sleep(1000);
+            Bridge.nodeOut(Integer.toString(i));
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+//        Bridge.edgeBack(i, from[i]);
         color[i] = 2;
         System.out.println("out " + i);
     }

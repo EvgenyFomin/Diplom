@@ -1,0 +1,36 @@
+node {
+	shape: box;
+	size: 15px, 15px;
+	fill-mode: plain;   /* Default.          */
+	fill-color: green;    /* Default is black. */
+}
+
+edge.forward {
+    shape: line;
+	fill-color: blue;
+	arrow-size: 5px, 2px;
+}
+
+edge.back {
+    shape: line;
+	fill-color: black;
+	arrow-size: 5px, 2px;
+}
+
+node.in {
+    shape: box;
+	size: 15px, 15px;
+	fill-mode: plain;
+	fill-color: yellow;
+	stroke-mode: plain;
+	stroke-color: blue;
+}
+
+node.out {
+    shape: box;
+	size: 15px, 15px;
+	fill-mode: plain;
+	fill-color: red;
+	stroke-mode: plain;
+	stroke-color: blue;
+}

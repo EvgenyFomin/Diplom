@@ -15,9 +15,8 @@ public class Launcher {
 //                Graph graphModel = new AdjListGraph();
                 graphModel.initGraph();
 
-                Bridge.convertGraph(graphModel);
-
-//                GraphWalker graphWalker = new GraphWalker(graphModel);
+                GraphWalker graphWalker = new GraphWalker(graphModel);
+                new Bridge().convertGraph(graphModel);
 
 //                SwingVisualisationPanel swingVisualisationPanel = new SwingVisualisationPanel(graphModel);
 //                JFrame frame = new JFrame();
@@ -25,10 +24,10 @@ public class Launcher {
 //                frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 //                frame.setLocationByPlatform(true);
 //                frame.setTitle("Graph Visualisation");
-
+//
 //                frame.add(swingVisualisationPanel);
 //                frame.setVisible(true);
-
+//
 //                graphModel.addModelListener(swingVisualisationPanel);
 
 //                org.graphstream.graph.Graph graph2 = new SingleGraph("Tutorial 1");
@@ -46,7 +45,7 @@ public class Launcher {
 
 
                 // обход в глубину
-//                graphWalker.dfs(0);
+                graphWalker.dfs(0);
                 // обход в ширину
 //                graphWalker.bfs(0, 3);
                 // Дейкстра
