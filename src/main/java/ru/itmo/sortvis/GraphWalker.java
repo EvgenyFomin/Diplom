@@ -22,7 +22,7 @@ public class GraphWalker<T> {
     public void dfs(int i) {
         from[i] = -1;
         depthFirstSearch(i);
-        for (int j = 0; i < color.length; i++) {
+        for (int j = 0; j < color.length; j++) {
             if (color[j] == 0) {
                 from[j] = -1;
                 depthFirstSearch(j);
