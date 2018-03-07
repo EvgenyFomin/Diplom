@@ -20,23 +20,18 @@ public class GraphWalker<T> {
     }
 
     public void dfs(int i) {
+        from[i] = -1;
         depthFirstSearch(i);
         for (int j = 0; i < color.length; i++) {
             if (color[j] == 0) {
+                from[j] = -1;
                 depthFirstSearch(j);
             }
         }
     }
 
     private void depthFirstSearch(int i) {
-        // Тут я пытаюсь спать 1 секунду, чтобы закрасить вершину, в которую я вхожу
-
-        try {
-            Thread.sleep(1000);
-            Bridge.nodeIn(Integer.toString(i));
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+        Bridge.nodeIn(Integer.toString(i));
 
         System.out.println("in " + i);
 
@@ -44,22 +39,26 @@ public class GraphWalker<T> {
         List<Integer> neighbours = graphModel.getNeighbours(i);
         for (Integer obj : neighbours) {
             if (color[obj] == 0) {
-//                Bridge.edgeForward(i, obj);
-//                from[i] = obj;
+                try {
+                    Thread.sleep(1000);
+                    Bridge.edgeForward(i, obj);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                from[obj] = i;
                 depthFirstSearch(obj);
             }
         }
 
-//         Тут я пытаюсь спать 1 секунду, чтобы закрасить вершину, из которой я выхожу
-
         try {
             Thread.sleep(1000);
             Bridge.nodeOut(Integer.toString(i));
+            if (from[i] != -1)
+                Bridge.edgeBack(i, from[i]);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
 
-//        Bridge.edgeBack(i, from[i]);
         color[i] = 2;
         System.out.println("out " + i);
     }

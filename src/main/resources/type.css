@@ -9,29 +9,27 @@ node {
 
 edge.forward {
     shape: line;
-	fill-color: blue;
+	fill-color: yellow;
 	arrow-size: 5px, 2px;
 }
 
 edge.back {
     shape: line;
-	fill-color: black;
+	fill-color: red;
 	arrow-size: 5px, 2px;
 }
 
 node.in {
-    shape: box;
 	size: 15px, 15px;
-	fill-mode: gradient-radial;
+	fill-mode: plain;
 	fill-color: yellow;
 	stroke-mode: plain;
 	stroke-color: blue;
 }
 
 node.out {
-    shape: box;
 	size: 15px, 15px;
-	fill-mode: gradient-radial;
+	fill-mode: plain;
 	fill-color: red;
 	stroke-mode: plain;
 	stroke-color: blue;

@@ -40,13 +40,13 @@ public class Bridge {
     // Пока вызываю эти методы из класса GraphWalker
 
     public static void edgeForward(int i, int j) {
-        if (newGraph.getEdge(Integer.toString(i) + Integer.toString(j)).isDirected())
+        if (newGraph.getEdge(Integer.toString(i) + Integer.toString(j)) != null)
             newGraph.getEdge(Integer.toString(i) + Integer.toString(j)).addAttribute("ui.class", "forward");
         else newGraph.getEdge(Integer.toString(j) + Integer.toString(i)).addAttribute("ui.class", "forward");
     }
 
     public static void edgeBack(int i, int j) {
-        if (newGraph.getEdge(Integer.toString(i) + Integer.toString(j)).isDirected())
+        if (newGraph.getEdge(Integer.toString(i) + Integer.toString(j)) != null)
             newGraph.getEdge(Integer.toString(i) + Integer.toString(j)).addAttribute("ui.class", "back");
         else newGraph.getEdge(Integer.toString(j) + Integer.toString(i)).addAttribute("ui.class", "back");
     }
