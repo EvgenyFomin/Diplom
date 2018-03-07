@@ -3,10 +3,13 @@ package ru.itmo.sortvis;
 import org.graphstream.graph.Graph;
 import org.graphstream.graph.implementations.SingleGraph;
 
+import java.io.File;
+
 public class Bridge {
     static Graph newGraph;
 
     public static Graph convertGraph(GraphModel ourGraph) {
+
         newGraph = new SingleGraph("Simple Graph");
         int vertexCount = ourGraph.getVertexCount();
 
@@ -22,7 +25,10 @@ public class Bridge {
             }
         }
 
-        newGraph.addAttribute("ui.stylesheet", "url('file:///home/wolfram/IdeaProjects/Diplom/src/main/resources/type.css')");
+        File cssFile = new File("src/main/resources/type.css");
+        String cssFileFullPath = cssFile.getAbsolutePath();
+
+        newGraph.addAttribute("ui.stylesheet", "url('file://" + cssFileFullPath + "')");
         newGraph.display();
 
         return newGraph;

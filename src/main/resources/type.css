@@ -1,9 +1,15 @@
-node {
-	shape: box;
+/*Описание всех вершин графа вначале отрисовки*/
+
+node { 
 	size: 15px, 15px;
-	fill-mode: plain;   /* Default.          */
-	fill-color: green;    /* Default is black. */
+	fill-mode: gradient-radial;
+    fill-color: black, white;
+    text-mode: normal;
+    text-background-mode: plain;
+    text-background-color: blue;
 }
+
+/*Описание ребра, по которому мы идем вперед*/
 
 edge.forward {
     shape: line;
@@ -11,25 +17,31 @@ edge.forward {
 	arrow-size: 5px, 2px;
 }
 
+/*Описание ребра, по которому мы возвращаемся*/
+
 edge.back {
     shape: line;
 	fill-color: black;
 	arrow-size: 5px, 2px;
 }
 
+/*Описание вершины в которую мы входим*/
+
 node.in {
     shape: box;
 	size: 15px, 15px;
-	fill-mode: plain;
+	fill-mode: gradient-radial;
 	fill-color: yellow;
 	stroke-mode: plain;
 	stroke-color: blue;
 }
 
+/*Описание вершины из которой мы выходим*/
+
 node.out {
     shape: box;
 	size: 15px, 15px;
-	fill-mode: plain;
+	fill-mode: gradient-radial;
 	fill-color: red;
 	stroke-mode: plain;
 	stroke-color: blue;

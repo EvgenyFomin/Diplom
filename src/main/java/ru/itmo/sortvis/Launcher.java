@@ -1,13 +1,10 @@
 package ru.itmo.sortvis;
 
-import org.graphstream.graph.implementations.SingleGraph;
-import org.graphstream.ui.swingViewer.Viewer;
-import ru.itmo.sortvis.ui.SwingVisualisationPanel;
-
 import javax.swing.*;
 
 public class Launcher {
     public static void main(String[] args) {
+        System.setProperty("gs.ui.renderer", "org.graphstream.ui.j2dviewer.J2DGraphRenderer");
         SwingUtilities.invokeLater(new Runnable() {
             @Override
             public void run() {
@@ -15,7 +12,7 @@ public class Launcher {
 //                Graph graphModel = new AdjListGraph();
                 graphModel.initGraph();
 
-                GraphWalker graphWalker = new GraphWalker(graphModel);
+//                GraphWalker graphWalker = new GraphWalker(graphModel);
                 new Bridge().convertGraph(graphModel);
 
 //                SwingVisualisationPanel swingVisualisationPanel = new SwingVisualisationPanel(graphModel);
@@ -45,7 +42,7 @@ public class Launcher {
 
 
                 // обход в глубину
-                graphWalker.dfs(0);
+//                graphWalker.dfs(0);
                 // обход в ширину
 //                graphWalker.bfs(0, 3);
                 // Дейкстра
