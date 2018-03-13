@@ -1,12 +1,14 @@
 package ru.itmo.sortvis;
 
+import scala.Int;
+
 import java.util.*;
 
 public class AdjListGraph implements GraphModel<String> {
     private static final int N = 6;
     private LinkedList<Integer>[] adjList;
     private final List<GraphModelListener> listenerList;
-    private Map<Integer, Integer> weight;
+    private Map<String, Integer> weight;
 
     public AdjListGraph() {
         listenerList = new ArrayList<>();
@@ -26,8 +28,8 @@ public class AdjListGraph implements GraphModel<String> {
                 if (n == 1) {
                     adjList[i].add(j);
                     adjList[j].add(i);
-                    weight.put(hashing(i, j), n);
-                } else weight.put(hashing(i, j), 0);
+                    weight.put(Integer.toString(i) + Integer.toString(j), n);
+                } else weight.put(Integer.toString(i) + Integer.toString(j), 0);
             }
         }
         graphInitialized();
@@ -45,7 +47,7 @@ public class AdjListGraph implements GraphModel<String> {
 
     @Override
     public int getEdge(int i, int j) {
-        return weight.get(hashing(i, j));
+        return weight.get(Integer.toString(i) + Integer.toString(j));
     }
 
     @Override
@@ -62,11 +64,5 @@ public class AdjListGraph implements GraphModel<String> {
         for (GraphModelListener obj : listenerList) {
             obj.modelChanged();
         }
-    }
-
-    // не додумался, как хранить вес ребер, поэтому использую хеш-функцию. Проверил для 1000 ребер - дает разные значения
-
-    private Integer hashing(int i, int j) {
-        return (i < j) ? 47 * i + 53 * j + 57 : 47 * j + 53 * i + 57;
     }
 }

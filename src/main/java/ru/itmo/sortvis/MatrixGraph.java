@@ -5,7 +5,7 @@ import org.apache.commons.lang3.RandomStringUtils;
 import java.util.*;
 
 public class MatrixGraph implements GraphModel<String> {
-    private static final int N = 10;
+    private static final int N = 6;
     private int[][] matrix;
     private final String[] data;
     private final List<GraphModelListener> listenerList;
@@ -22,7 +22,7 @@ public class MatrixGraph implements GraphModel<String> {
             matrix[i][i] = -1;
             data[i] = RandomStringUtils.randomAlphabetic(3).toUpperCase();
             for (int j = i + 1; j < N; j++) {
-                matrix[i][j] = new Random().nextInt(2);
+                matrix[i][j] = new Random().nextInt(30);
                 matrix[j][i] = matrix[i][j];
             }
         }

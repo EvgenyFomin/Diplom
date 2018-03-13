@@ -2,9 +2,17 @@ node {
 	size: 15px, 15px;
 	fill-mode: gradient-radial;
     fill-color: black, white;
-    text-mode: normal;
     text-background-mode: plain;
-    text-background-color: blue;
+    text-alignment: under;
+}
+
+edge {
+    shape: line;
+    arrow-shape: arrow;
+	arrow-size: 10px, 4px;
+    text-background-mode: plain;
+    text-alignment: along;
+    text-color: red;
 }
 
 edge.forward {
@@ -23,6 +31,8 @@ node.in {
 	size: 15px, 15px;
 	fill-mode: plain;
 	fill-color: yellow;
+    text-background-mode: plain;
+    text-alignment: under;
 	stroke-mode: plain;
 	stroke-color: blue;
 }
@@ -31,6 +41,8 @@ node.out {
 	size: 15px, 15px;
 	fill-mode: plain;
 	fill-color: red;
+    text-background-mode: plain;
+    text-alignment: under;
 	stroke-mode: plain;
 	stroke-color: blue;
 }
