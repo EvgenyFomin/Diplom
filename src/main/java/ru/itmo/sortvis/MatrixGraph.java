@@ -1,6 +1,6 @@
 package ru.itmo.sortvis;
 
-import org.apache.commons.lang3.RandomStringUtils;
+import javafx.util.Pair;
 
 import java.io.*;
 import java.util.*;
@@ -10,14 +10,13 @@ public class MatrixGraph implements GraphModel<String> {
     private int countOfVertex;
     private int countOfEdges;
     private boolean isOrientedGraph;
-    private int[][] matrix;
-    private Map<String, Object> data;
+    private Map<Pair<String, String>, Integer> matrix;
+    private String[] nodes;
     private final List<GraphModelListener> listenerList;
 
     public MatrixGraph() {
         this.listenerList = new ArrayList<>();
-        this.data = new HashMap<>();
-//        this.data = new String[N];
+        this.matrix = new HashMap<>();
     }
 
     @Override
@@ -31,18 +30,13 @@ public class MatrixGraph implements GraphModel<String> {
             countOfVertex = Integer.valueOf(tmp.substring(0, tmp.indexOf(" ")));
             countOfEdges = Integer.valueOf(tmp.substring(tmp.lastIndexOf(" ") + 1));
 
+            nodes = new String[countOfVertex];
+
             tmp = bufferedGraphReader.readLine();
             StringTokenizer nodes = new StringTokenizer(tmp);
             for (int i = 0; i < countOfVertex; i++) {
-                data.put(nodes.nextToken(), i);
-            }
-
-            matrix = new int[countOfVertex][countOfVertex];
-
-            for (int i = 0; i < countOfVertex; i++) {
-                for (int j = 0; j < countOfVertex; j++) {
-                    matrix[i][i] = 0;
-                }
+                String s = nodes.nextToken();
+                this.nodes[i] = s;
             }
 
             if (isOrientedGraph) {
@@ -51,10 +45,10 @@ public class MatrixGraph implements GraphModel<String> {
                     String node1 = currentEdge.nextToken();
                     String node2 = currentEdge.nextToken();
                     try {
-                        matrix[(Integer) data.get(node1)][(Integer) data.get(node2)] =
-                                Integer.valueOf(currentEdge.nextToken());
+                        int weight = Integer.valueOf(currentEdge.nextToken());
+                        matrix.put(new Pair<>(node1, node2), weight);
                     } catch (NoSuchElementException err) {
-                        matrix[(Integer) data.get(node1)][(Integer) data.get(node2)] = 1;
+                        matrix.put(new Pair<>(node1, node2), 1);
                     }
                 }
             } else {
@@ -63,27 +57,22 @@ public class MatrixGraph implements GraphModel<String> {
                     String node1 = currentEdge.nextToken();
                     String node2 = currentEdge.nextToken();
                     try {
-                        matrix[(Integer) data.get(node1)][(Integer) data.get(node2)] =
-                                Integer.valueOf(currentEdge.nextToken());
-                        matrix[(Integer) data.get(node2)][(Integer) data.get(node1)] =
-                                matrix[(Integer) data.get(node1)][(Integer) data.get(node2)];
+                        int weight = Integer.valueOf(currentEdge.nextToken());
+                        matrix.put(new Pair<>(node1, node2), weight);
+                        matrix.put(new Pair<>(node2, node1), weight);
                     } catch (NoSuchElementException err) {
-                        matrix[(Integer) data.get(node1)][(Integer) data.get(node2)] = 1;
-                        matrix[(Integer) data.get(node2)][(Integer) data.get(node1)] = 1;
+                        matrix.put(new Pair<>(node1, node2), 1);
+                        matrix.put(new Pair<>(node2, node1), 1);
                     }
                 }
             }
 
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
         }
 
 //        graphInitialized();
         print();
-        GraphAdapter graphAdapter = new GraphAdapter(this);
-        graphAdapter.initGraph();
     }
 
     public void addModelListener(GraphModelListener gr) {
@@ -101,19 +90,29 @@ public class MatrixGraph implements GraphModel<String> {
     }
 
     @Override
-    public int getEdge(int i, int j) {
-        return matrix[i][j];
+    public Integer getEdge(String i, String j) {
+        return matrix.get(new Pair<>(i, j));
     }
 
     @Override
-    public LinkedList<Integer> getNeighbours(int i) {
-        LinkedList<Integer> neighbourList = new LinkedList<>();
+    public LinkedList<String> getNeighbours(String i) {
+        LinkedList<String> neighbourList = new LinkedList<>();
         for (int j = 0; j < N; j++) {
-            if (matrix[i][j] >= 1) {
-                neighbourList.add(j);
+            if (getEdge(i, nodes[j]) != null) {
+                neighbourList.add(nodes[j]);
             }
         }
         return neighbourList;
+    }
+
+    @Override
+    public String[] getNodes() {
+        return nodes;
+    }
+
+    @Override
+    public boolean getGraphStatus() {
+        return isOrientedGraph;
     }
 
     private void graphInitialized() {
@@ -125,24 +124,10 @@ public class MatrixGraph implements GraphModel<String> {
     void print() {
         for (int i = 0; i < N; i++) {
             for (int j = 0; j < N; j++) {
-                System.out.printf("%4d", matrix[i][j]);
+                if (getEdge(nodes[i], nodes[j]) != null) {
+                    System.out.println(nodes[i] + " " + nodes[j] + " " + getEdge(nodes[i], nodes[j]));
+                }
             }
-            System.out.println();
         }
     }
-
-//    private void randomInit() {
-//        matrix = new int[N][N];
-//        for (int i = 0; i < N; i++) {
-//            matrix[i][i] = -1;
-//            data[i] = RandomStringUtils.randomAlphabetic(3).toUpperCase();
-//            for (int j = i + 1; j < N; j++) {
-//                matrix[i][j] = new Random().nextInt(30);
-//                matrix[j][i] = matrix[i][j];
-//            }
-//        }
-//
-//        graphInitialized();
-//        print();
-//    }
 }

@@ -36,7 +36,7 @@ public class GraphWalker<T> {
         System.out.println("in " + i);
 
         color[i] = 1;
-        List<Integer> neighbours = graphModel.getNeighbours(i);
+        List<Integer> neighbours = graphModel.getNeighbours("asd");
         for (Integer obj : neighbours) {
             if (color[obj] == 0) {
                 try {
@@ -77,14 +77,14 @@ public class GraphWalker<T> {
                 break;
             }
 
-            for (Integer obj : graphModel.getNeighbours(currentVertexQueue.peek())) {
-                if (color[obj] == 0) {
-                    color[obj] = 1;
-                    distance[obj] = distance[currentVertexQueue.peek()] + 1;
-                    currentVertexQueue.add(obj);
-                    from[obj] = currentVertexQueue.peek();
-                }
-            }
+//            for (Integer obj : graphModel.getNeighbours(currentVertexQueue.peek())) {
+//                if (color[obj] == 0) {
+//                    color[obj] = 1;
+//                    distance[obj] = distance[currentVertexQueue.peek()] + 1;
+//                    currentVertexQueue.add(obj);
+//                    from[obj] = currentVertexQueue.peek();
+//                }
+//            }
 
             currentVertexQueue.poll();
         }
@@ -122,15 +122,15 @@ public class GraphWalker<T> {
         while (!vertexPriorityQueue.isEmpty()) {
             int currentVertex = vertexPriorityQueue.poll();
             color[currentVertex] = 1;
-            for (Integer obj : graphModel.getNeighbours(currentVertex)) {
-                if (color[obj] == 0) {
-                    neighbours.add(obj);
-                }
-            }
+//            for (Integer obj : graphModel.getNeighbours(currentVertex)) {
+//                if (color[obj] == 0) {
+//                    neighbours.add(obj);
+//                }
+//            }
 
             for (Integer obj : neighbours) {
-                if (distance[obj] > distance[currentVertex] + graphModel.getEdge(obj, currentVertex)) {
-                    distance[obj] = distance[currentVertex] + graphModel.getEdge(obj, currentVertex);
+                if (distance[obj] > distance[currentVertex] + graphModel.getEdge("asd", "asd")) {
+                    distance[obj] = distance[currentVertex] + graphModel.getEdge("asd", "asd");
                     from[obj] = currentVertex;
                 }
             }

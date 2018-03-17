@@ -16,11 +16,90 @@ public class GraphAdapter implements Runnable, GraphModel {
     private Graph graph;
     private GraphModel oldGraph;
     private int vertexCount;
+    private boolean isOrientedGraph;
     private Map<String, Integer> edgesWeight = new HashMap<>();
     private Map<String, Object> nodesData = new HashMap<>();
 
     public GraphAdapter(GraphModel graphModel) {
         this.oldGraph = graphModel;
+    }
+
+    @Override
+    public void initGraph() {
+        graph = new SingleGraph("Simple Graph");
+        vertexCount = oldGraph.getVertexCount();
+        String[] nodes = oldGraph.getNodes();
+        isOrientedGraph = oldGraph.getGraphStatus();
+
+        graph.addAttribute("ui.quality");
+        graph.addAttribute("ui.antialias");
+
+        File cssFile = new File("src/main/resources/type.css");
+        String cssFileFullPath = cssFile.getAbsolutePath();
+
+        graph.addAttribute("ui.stylesheet", "url('file:///" + cssFileFullPath + "')");
+
+        for (int i = 0; i < vertexCount; i++) {
+            graph.addNode(nodes[i]).addAttribute("ui.label", "Node " + nodes[i]);
+        }
+
+        for (int i = 0; i < vertexCount; i++) {
+            for (int j = i + 1; j < vertexCount; j++) {
+                if (oldGraph.getEdge(nodes[i], nodes[j]) != null) {
+                    graph.addEdge(nodes[i] + nodes[j], nodes[i], nodes[j], isOrientedGraph);
+                    edgesWeight.put(nodes[i] + nodes[j], oldGraph.getEdge(nodes[i], nodes[j]));
+                }
+            }
+        }
+
+        DisplayGraph displayGraph = new DisplayGraph(graph);
+        displayGraph.display();
+//        graph.display();
+    }
+
+    @Override
+    public int getVertexCount() {
+        return vertexCount;
+    }
+
+    @Override
+    public Object getData(int i) {
+        return null;
+    }
+
+    @Override
+    public Integer getEdge(String i, String j) {
+        return 0;
+    }
+
+    @Override
+    public void addModelListener(GraphModelListener gr) {
+
+    }
+
+    @Override
+    public List<String> getNeighbours(String i) {
+        List<Integer> neighbourList = new LinkedList<>();
+        for (Node currentNode : graph) {
+            if (graph.getEdge(i + currentNode.getId()) != null)
+                neighbourList.add(edgesWeight.get(i + currentNode.getId()));
+        }
+        return null;
+    }
+
+    @Override
+    public String[] getNodes() {
+        return new String[0];
+    }
+
+    @Override
+    public boolean getGraphStatus() {
+        return isOrientedGraph;
+    }
+
+    @Override
+    public void run() {
+        initGraph();
     }
 
     // Ниже я определяю цвета ребер и вершин.
@@ -69,70 +148,4 @@ public class GraphAdapter implements Runnable, GraphModel {
 //        }
 //        else graph.getEdge(Integer.toString(j) + Integer.toString(i)).addAttribute("ui.label", "weight: 1");
 //    }
-
-    @Override
-    public void initGraph() {
-        graph = new SingleGraph("Simple Graph");
-        vertexCount = oldGraph.getVertexCount();
-
-        graph.addAttribute("ui.quality");
-        graph.addAttribute("ui.antialias");
-
-        File cssFile = new File("src/main/resources/type.css");
-        String cssFileFullPath = cssFile.getAbsolutePath();
-
-        graph.addAttribute("ui.stylesheet", "url('file://" + cssFileFullPath + "')");
-
-        for (int i = 0; i < vertexCount; i++) {
-            graph.addNode(Integer.toString(i)).addAttribute("ui.label", "Node " + Integer.toString(i));
-        }
-
-        for (int i = 0; i < vertexCount; i++) {
-            for (int j = i + 1; j < vertexCount; j++) {
-                if (oldGraph.getEdge(i, j) > 0) {
-                    graph.addEdge(Integer.toString(i) + Integer.toString(j), Integer.toString(i), Integer.toString(j));
-                    edgesWeight.put(Integer.toString(i) + Integer.toString(j), oldGraph.getEdge(i, j));
-                }
-            }
-        }
-
-        DisplayGraph displayGraph = new DisplayGraph(graph);
-        displayGraph.display();
-//        graph.display();
-    }
-
-    @Override
-    public int getVertexCount() {
-        return vertexCount;
-    }
-
-    @Override
-    public Object getData(int i) {
-        return null;
-    }
-
-    @Override
-    public int getEdge(int i, int j) {
-        return edgesWeight.get(Integer.toString(i) + Integer.toString(j));
-    }
-
-    @Override
-    public void addModelListener(GraphModelListener gr) {
-
-    }
-
-    @Override
-    public List<Integer> getNeighbours(int i) {
-        List<Integer> neighbourList = new LinkedList<>();
-        for (Node currentNode : graph) {
-            if (graph.getEdge(Integer.toString(i) + currentNode.getId()) != null)
-                neighbourList.add(edgesWeight.get(Integer.toString(i) + currentNode.getId()));
-        }
-        return null;
-    }
-
-    @Override
-    public void run() {
-        initGraph();
-    }
 }

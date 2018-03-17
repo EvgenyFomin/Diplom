@@ -3,7 +3,7 @@ node {
 	fill-mode: gradient-radial;
     fill-color: black, white;
     text-background-mode: plain;
-    text-alignment: under;
+    text-alignment: at-left;
 }
 
 edge {

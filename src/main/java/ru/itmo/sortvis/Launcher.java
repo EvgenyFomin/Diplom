@@ -11,11 +11,11 @@ public class Launcher {
         Thread threadToConvert = new Thread(graphAdapter);
         threadToConvert.start();
 //        GraphWalker graphWalker = new GraphWalker(graphAdapter);
-//        try {
-//            threadToConvert.join();
-//        } catch (InterruptedException e) {
-//            e.printStackTrace();
-//        }
+        try {
+            threadToConvert.join();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
         // обход в глубину
 //        dfs(graphWalker, 0);
         // обход в ширину

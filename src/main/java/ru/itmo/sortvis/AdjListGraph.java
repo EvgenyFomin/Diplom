@@ -1,7 +1,5 @@
 package ru.itmo.sortvis;
 
-import scala.Int;
-
 import java.util.*;
 
 public class AdjListGraph implements GraphModel<String> {
@@ -46,8 +44,8 @@ public class AdjListGraph implements GraphModel<String> {
     }
 
     @Override
-    public int getEdge(int i, int j) {
-        return weight.get(Integer.toString(i) + Integer.toString(j));
+    public Integer getEdge(String i, String j) {
+        return 0;
     }
 
     @Override
@@ -56,8 +54,18 @@ public class AdjListGraph implements GraphModel<String> {
     }
 
     @Override
-    public LinkedList<Integer> getNeighbours(int i) {
-        return adjList[i];
+    public LinkedList<Integer> getNeighbours(String i) {
+        return new LinkedList<>();
+    }
+
+    @Override
+    public String[] getNodes() {
+        return new String[0];
+    }
+
+    @Override
+    public boolean getGraphStatus() {
+        return false;
     }
 
     private void graphInitialized() {
