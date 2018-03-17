@@ -7,17 +7,19 @@ public class Launcher {
         graphModel.initGraph();
 
 //        GraphModel graphModel = new AdjListGraph();
-        GraphAdapter graphAdapter = new GraphAdapter(graphModel);
-        Thread threadToConvert = new Thread(graphAdapter);
+        GsGraphAdapter gsGraphAdapter = new GsGraphAdapter(graphModel);
+        Thread threadToConvert = new Thread(gsGraphAdapter);
         threadToConvert.start();
-//        GraphWalker graphWalker = new GraphWalker(graphAdapter);
-//        try {
-//            threadToConvert.join();
-//        } catch (InterruptedException e) {
-//            e.printStackTrace();
-//        }
+        GraphWalker graphWalker = new GraphWalker(gsGraphAdapter);
+
+        graphWalker.addListener(gsGraphAdapter);
+        try {
+            threadToConvert.join();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
         // обход в глубину
-//        dfs(graphWalker, 0);
+        dfs(graphWalker, 0);
         // обход в ширину
 //        bfs(graphWalker, 0, 3);
         // Дейкстра
@@ -51,8 +53,8 @@ public class Launcher {
     }
 
     private static void dijkstra(GraphWalker graphWalker, int startVertex) {
-//        GraphAdapter.initNodesData();
-//        GraphAdapter.initEdgesWeight();
+//        GsGraphAdapter.initNodesData();
+//        GsGraphAdapter.initEdgesWeight();
         System.out.println("START!");
         for (int i = 5; i > -1; i--) {
             try {

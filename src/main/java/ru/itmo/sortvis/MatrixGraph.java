@@ -1,7 +1,5 @@
 package ru.itmo.sortvis;
 
-import org.apache.commons.lang3.RandomStringUtils;
-
 import java.io.*;
 import java.util.*;
 
@@ -12,12 +10,9 @@ public class MatrixGraph implements GraphModel<String> {
     private boolean isOrientedGraph;
     private int[][] matrix;
     private Map<String, Object> data;
-    private final List<GraphModelListener> listenerList;
 
     public MatrixGraph() {
-        this.listenerList = new ArrayList<>();
         this.data = new HashMap<>();
-//        this.data = new String[N];
     }
 
     @Override
@@ -80,14 +75,9 @@ public class MatrixGraph implements GraphModel<String> {
             e.printStackTrace();
         }
 
-//        graphInitialized();
         print();
-        GraphAdapter graphAdapter = new GraphAdapter(this);
-        graphAdapter.initGraph();
-    }
-
-    public void addModelListener(GraphModelListener gr) {
-        listenerList.add(gr);
+        GsGraphAdapter gsGraphAdapter = new GsGraphAdapter(this);
+        gsGraphAdapter.initGraph();
     }
 
     @Override
@@ -106,23 +96,17 @@ public class MatrixGraph implements GraphModel<String> {
     }
 
     @Override
-    public LinkedList<Integer> getNeighbours(int i) {
-        LinkedList<Integer> neighbourList = new LinkedList<>();
+    public int[] getNeighbours(int i) {
+        List<Integer> neighbourList = new ArrayList<>();
         for (int j = 0; j < N; j++) {
             if (matrix[i][j] >= 1) {
                 neighbourList.add(j);
             }
         }
-        return neighbourList;
+        return neighbourList.stream().mapToInt(k -> k).toArray();
     }
 
-    private void graphInitialized() {
-        for (GraphModelListener obj : listenerList) {
-            obj.modelChanged();
-        }
-    }
-
-    void print() {
+    private void print() {
         for (int i = 0; i < N; i++) {
             for (int j = 0; j < N; j++) {
                 System.out.printf("%4d", matrix[i][j]);
@@ -130,19 +114,4 @@ public class MatrixGraph implements GraphModel<String> {
             System.out.println();
         }
     }
-
-//    private void randomInit() {
-//        matrix = new int[N][N];
-//        for (int i = 0; i < N; i++) {
-//            matrix[i][i] = -1;
-//            data[i] = RandomStringUtils.randomAlphabetic(3).toUpperCase();
-//            for (int j = i + 1; j < N; j++) {
-//                matrix[i][j] = new Random().nextInt(30);
-//                matrix[j][i] = matrix[i][j];
-//            }
-//        }
-//
-//        graphInitialized();
-//        print();
-//    }
 }

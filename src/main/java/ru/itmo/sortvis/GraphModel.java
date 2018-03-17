@@ -11,7 +11,5 @@ public interface GraphModel<T> {
 
     int getEdge(int i, int j);
 
-    void addModelListener(GraphModelListener gr);
-
-    List<Integer> getNeighbours(int i);
+    int[] getNeighbours(int i);
 }

@@ -3,14 +3,14 @@ package ru.itmo.sortvis.ui;
 import com.google.common.collect.ImmutableMap;
 import javafx.util.Pair;
 import ru.itmo.sortvis.GraphModel;
-import ru.itmo.sortvis.GraphModelListener;
+import ru.itmo.sortvis.GraphWalkerListener;
 
 import javax.swing.*;
 import java.awt.*;
 import java.util.HashMap;
 import java.util.Map;
 
-public class SwingVisualisationPanel extends JPanel implements GraphModelListener {
+public class SwingVisualisationPanel extends JPanel  {
 
     private static final int sizeOfGrid = 20;
 
@@ -40,10 +40,10 @@ public class SwingVisualisationPanel extends JPanel implements GraphModelListene
         }
     }
 
-    @Override
-    public void modelChanged() {
-        repaint();
-    }
+//    @Override
+//    public void modelChanged() {
+//        repaint();
+//    }
 
     @Override
     public void paintComponent(Graphics g1) {
