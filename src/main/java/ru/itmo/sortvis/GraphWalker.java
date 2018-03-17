@@ -31,7 +31,7 @@ public class GraphWalker<T> {
     }
 
     private void depthFirstSearch(int i) {
-        Bridge.nodeIn(Integer.toString(i));
+//        GraphAdapter.nodeIn(Integer.toString(i));
 
         System.out.println("in " + i);
 
@@ -41,7 +41,7 @@ public class GraphWalker<T> {
             if (color[obj] == 0) {
                 try {
                     Thread.sleep(1000);
-                    Bridge.edgeForward(i, obj);
+//                    GraphAdapter.edgeForward(i, obj);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
@@ -50,14 +50,14 @@ public class GraphWalker<T> {
             }
         }
 
-        try {
-            Thread.sleep(1000);
-            Bridge.nodeOut(Integer.toString(i));
-            if (from[i] != -1)
-                Bridge.edgeBack(i, from[i]);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+//        try {
+//            Thread.sleep(1000);
+//            GraphAdapter.nodeOut(Integer.toString(i));
+//            if (from[i] != -1)
+//                GraphAdapter.edgeBack(i, from[i]);
+//        } catch (InterruptedException e) {
+//            e.printStackTrace();
+//        }
 
         color[i] = 2;
         System.out.println("out " + i);

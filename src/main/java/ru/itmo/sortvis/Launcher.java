@@ -4,18 +4,20 @@ public class Launcher {
     public static void main(String[] args) {
         System.setProperty("org.graphstream.ui.renderer", "org.graphstream.ui.j2dviewer.J2DGraphRenderer");
         GraphModel graphModel = new MatrixGraph();
-//        GraphModel graphModel = new AdjListGraph();
         graphModel.initGraph();
-        Thread threadToConvert = new Thread(new Bridge(graphModel));
+
+//        GraphModel graphModel = new AdjListGraph();
+        GraphAdapter graphAdapter = new GraphAdapter(graphModel);
+        Thread threadToConvert = new Thread(graphAdapter);
         threadToConvert.start();
-        GraphWalker graphWalker = new GraphWalker(graphModel);
-        try {
-            threadToConvert.join();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+//        GraphWalker graphWalker = new GraphWalker(graphAdapter);
+//        try {
+//            threadToConvert.join();
+//        } catch (InterruptedException e) {
+//            e.printStackTrace();
+//        }
         // обход в глубину
-        dfs(graphWalker, 0);
+//        dfs(graphWalker, 0);
         // обход в ширину
 //        bfs(graphWalker, 0, 3);
         // Дейкстра
@@ -49,8 +51,8 @@ public class Launcher {
     }
 
     private static void dijkstra(GraphWalker graphWalker, int startVertex) {
-        Bridge.initNodesData();
-        Bridge.initEdgesWeight();
+//        GraphAdapter.initNodesData();
+//        GraphAdapter.initEdgesWeight();
         System.out.println("START!");
         for (int i = 5; i > -1; i--) {
             try {

@@ -1,0 +1,9 @@
+false
+6 6
+A B C D E F
+A B 8
+C D 6
+E F 4
+A E 12
+B D 3
+A D 4
