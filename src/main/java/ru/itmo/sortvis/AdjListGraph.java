@@ -4,8 +4,10 @@ import java.util.*;
 
 public class AdjListGraph implements GraphModel<String> {
     private static final int N = 6;
-    private LinkedList<Integer>[] adjList;
-    private final List<GraphModelListener> listenerList;
+
+    // Не очень разобрался, почему массив списков, а не список массивов.
+    private List<Integer>[] adjList;
+    private final List<GraphWalkerListener> listenerList;
     private Map<String, Integer> weight;
 
     public AdjListGraph() {
@@ -30,7 +32,6 @@ public class AdjListGraph implements GraphModel<String> {
                 } else weight.put(Integer.toString(i) + Integer.toString(j), 0);
             }
         }
-        graphInitialized();
     }
 
     @Override
@@ -44,33 +45,12 @@ public class AdjListGraph implements GraphModel<String> {
     }
 
     @Override
-    public Integer getEdge(String i, String j) {
-        return 0;
+    public int getEdge(int i, int j) {
+        return weight.get(Integer.toString(i) + Integer.toString(j));
     }
 
-    @Override
-    public void addModelListener(GraphModelListener gr) {
-        listenerList.add(gr);
-    }
-
-    @Override
-    public LinkedList<Integer> getNeighbours(String i) {
-        return new LinkedList<>();
-    }
-
-    @Override
-    public String[] getNodes() {
-        return new String[0];
-    }
-
-    @Override
-    public boolean getGraphStatus() {
-        return false;
-    }
-
-    private void graphInitialized() {
-        for (GraphModelListener obj : listenerList) {
-            obj.modelChanged();
-        }
+    // Пофиксить, работоспособность не проверял
+    public int[] getNeighbours(int i) {
+        return adjList[i].stream().mapToInt(k -> k).toArray();
     }
 }

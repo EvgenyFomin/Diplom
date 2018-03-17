@@ -1,23 +1,36 @@
 package ru.itmo.sortvis;
 
+import ru.itmo.sortvis.ui.DisplayGraph;
+
+import javax.swing.*;
+import java.io.File;
+import java.io.IOException;
+
 public class Launcher {
-    public static void main(String[] args) {
+    private static final GraphParserService graphParserService = new GraphParserService();
+
+    public static void main(String[] args) throws IOException {
         System.setProperty("org.graphstream.ui.renderer", "org.graphstream.ui.j2dviewer.J2DGraphRenderer");
-        GraphModel graphModel = new MatrixGraph();
+        // плохо что такой путь передаём
+
+        GraphModel graphModel = graphParserService.parse(new File("src/main/resources/Graph.txt"));
         graphModel.initGraph();
 
 //        GraphModel graphModel = new AdjListGraph();
-        GraphAdapter graphAdapter = new GraphAdapter(graphModel);
-        Thread threadToConvert = new Thread(graphAdapter);
-        threadToConvert.start();
-//        GraphWalker graphWalker = new GraphWalker(graphAdapter);
-        try {
-            threadToConvert.join();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+
+        GsGraphAdapter gsGraphAdapter = new GsGraphAdapter(graphModel);
+        GraphWalker graphWalker = new GraphWalker(gsGraphAdapter);
+        graphWalker.addListener(gsGraphAdapter);
+
+        gsGraphAdapter.initGraph();
+
+        SwingUtilities.invokeLater(() -> {
+            DisplayGraph displayGraph = new DisplayGraph(gsGraphAdapter.getGsGraph());
+            displayGraph.display();
+        });
+
         // обход в глубину
-//        dfs(graphWalker, 0);
+        dfs(graphWalker, 0);
         // обход в ширину
 //        bfs(graphWalker, 0, 3);
         // Дейкстра
@@ -51,8 +64,8 @@ public class Launcher {
     }
 
     private static void dijkstra(GraphWalker graphWalker, int startVertex) {
-//        GraphAdapter.initNodesData();
-//        GraphAdapter.initEdgesWeight();
+//        GsGraphAdapter.initNodesData();
+//        GsGraphAdapter.initEdgesWeight();
         System.out.println("START!");
         for (int i = 5; i > -1; i--) {
             try {

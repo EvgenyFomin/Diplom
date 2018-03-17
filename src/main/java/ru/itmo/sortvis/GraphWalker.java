@@ -1,6 +1,7 @@
 package ru.itmo.sortvis;
 
 import java.util.*;
+import java.util.function.Consumer;
 
 public class GraphWalker<T> {
     private GraphModel<T> graphModel;
@@ -8,22 +9,30 @@ public class GraphWalker<T> {
     private int[] distance;
     private int[] from;
 
+    private final List<GraphWalkerListener> listeners;
+
+    private static final byte WHITE = 0;
+    private static byte GRAY = 1;
+    private static byte BLACK = 2;
+
     GraphWalker(GraphModel<T> graphModel) {
         this.graphModel = graphModel;
         int vertexCount = graphModel.getVertexCount();
-        color = new byte[vertexCount];
-        for (int i = 0; i < vertexCount; i++) {
-            color[i] = 0;
-        }
-        distance = new int[vertexCount];
-        from = new int[vertexCount];
+
+        this.color = new byte[vertexCount];
+        Arrays.fill(this.color, WHITE);
+
+        this.distance = new int[vertexCount];
+        this.from = new int[vertexCount];
+
+        this.listeners = new ArrayList<>();
     }
 
     public void dfs(int i) {
         from[i] = -1;
         depthFirstSearch(i);
         for (int j = 0; j < color.length; j++) {
-            if (color[j] == 0) {
+            if (color[j] == WHITE) {
                 from[j] = -1;
                 depthFirstSearch(j);
             }
@@ -31,17 +40,17 @@ public class GraphWalker<T> {
     }
 
     private void depthFirstSearch(int i) {
-//        GraphAdapter.nodeIn(Integer.toString(i));
+        notify(l -> l.nodeIn(Integer.toString(i)));
 
         System.out.println("in " + i);
 
-        color[i] = 1;
-        List<Integer> neighbours = graphModel.getNeighbours("asd");
+        color[i] = GRAY;
+        int[] neighbours = graphModel.getNeighbours(i);
         for (Integer obj : neighbours) {
-            if (color[obj] == 0) {
+            if (color[obj] == WHITE) {
                 try {
                     Thread.sleep(1000);
-//                    GraphAdapter.edgeForward(i, obj);
+                    notify(l -> l.edgeForward(i, obj));
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
@@ -50,16 +59,16 @@ public class GraphWalker<T> {
             }
         }
 
-//        try {
-//            Thread.sleep(1000);
-//            GraphAdapter.nodeOut(Integer.toString(i));
-//            if (from[i] != -1)
-//                GraphAdapter.edgeBack(i, from[i]);
-//        } catch (InterruptedException e) {
-//            e.printStackTrace();
-//        }
+        try {
+            Thread.sleep(1000);
+            notify(l -> l.nodeOut(Integer.toString(i)));
+            if (from[i] != -1)
+                notify(l -> l.edgeBack(i, from[i]));
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
 
-        color[i] = 2;
+        color[i] = BLACK;
         System.out.println("out " + i);
     }
 
@@ -68,8 +77,8 @@ public class GraphWalker<T> {
         boolean isWayExists = false;
         Queue<Integer> currentVertexQueue = new LinkedList<>();
         currentVertexQueue.add(u);
-        color[u] = 1;
-        distance[u] = 0;
+        color[u] = GRAY;
+        distance[u] = WHITE;
 
         while (!currentVertexQueue.isEmpty()) {
             if (currentVertexQueue.peek() == v) {
@@ -77,14 +86,14 @@ public class GraphWalker<T> {
                 break;
             }
 
-//            for (Integer obj : graphModel.getNeighbours(currentVertexQueue.peek())) {
-//                if (color[obj] == 0) {
-//                    color[obj] = 1;
-//                    distance[obj] = distance[currentVertexQueue.peek()] + 1;
-//                    currentVertexQueue.add(obj);
-//                    from[obj] = currentVertexQueue.peek();
-//                }
-//            }
+            for (int obj : graphModel.getNeighbours(currentVertexQueue.peek())) {
+                if (color[obj] == WHITE) {
+                    color[obj] = GRAY;
+                    distance[obj] = distance[currentVertexQueue.peek()] + 1;
+                    currentVertexQueue.add(obj);
+                    from[obj] = currentVertexQueue.peek();
+                }
+            }
 
             currentVertexQueue.poll();
         }
@@ -121,16 +130,16 @@ public class GraphWalker<T> {
 
         while (!vertexPriorityQueue.isEmpty()) {
             int currentVertex = vertexPriorityQueue.poll();
-            color[currentVertex] = 1;
-//            for (Integer obj : graphModel.getNeighbours(currentVertex)) {
-//                if (color[obj] == 0) {
-//                    neighbours.add(obj);
-//                }
-//            }
+            color[currentVertex] = GRAY;
+            for (int obj : graphModel.getNeighbours(currentVertex)) {
+                if (color[obj] == WHITE) {
+                    neighbours.add(obj);
+                }
+            }
 
             for (Integer obj : neighbours) {
-                if (distance[obj] > distance[currentVertex] + graphModel.getEdge("asd", "asd")) {
-                    distance[obj] = distance[currentVertex] + graphModel.getEdge("asd", "asd");
+                if (distance[obj] > distance[currentVertex] + graphModel.getEdge(obj, currentVertex)) {
+                    distance[obj] = distance[currentVertex] + graphModel.getEdge(obj, currentVertex);
                     from[obj] = currentVertex;
                 }
             }
@@ -174,5 +183,17 @@ public class GraphWalker<T> {
 
         way.addFirst(u);
         return way;
+    }
+
+    public void addListener(GraphWalkerListener l) {
+        listeners.add(l);
+    }
+
+    public void removeListener(GraphWalkerListener l) {
+        listeners.remove(l);
+    }
+
+    private void notify(Consumer<GraphWalkerListener> consumer) {
+        listeners.forEach(consumer::accept);
     }
 }

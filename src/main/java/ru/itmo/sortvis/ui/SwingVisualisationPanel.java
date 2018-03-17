@@ -3,14 +3,14 @@ package ru.itmo.sortvis.ui;
 import com.google.common.collect.ImmutableMap;
 import javafx.util.Pair;
 import ru.itmo.sortvis.GraphModel;
-import ru.itmo.sortvis.GraphModelListener;
+import ru.itmo.sortvis.GraphWalkerListener;
 
 import javax.swing.*;
 import java.awt.*;
 import java.util.HashMap;
 import java.util.Map;
 
-public class SwingVisualisationPanel extends JPanel implements GraphModelListener {
+public class SwingVisualisationPanel extends JPanel  {
 
     private static final int sizeOfGrid = 20;
 
@@ -40,10 +40,10 @@ public class SwingVisualisationPanel extends JPanel implements GraphModelListene
         }
     }
 
-    @Override
-    public void modelChanged() {
-        repaint();
-    }
+//    @Override
+//    public void modelChanged() {
+//        repaint();
+//    }
 
     @Override
     public void paintComponent(Graphics g1) {
@@ -86,18 +86,18 @@ public class SwingVisualisationPanel extends JPanel implements GraphModelListene
 
         g.setStroke(new BasicStroke(1));
 
-        for (int i = 0; i < vertexCount; i++) {
-            for (int j = i + 1; j < vertexCount; j++) {
-                if (graphModel.getEdge("asd", "asd") != 0) {
-                    g.drawLine(
-                            (int) Math.round(coord.get(i).getKey() * sizeOfGrid + x0),
-                            (int) Math.round(coord.get(i).getValue() * sizeOfGrid + y0),
-                            (int) Math.round(coord.get(j).getKey() * sizeOfGrid + x0),
-                            (int) Math.round(coord.get(j).getValue() * sizeOfGrid + y0)
-                    );
-                }
-            }
-        }
+//        for (int i = 0; i < vertexCount; i++) {
+//            for (int j = i + 1; j < vertexCount; j++) {
+//                if (graphModel.getEdge("asd", "asd") != 0) {
+//                    g.drawLine(
+//                            (int) Math.round(coord.get(i).getKey() * sizeOfGrid + x0),
+//                            (int) Math.round(coord.get(i).getValue() * sizeOfGrid + y0),
+//                            (int) Math.round(coord.get(j).getKey() * sizeOfGrid + x0),
+//                            (int) Math.round(coord.get(j).getValue() * sizeOfGrid + y0)
+//                    );
+//                }
+//            }
+//        }
 
         g.setStroke(new BasicStroke(4));
         g.setColor(Color.RED);

@@ -1,87 +1,29 @@
 package ru.itmo.sortvis;
 
-import javafx.util.Pair;
-
 import java.io.*;
 import java.util.*;
 
 public class MatrixGraph implements GraphModel<String> {
-    private static final int N = 6;
-    private int countOfVertex;
-    private int countOfEdges;
-    private boolean isOrientedGraph;
-    private Map<Pair<String, String>, Integer> matrix;
-    private String[] nodes;
-    private final List<GraphModelListener> listenerList;
+    private final int countOfVertex;
+    private final int countOfEdges;
+    private final boolean isOrientedGraph;
+    private final int[][] matrix;
 
-    public MatrixGraph() {
-        this.listenerList = new ArrayList<>();
-        this.matrix = new HashMap<>();
+    public MatrixGraph(int countOfVertex, int countOfEdges, boolean isOrientedGraph, int[][] matrix) {
+        this.countOfVertex = countOfVertex;
+        this.countOfEdges = countOfEdges;
+        this.isOrientedGraph = isOrientedGraph;
+        this.matrix = matrix;
     }
 
     @Override
     public void initGraph() {
-        try {
-            FileReader graphReader = new FileReader(new File("src/main/resources/Graph.txt"));
-            BufferedReader bufferedGraphReader = new BufferedReader(graphReader);
-            String tmp = bufferedGraphReader.readLine().trim();
-            isOrientedGraph = Boolean.parseBoolean(tmp);
-            tmp = bufferedGraphReader.readLine();
-            countOfVertex = Integer.valueOf(tmp.substring(0, tmp.indexOf(" ")));
-            countOfEdges = Integer.valueOf(tmp.substring(tmp.lastIndexOf(" ") + 1));
-
-            nodes = new String[countOfVertex];
-
-            tmp = bufferedGraphReader.readLine();
-            StringTokenizer nodes = new StringTokenizer(tmp);
-            for (int i = 0; i < countOfVertex; i++) {
-                String s = nodes.nextToken();
-                this.nodes[i] = s;
-            }
-
-            if (isOrientedGraph) {
-                for (int i = 0; i < countOfEdges; i++) {
-                    StringTokenizer currentEdge = new StringTokenizer(bufferedGraphReader.readLine());
-                    String node1 = currentEdge.nextToken();
-                    String node2 = currentEdge.nextToken();
-                    try {
-                        int weight = Integer.valueOf(currentEdge.nextToken());
-                        matrix.put(new Pair<>(node1, node2), weight);
-                    } catch (NoSuchElementException err) {
-                        matrix.put(new Pair<>(node1, node2), 1);
-                    }
-                }
-            } else {
-                for (int i = 0; i < countOfEdges; i++) {
-                    StringTokenizer currentEdge = new StringTokenizer(bufferedGraphReader.readLine());
-                    String node1 = currentEdge.nextToken();
-                    String node2 = currentEdge.nextToken();
-                    try {
-                        int weight = Integer.valueOf(currentEdge.nextToken());
-                        matrix.put(new Pair<>(node1, node2), weight);
-                        matrix.put(new Pair<>(node2, node1), weight);
-                    } catch (NoSuchElementException err) {
-                        matrix.put(new Pair<>(node1, node2), 1);
-                        matrix.put(new Pair<>(node2, node1), 1);
-                    }
-                }
-            }
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-//        graphInitialized();
         print();
-    }
-
-    public void addModelListener(GraphModelListener gr) {
-        listenerList.add(gr);
     }
 
     @Override
     public int getVertexCount() {
-        return N;
+        return countOfVertex;
     }
 
     @Override
@@ -90,44 +32,27 @@ public class MatrixGraph implements GraphModel<String> {
     }
 
     @Override
-    public Integer getEdge(String i, String j) {
-        return matrix.get(new Pair<>(i, j));
+    public int getEdge(int i, int j) {
+        return matrix[i][j];
     }
 
     @Override
-    public LinkedList<String> getNeighbours(String i) {
-        LinkedList<String> neighbourList = new LinkedList<>();
-        for (int j = 0; j < N; j++) {
-            if (getEdge(i, nodes[j]) != null) {
-                neighbourList.add(nodes[j]);
+    public int[] getNeighbours(int i) {
+        List<Integer> neighbourList = new ArrayList<>();
+        for (int j = 0; j < countOfVertex; j++) {
+            if (matrix[i][j] >= 1) {
+                neighbourList.add(j);
             }
         }
-        return neighbourList;
+        return neighbourList.stream().mapToInt(k -> k).toArray();
     }
 
-    @Override
-    public String[] getNodes() {
-        return nodes;
-    }
-
-    @Override
-    public boolean getGraphStatus() {
-        return isOrientedGraph;
-    }
-
-    private void graphInitialized() {
-        for (GraphModelListener obj : listenerList) {
-            obj.modelChanged();
-        }
-    }
-
-    void print() {
-        for (int i = 0; i < N; i++) {
-            for (int j = 0; j < N; j++) {
-                if (getEdge(nodes[i], nodes[j]) != null) {
-                    System.out.println(nodes[i] + " " + nodes[j] + " " + getEdge(nodes[i], nodes[j]));
-                }
+    private void print() {
+        for (int i = 0; i < countOfVertex; i++) {
+            for (int j = 0; j < countOfVertex; j++) {
+                System.out.printf("%4d", matrix[i][j]);
             }
+            System.out.println();
         }
     }
 }
