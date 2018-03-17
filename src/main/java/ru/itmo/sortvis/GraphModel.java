@@ -8,7 +8,7 @@ public interface GraphModel<T> {
 
     int getVertexCount();
 
-    T getData(int i);
+    T getData(String i);
 
     Integer getEdge(String i, String j);
 

@@ -11,6 +11,7 @@ public class MatrixGraph implements GraphModel<String> {
     private int countOfEdges;
     private boolean isOrientedGraph;
     private Map<Pair<String, String>, Integer> matrix;
+    private Map<String, Integer> data;
     private String[] nodes;
     private final List<GraphModelListener> listenerList;
 
@@ -36,6 +37,7 @@ public class MatrixGraph implements GraphModel<String> {
             StringTokenizer nodes = new StringTokenizer(tmp);
             for (int i = 0; i < countOfVertex; i++) {
                 String s = nodes.nextToken();
+                data.put(s, i);
                 this.nodes[i] = s;
             }
 
@@ -85,8 +87,8 @@ public class MatrixGraph implements GraphModel<String> {
     }
 
     @Override
-    public String getData(int i) {
-        return "abd";
+    public Integer getData(String i) {
+        return null;
     }
 
     @Override

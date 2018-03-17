@@ -24,7 +24,7 @@ public class Launcher {
 //        dijkstra(graphWalker, 0);
     }
 
-    private static void dfs(GraphWalker graphWalker, int startVertex) {
+    private static void dfs(GraphWalker graphWalker, String startNode) {
         System.out.println("START!");
         for (int i = 5; i > -1; i--) {
             try {
@@ -34,7 +34,7 @@ public class Launcher {
             }
             System.out.println(i);
         }
-        graphWalker.dfs(startVertex);
+        graphWalker.dfs(startNode);
     }
 
     private static void bfs(GraphWalker graphWalker, int fromVertex, int toVertex) {

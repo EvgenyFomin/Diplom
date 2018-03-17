@@ -19,9 +19,9 @@ public class GraphWalker<T> {
         from = new int[vertexCount];
     }
 
-    public void dfs(int i) {
-        from[i] = -1;
-        depthFirstSearch(i);
+    public void dfs(String startVertex) {
+        from[startVertex] = -1;
+        depthFirstSearch(startVertex);
         for (int j = 0; j < color.length; j++) {
             if (color[j] == 0) {
                 from[j] = -1;
