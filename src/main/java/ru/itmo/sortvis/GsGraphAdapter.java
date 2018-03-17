@@ -3,6 +3,7 @@ package ru.itmo.sortvis;
 import org.graphstream.graph.Edge;
 import org.graphstream.graph.Graph;
 import org.graphstream.graph.Node;
+import org.graphstream.graph.implementations.AbstractGraph;
 import org.graphstream.graph.implementations.SingleGraph;
 import ru.itmo.sortvis.ui.DisplayGraph;
 
@@ -11,12 +12,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class GsGraphAdapter<T> implements Runnable, GraphModel<T>, GraphWalkerListener {
+public class GsGraphAdapter<T> implements GraphModel<T>, GraphWalkerListener {
     private Graph gsGraph;
     private GraphModel<T> delegateGraph;
-    private int vertexCount;
-    private Map<String, Integer> edgesWeight = new HashMap<>();
-    private Map<String, Object> nodesData = new HashMap<>();
 
     public GsGraphAdapter(GraphModel<T> delegateGraph) {
         this.delegateGraph = delegateGraph;
@@ -28,15 +26,15 @@ public class GsGraphAdapter<T> implements Runnable, GraphModel<T>, GraphWalkerLi
     // Пока вызываю эти методы из класса GraphWalker
 
     public void edgeForward(int i, int j) {
-        if (gsGraph.getEdge(Integer.toString(i) + Integer.toString(j)) != null)
-            gsGraph.getEdge(Integer.toString(i) + Integer.toString(j)).addAttribute("ui.class", "forward");
-        else gsGraph.getEdge(Integer.toString(j) + Integer.toString(i)).addAttribute("ui.class", "forward");
+        if (gsGraph.getEdge(getGsEdgeId(i, j)) != null)
+            gsGraph.getEdge(getGsEdgeId(i, j)).addAttribute("ui.class", "forward");
+        else gsGraph.getEdge(getGsEdgeId(j, i)).addAttribute("ui.class", "forward");
     }
 
     public void edgeBack(int i, int j) {
-        if (gsGraph.getEdge(Integer.toString(i) + Integer.toString(j)) != null)
-            gsGraph.getEdge(Integer.toString(i) + Integer.toString(j)).addAttribute("ui.class", "back");
-        else gsGraph.getEdge(Integer.toString(j) + Integer.toString(i)).addAttribute("ui.class", "back");
+        if (gsGraph.getEdge(getGsEdgeId(i, j)) != null)
+            gsGraph.getEdge(getGsEdgeId(i, j)).addAttribute("ui.class", "back");
+        else gsGraph.getEdge(getGsEdgeId(j, i)).addAttribute("ui.class", "back");
     }
 
     public void nodeIn(String node) {
@@ -47,32 +45,33 @@ public class GsGraphAdapter<T> implements Runnable, GraphModel<T>, GraphWalkerLi
         gsGraph.getNode(node).addAttribute("ui.class", "out");
     }
 
-    public void initNodesData() {
-        for (Node node : gsGraph) {
-            node.removeAttribute("ui.label");
-            nodesData.put(node.getId(), Integer.MAX_VALUE);
-            node.addAttribute("ui.label", node.getId() + " / dist: inf");
-        }
-    }
-
-    public void initEdgesWeight() {
-        for (Edge edge : gsGraph.getEachEdge()) {
-            edge.addAttribute("ui.label", "weight: " + edgesWeight.get(edge.getId()));
-        }
-    }
+    // Закомментировал - не компилировалось - а пофиксить не могу тк не понимаю что тут происходит
+//    public void initNodesData() {
+//        for (Node node : gsGraph) {
+//            node.removeAttribute("ui.label");
+////            nodesData.put(node.getId(), Integer.MAX_VALUE);
+//            node.addAttribute("ui.label", node.getId() + " / dist: inf");
+//        }
+//    }
+//
+//    public void initEdgesWeight() {
+//        for (Edge edge : gsGraph.getEachEdge()) {
+//            edge.addAttribute("ui.label", "weight: " + edgesWeight.get(edge.getId()));
+//        }
+//    }
 
 //    public static void relaxEdge(int i, int j) {
 //        if (edgesWeight.get()) {
 //            nodesData.put()
-//            gsGraph.getEdge(Integer.toString(i) + Integer.toString(j)).addAttribute("ui.label", "weight: 1");
+//            gsGraph.getEdge(getGsEdgeId(i, j)).addAttribute("ui.label", "weight: 1");
 //        }
-//        else gsGraph.getEdge(Integer.toString(j) + Integer.toString(i)).addAttribute("ui.label", "weight: 1");
+//        else gsGraph.getEdge(getGsEdgeId(j, i)).addAttribute("ui.label", "weight: 1");
 //    }
 
     @Override
     public void initGraph() {
         gsGraph = new SingleGraph("Simple Graph");
-        vertexCount = delegateGraph.getVertexCount();
+        int vertexCount = delegateGraph.getVertexCount();
 
         gsGraph.addAttribute("ui.quality");
         gsGraph.addAttribute("ui.antialias");
@@ -83,35 +82,31 @@ public class GsGraphAdapter<T> implements Runnable, GraphModel<T>, GraphWalkerLi
         gsGraph.addAttribute("ui.stylesheet", "url('file:///" + cssFileFullPath + "')");
 
         for (int i = 0; i < vertexCount; i++) {
-            gsGraph.addNode(Integer.toString(i)).addAttribute("ui.label", "Node " + Integer.toString(i));
+            gsGraph.addNode(Integer.toString(i)).addAttribute("ui.label", "Node " + i);
         }
 
         for (int i = 0; i < vertexCount; i++) {
             for (int j = i + 1; j < vertexCount; j++) {
                 if (delegateGraph.getEdge(i, j) > 0) {
-                    gsGraph.addEdge(Integer.toString(i) + Integer.toString(j), Integer.toString(i), Integer.toString(j));
-                    edgesWeight.put(Integer.toString(i) + Integer.toString(j), delegateGraph.getEdge(i, j));
+                    gsGraph.addEdge(getGsEdgeId(i, j), i, j);
                 }
             }
         }
-
-        DisplayGraph displayGraph = new DisplayGraph(gsGraph);
-        displayGraph.display();
     }
 
     @Override
     public int getVertexCount() {
-        return vertexCount;
+        return delegateGraph.getVertexCount();
     }
 
     @Override
     public T getData(int i) {
-        return null;
+        return delegateGraph.getData(i);
     }
 
     @Override
     public int getEdge(int i, int j) {
-        return edgesWeight.get(Integer.toString(i) + Integer.toString(j));
+        return delegateGraph.getEdge(i, j);
     }
 
     @Override
@@ -119,8 +114,13 @@ public class GsGraphAdapter<T> implements Runnable, GraphModel<T>, GraphWalkerLi
         return delegateGraph.getNeighbours(i);
     }
 
-    @Override
-    public void run() {
-        initGraph();
+    // Без дефиса может быть косяк для вершин, например,
+    // 22, 1 и вершин 2, 21 - перетрутся веса.
+    private String getGsEdgeId(int i, int j) {
+        return i + "-" + j;
+    }
+
+    public Graph getGsGraph() {
+        return gsGraph;
     }
 }
