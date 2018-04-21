@@ -65,6 +65,11 @@ public class GraphParserService {
                 }
             }
 
+            // Не могу с ходу понять, "забываются" ли тут строковые имена нодов?
+            // Короче, здесь, кажется, надо сделать маппинг String -> int и передать его в StringGraphModel...
+//            new StringGraphModel<>(new MatrixGraph(....), stringToIntMap);
+            // как-то так
+
             return new MatrixGraph(countOfVertex, countOfEdges, isOrientedGraph, matrix);
         }
     }
