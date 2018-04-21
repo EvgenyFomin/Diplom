@@ -1,36 +1,41 @@
 package ru.itmo.sortvis;
 
+import ru.itmo.sortvis.XMLMapParser.JAXBReader;
 import ru.itmo.sortvis.ui.DisplayGraph;
 
 import javax.swing.*;
+import javax.xml.bind.JAXBException;
 import java.io.File;
 import java.io.IOException;
 
 public class Launcher {
     private static final GraphParserService graphParserService = new GraphParserService();
 
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) throws IOException, JAXBException {
         System.setProperty("org.graphstream.ui.renderer", "org.graphstream.ui.j2dviewer.J2DGraphRenderer");
+
+        JAXBReader reader = new JAXBReader();
+        reader.parse();
         // плохо что такой путь передаём
 
-        GraphModel graphModel = graphParserService.parse(new File("src/main/resources/Graph.txt"));
-        graphModel.initGraph();
+//        GraphModel graphModel = graphParserService.parse(new File("src/main/resources/Graph.txt"));
+//        graphModel.initGraph();
 
 //        GraphModel graphModel = new AdjListGraph();
 
-        GsGraphAdapter gsGraphAdapter = new GsGraphAdapter(graphModel);
-        GraphWalker graphWalker = new GraphWalker(gsGraphAdapter);
-        graphWalker.addListener(gsGraphAdapter);
-
-        gsGraphAdapter.initGraph();
-
-        SwingUtilities.invokeLater(() -> {
-            DisplayGraph displayGraph = new DisplayGraph(gsGraphAdapter.getGsGraph());
-            displayGraph.display();
-        });
+//        GsGraphAdapter gsGraphAdapter = new GsGraphAdapter(graphModel);
+//        GraphWalker graphWalker = new GraphWalker(gsGraphAdapter);
+//        graphWalker.addListener(gsGraphAdapter);
+//
+//        gsGraphAdapter.initGraph();
+//
+//        SwingUtilities.invokeLater(() -> {
+//            DisplayGraph displayGraph = new DisplayGraph(gsGraphAdapter.getGsGraph());
+//            displayGraph.display();
+//        });
 
         // обход в глубину
-        dfs(graphWalker, 0);
+//        dfs(graphWalker, 0);
         // обход в ширину
 //        bfs(graphWalker, 0, 3);
         // Дейкстра
