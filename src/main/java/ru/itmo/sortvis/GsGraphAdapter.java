@@ -71,7 +71,7 @@ public class GsGraphAdapter<T> implements GraphModel<T>, GraphWalkerListener {
     @Override
     public void initGraph() {
         gsGraph = new SingleGraph("Simple Graph");
-        int vertexCount = delegateGraph.getVertexCount();
+        int countOfNodes = delegateGraph.getCountOfNodes();
 
         gsGraph.addAttribute("ui.quality");
         gsGraph.addAttribute("ui.antialias");
@@ -81,12 +81,12 @@ public class GsGraphAdapter<T> implements GraphModel<T>, GraphWalkerListener {
 
         gsGraph.addAttribute("ui.stylesheet", "url('file:///" + cssFileFullPath + "')");
 
-        for (int i = 0; i < vertexCount; i++) {
+        for (int i = 0; i < countOfNodes; i++) {
             gsGraph.addNode(Integer.toString(i)).addAttribute("ui.label", "Node " + i);
         }
 
-        for (int i = 0; i < vertexCount; i++) {
-            for (int j = i + 1; j < vertexCount; j++) {
+        for (int i = 0; i < countOfNodes; i++) {
+            for (int j = i + 1; j < countOfNodes; j++) {
                 if (delegateGraph.getEdge(i, j) > 0) {
                     gsGraph.addEdge(getGsEdgeId(i, j), i, j);
                 }
@@ -95,8 +95,8 @@ public class GsGraphAdapter<T> implements GraphModel<T>, GraphWalkerListener {
     }
 
     @Override
-    public int getVertexCount() {
-        return delegateGraph.getVertexCount();
+    public int getCountOfNodes() {
+        return delegateGraph.getCountOfNodes();
     }
 
     @Override

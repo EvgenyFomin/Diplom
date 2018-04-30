@@ -17,8 +17,8 @@ public class StringGraphModel<T> {
         delegate.initGraph();
     }
 
-    public int getVertexCount() {
-        return delegate.getVertexCount();
+    public int getCountOfNodes() {
+        return delegate.getCountOfNodes();
     }
 
     public T getData(String i) {

@@ -1,5 +1,8 @@
 package ru.itmo.sortvis.XMLMapParser;
 
+import ru.itmo.sortvis.GraphModel;
+import ru.itmo.sortvis.MatrixGraph;
+
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
@@ -8,8 +11,15 @@ import java.io.File;
 import java.util.List;
 
 public class JAXBReader {
-    public void parse() throws JAXBException {
-        File file = new File("src/main/resources/map.osm");
+    int countOfNodes;
+    int countOfEdges;
+    boolean isOrientedGraph = false;
+    int[][] matrix;
+    List<Node> nodeList;
+    List<Way> wayList;
+
+    public GraphModel parse(String path) throws JAXBException {
+        File file = new File(path);
         JAXBContext context = JAXBContext.newInstance(XMLParser.class);
 
         Unmarshaller unmarshaller = context.createUnmarshaller();
@@ -19,12 +29,18 @@ public class JAXBReader {
 //        marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
 //        marshaller.marshal(xmlParser, System.out);
 //        marshaller.marshal(xmlParser, new File("src/main/resources/newMap.xml"));
+
+        nodeList = xmlParser.getNodeList();
+        wayList = xmlParser.getWayList();
+
+        matrix = new int[nodeList.size()][nodeList.size()];
+
+        System.out.println(nodeList.size());
+
+        return null;
     }
 
-    private void printer(XMLParser xmlParser) {
-        List<Node> nodeList = xmlParser.getNodeList();
-        List<Way> wayList = xmlParser.getWayList();
-
+    private void printer() {
         System.out.println("Nodes: ");
 
         for (Node obj : nodeList) {

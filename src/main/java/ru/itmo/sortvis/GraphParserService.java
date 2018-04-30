@@ -9,7 +9,7 @@ import java.util.StringTokenizer;
 
 public class GraphParserService {
     public GraphModel parse(File file) throws IOException {
-        int countOfVertex;
+        int countOfNodes;
         int countOfEdges;
         boolean isOrientedGraph;
         int[][] matrix;
@@ -19,19 +19,19 @@ public class GraphParserService {
             String tmp = bufferedGraphReader.readLine().trim();
             isOrientedGraph = Boolean.parseBoolean(tmp);
             tmp = bufferedGraphReader.readLine();
-            countOfVertex = Integer.valueOf(tmp.substring(0, tmp.indexOf(" ")));
+            countOfNodes = Integer.valueOf(tmp.substring(0, tmp.indexOf(" ")));
             countOfEdges = Integer.valueOf(tmp.substring(tmp.lastIndexOf(" ") + 1));
 
             tmp = bufferedGraphReader.readLine();
             StringTokenizer nodes = new StringTokenizer(tmp);
-            for (int i = 0; i < countOfVertex; i++) {
+            for (int i = 0; i < countOfNodes; i++) {
                 data.put(nodes.nextToken(), i);
             }
 
-            matrix = new int[countOfVertex][countOfVertex];
+            matrix = new int[countOfNodes][countOfNodes];
 
-            for (int i = 0; i < countOfVertex; i++) {
-                for (int j = 0; j < countOfVertex; j++) {
+            for (int i = 0; i < countOfNodes; i++) {
+                for (int j = 0; j < countOfNodes; j++) {
                     matrix[i][i] = 0;
                 }
             }
@@ -70,7 +70,7 @@ public class GraphParserService {
 //            new StringGraphModel<>(new MatrixGraph(....), stringToIntMap);
             // как-то так
 
-            return new MatrixGraph(countOfVertex, countOfEdges, isOrientedGraph, matrix);
+            return new MatrixGraph(countOfNodes, countOfEdges, isOrientedGraph, matrix);
         }
     }
 }

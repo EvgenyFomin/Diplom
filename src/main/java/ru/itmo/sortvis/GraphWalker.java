@@ -17,7 +17,7 @@ public class GraphWalker<T> {
 
     GraphWalker(GraphModel<T> graphModel) {
         this.graphModel = graphModel;
-        int vertexCount = graphModel.getVertexCount();
+        int vertexCount = graphModel.getCountOfNodes();
 
         this.color = new byte[vertexCount];
         Arrays.fill(this.color, WHITE);

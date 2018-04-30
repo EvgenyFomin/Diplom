@@ -3,40 +3,30 @@ package ru.itmo.sortvis;
 import java.util.*;
 
 public class AdjListGraph implements GraphModel<String> {
-    private static final int N = 6;
-
-    // Не очень разобрался, почему массив списков, а не список массивов.
-    private List<Integer>[] adjList;
+    private final int countOfNodes;
+    private final int countOfEdges;
+    private final boolean isOrientedGraph;
     private final List<GraphWalkerListener> listenerList;
+    private Map adjList; // для хранения вершин под разными типами
     private Map<String, Integer> weight;
 
-    public AdjListGraph() {
+    public AdjListGraph(int countOfNodes, int countOfEdges, boolean isOrientedGraph, HashMap adjList, HashMap weight) {
+        this.countOfNodes = countOfNodes;
+        this.countOfEdges = countOfEdges;
+        this.isOrientedGraph = isOrientedGraph;
         listenerList = new ArrayList<>();
-        weight = new HashMap<>();
+        this.weight = weight;
+        this.adjList = adjList;
     }
 
     @Override
     public void initGraph() {
-        adjList = new LinkedList[N];
-        for (int i = 0; i < N; i++) {
-            adjList[i] = new LinkedList<>();
-        }
 
-        for (int i = 0; i < N; i++) {
-            for (int j = i + 1; j < N; j++) {
-                int n = new Random().nextInt(2);
-                if (n == 1) {
-                    adjList[i].add(j);
-                    adjList[j].add(i);
-                    weight.put(Integer.toString(i) + Integer.toString(j), n);
-                } else weight.put(Integer.toString(i) + Integer.toString(j), 0);
-            }
-        }
     }
 
     @Override
-    public int getVertexCount() {
-        return N;
+    public int getCountOfNodes() {
+        return adjList.size();
     }
 
     @Override
@@ -46,11 +36,16 @@ public class AdjListGraph implements GraphModel<String> {
 
     @Override
     public int getEdge(int i, int j) {
-        return weight.get(Integer.toString(i) + Integer.toString(j));
+        return weight.get(String.valueOf(i) + " " + String.valueOf(j));
+    }
+
+    @Override
+    public int[] getNeighbours(int i) {
+        return new int[0];
     }
 
     // Пофиксить, работоспособность не проверял
-    public int[] getNeighbours(int i) {
-        return adjList[i].stream().mapToInt(k -> k).toArray();
-    }
+//    public int[] getNeighbours(int i) {
+//        return adjList[i].stream().mapToInt(k -> k).toArray();
+//    }
 }

@@ -1,6 +1,7 @@
 package ru.itmo.sortvis;
 
 import ru.itmo.sortvis.XMLMapParser.JAXBReader;
+import ru.itmo.sortvis.XMLMapParser.XMLParser;
 import ru.itmo.sortvis.ui.DisplayGraph;
 
 import javax.swing.*;
@@ -15,7 +16,8 @@ public class Launcher {
         System.setProperty("org.graphstream.ui.renderer", "org.graphstream.ui.j2dviewer.J2DGraphRenderer");
 
         JAXBReader reader = new JAXBReader();
-        reader.parse();
+        GraphModel graphModel = reader.parse("src/main/resources/map.osm");
+
         // плохо что такой путь передаём
 
 //        GraphModel graphModel = graphParserService.parse(new File("src/main/resources/Graph.txt"));

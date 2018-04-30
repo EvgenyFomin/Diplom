@@ -5,7 +5,7 @@ import java.util.List;
 public interface GraphModel<T> {
     void initGraph();
 
-    int getVertexCount();
+    int getCountOfNodes();
 
     T getData(int i);
 
