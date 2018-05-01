@@ -30,18 +30,18 @@ public class AdjListGraph implements GraphModel<String> {
     }
 
     @Override
-    public String getData(int i) {
+    public String getData(long i) {
         return null;
     }
 
     @Override
-    public int getEdge(int i, int j) {
+    public int getEdge(long i, long j) {
         return weight.get(String.valueOf(i) + " " + String.valueOf(j));
     }
 
     @Override
-    public int[] getNeighbours(int i) {
-        return new int[0];
+    public long[] getNeighbours(long i) {
+        return new long[0];
     }
 
     // Пофиксить, работоспособность не проверял

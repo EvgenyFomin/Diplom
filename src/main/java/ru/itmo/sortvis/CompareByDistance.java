@@ -4,7 +4,7 @@ package ru.itmo.sortvis;
 
 import java.util.Comparator;
 
-class CompareByDistance implements Comparator<Integer> {
+class CompareByDistance implements Comparator<Long> {
     int[] distance;
 
     public CompareByDistance(int[] distance) {
@@ -12,7 +12,7 @@ class CompareByDistance implements Comparator<Integer> {
     }
 
     @Override
-    public int compare(Integer obj1, Integer obj2) {
-        return distance[obj1] - distance[obj2];
+    public int compare(Long obj1, Long obj2) {
+        return distance[Math.toIntExact(obj1)] - distance[Math.toIntExact(obj2)];
     }
 }

@@ -26,24 +26,24 @@ public class MatrixGraph implements GraphModel<String> {
     }
 
     @Override
-    public String getData(int i) {
+    public String getData(long i) {
         return "abd";
     }
 
     @Override
-    public int getEdge(int i, int j) {
+    public int getEdge(long i, long j) {
         return matrix[Math.toIntExact(i)][Math.toIntExact(j)];
     }
 
     @Override
-    public int[] getNeighbours(int i) {
-        List<Integer> neighbourList = new ArrayList<>();
+    public long[] getNeighbours(long i) {
+        List<Long> neighbourList = new ArrayList<>();
         for (int j = 0; j < countOfNodes; j++) {
-            if (matrix[i][j] >= 1) {
-                neighbourList.add(j);
+            if (matrix[(int) i][j] >= 1) {
+                neighbourList.add((long) j);
             }
         }
-        return neighbourList.stream().mapToInt(k -> k).toArray();
+        return neighbourList.stream().mapToLong(k -> k).toArray();
     }
 
     private void print() {

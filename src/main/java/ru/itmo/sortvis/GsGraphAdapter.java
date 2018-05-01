@@ -25,13 +25,13 @@ public class GsGraphAdapter<T> implements GraphModel<T>, GraphWalkerListener {
     // Используются css файлы из папки resources
     // Пока вызываю эти методы из класса GraphWalker
 
-    public void edgeForward(int i, int j) {
+    public void edgeForward(long i, long j) {
         if (gsGraph.getEdge(getGsEdgeId(i, j)) != null)
             gsGraph.getEdge(getGsEdgeId(i, j)).addAttribute("ui.class", "forward");
         else gsGraph.getEdge(getGsEdgeId(j, i)).addAttribute("ui.class", "forward");
     }
 
-    public void edgeBack(int i, int j) {
+    public void edgeBack(long i, long j) {
         if (gsGraph.getEdge(getGsEdgeId(i, j)) != null)
             gsGraph.getEdge(getGsEdgeId(i, j)).addAttribute("ui.class", "back");
         else gsGraph.getEdge(getGsEdgeId(j, i)).addAttribute("ui.class", "back");
@@ -100,23 +100,21 @@ public class GsGraphAdapter<T> implements GraphModel<T>, GraphWalkerListener {
     }
 
     @Override
-    public T getData(int i) {
+    public T getData(long i) {
         return delegateGraph.getData(i);
     }
 
     @Override
-    public int getEdge(int i, int j) {
+    public int getEdge(long i, long j) {
         return delegateGraph.getEdge(i, j);
     }
 
     @Override
-    public int[] getNeighbours(int i) {
+    public long[] getNeighbours(long i) {
         return delegateGraph.getNeighbours(i);
     }
 
-    // Без дефиса может быть косяк для вершин, например,
-    // 22, 1 и вершин 2, 21 - перетрутся веса.
-    private String getGsEdgeId(int i, int j) {
+    private String getGsEdgeId(long i, long j) {
         return i + "-" + j;
     }
 

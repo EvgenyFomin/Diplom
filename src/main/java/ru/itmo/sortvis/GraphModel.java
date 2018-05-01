@@ -7,9 +7,9 @@ public interface GraphModel<T> {
 
     int getCountOfNodes();
 
-    T getData(int i);
+    T getData(long i);
 
-    int getEdge(int i, int j);
+    int getEdge(long i, long j); // тут пока что мы передаем вес ребра
 
-    int[] getNeighbours(int i);
+    long[] getNeighbours(long i);
 }

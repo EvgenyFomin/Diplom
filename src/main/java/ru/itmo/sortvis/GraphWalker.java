@@ -7,7 +7,7 @@ public class GraphWalker<T> {
     private GraphModel<T> graphModel;
     private byte[] color;
     private int[] distance;
-    private int[] from;
+    private long[] from;
 
     private final List<GraphWalkerListener> listeners;
 
@@ -23,12 +23,12 @@ public class GraphWalker<T> {
         Arrays.fill(this.color, WHITE);
 
         this.distance = new int[vertexCount];
-        this.from = new int[vertexCount];
+        this.from = new long[vertexCount];
 
         this.listeners = new ArrayList<>();
     }
 
-    public void dfs(int i) {
+    void dfs(int i) {
         from[i] = -1;
         depthFirstSearch(i);
         for (int j = 0; j < color.length; j++) {
@@ -39,46 +39,46 @@ public class GraphWalker<T> {
         }
     }
 
-    private void depthFirstSearch(int i) {
-        notify(l -> l.nodeIn(Integer.toString(i)));
+    private void depthFirstSearch(long i) {
+        notify(l -> l.nodeIn(String.valueOf(i)));
 
         System.out.println("in " + i);
 
-        color[i] = GRAY;
-        int[] neighbours = graphModel.getNeighbours(i);
-        for (Integer obj : neighbours) {
-            if (color[obj] == WHITE) {
+        color[(int) i] = GRAY;
+        long[] neighbours = graphModel.getNeighbours(i);
+        for (long obj : neighbours) {
+            if (color[(int) obj] == WHITE) {
                 try {
                     Thread.sleep(1000);
                     notify(l -> l.edgeForward(i, obj));
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
-                from[obj] = i;
+                from[(int) obj] = i;
                 depthFirstSearch(obj);
             }
         }
 
         try {
             Thread.sleep(1000);
-            notify(l -> l.nodeOut(Integer.toString(i)));
-            if (from[i] != -1)
-                notify(l -> l.edgeBack(i, from[i]));
+            notify(l -> l.nodeOut(String.valueOf(i)));
+            if (from[(int) i] != -1)
+                notify(l -> l.edgeBack(i, from[(int) i]));
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
 
-        color[i] = BLACK;
+        color[(int) i] = BLACK;
         System.out.println("out " + i);
     }
 
-    public void bfs(int u, int v) {
-        LinkedList<Integer> way; // путь от u до v. Сюда кладем уже верный путь от u до v.
+    void bfs(long u, long v) {
+        LinkedList<Long> way; // путь от u до v. Сюда кладем уже верный путь от u до v.
         boolean isWayExists = false;
-        Queue<Integer> currentVertexQueue = new LinkedList<>();
+        Queue<Long> currentVertexQueue = new LinkedList<>();
         currentVertexQueue.add(u);
-        color[u] = GRAY;
-        distance[u] = WHITE;
+        color[(int) u] = GRAY;
+        distance[(int) u] = WHITE;
 
         while (!currentVertexQueue.isEmpty()) {
             if (currentVertexQueue.peek() == v) {
@@ -86,12 +86,12 @@ public class GraphWalker<T> {
                 break;
             }
 
-            for (int obj : graphModel.getNeighbours(currentVertexQueue.peek())) {
-                if (color[obj] == WHITE) {
-                    color[obj] = GRAY;
-                    distance[obj] = distance[currentVertexQueue.peek()] + 1;
+            for (long obj : graphModel.getNeighbours(currentVertexQueue.peek())) {
+                if (color[(int) obj] == WHITE) {
+                    color[(int) obj] = GRAY;
+                    distance[(int) obj] = distance[Math.toIntExact(currentVertexQueue.peek())] + 1;
                     currentVertexQueue.add(obj);
-                    from[obj] = currentVertexQueue.peek();
+                    from[(int) obj] = currentVertexQueue.peek();
                 }
             }
 
@@ -103,44 +103,44 @@ public class GraphWalker<T> {
 
             System.out.print("The way is [ ");
 
-            for (Integer obj : way) {
+            for (long obj : way) {
                 System.out.print(obj + " ");
             }
 
             System.out.println("]");
-            System.out.println("distance = " + distance[v]);
+            System.out.println("distance = " + distance[(int) v]);
         } else {
             System.out.println("The way doesn't exists");
         }
     }
 
-    public void dijkstra(int u) {
-        Queue<Integer> vertexPriorityQueue = new PriorityQueue<>(new CompareByDistance(distance));
-        LinkedList<Integer> neighbours = new LinkedList<>();
-        int[] from = new int[distance.length];
-        LinkedList<Integer> way;
+    void dijkstra(long u) {
+        Queue<Long> vertexPriorityQueue = new PriorityQueue<Long>(new CompareByDistance(distance));
+        LinkedList<Long> neighbours = new LinkedList<>();
+        long[] from = new long[distance.length];
+        LinkedList<Long> way;
 
         for (int i = 0; i < distance.length; i++) {
             distance[i] = Integer.MAX_VALUE;
         }
 
-        distance[u] = 0;
-        from[u] = u;
+        distance[(int) u] = 0;
+        from[(int) u] = u;
         vertexPriorityQueue.add(u);
 
         while (!vertexPriorityQueue.isEmpty()) {
-            int currentVertex = vertexPriorityQueue.poll();
-            color[currentVertex] = GRAY;
-            for (int obj : graphModel.getNeighbours(currentVertex)) {
-                if (color[obj] == WHITE) {
+            long currentVertex = vertexPriorityQueue.poll();
+            color[(int) currentVertex] = GRAY;
+            for (long obj : graphModel.getNeighbours(currentVertex)) {
+                if (color[(int) obj] == WHITE) {
                     neighbours.add(obj);
                 }
             }
 
-            for (Integer obj : neighbours) {
-                if (distance[obj] > distance[currentVertex] + graphModel.getEdge(obj, currentVertex)) {
-                    distance[obj] = distance[currentVertex] + graphModel.getEdge(obj, currentVertex);
-                    from[obj] = currentVertex;
+            for (long obj : neighbours) {
+                if (distance[(int) obj] > distance[(int) currentVertex] + graphModel.getEdge(obj, currentVertex)) {
+                    distance[(int) obj] = distance[(int) currentVertex] + graphModel.getEdge(obj, currentVertex);
+                    from[(int) obj] = currentVertex;
                 }
             }
 
@@ -162,7 +162,7 @@ public class GraphWalker<T> {
 
                 way = wayMaker(u, i, from);
 
-                for (Integer obj : way) {
+                for (long obj : way) {
                     System.out.print(obj + " ");
                 }
 
@@ -172,13 +172,13 @@ public class GraphWalker<T> {
         }
     }
 
-    private LinkedList<Integer> wayMaker(int u, int v, int[] from) {
-        LinkedList<Integer> way = new LinkedList<>();
+    private LinkedList<Long> wayMaker(long u, long v, long[] from) {
+        LinkedList<Long> way = new LinkedList<>();
         way.add(v);
-        int tmp = from[v];
+        long tmp = from[(int) v];
         while (tmp != u) {
             way.addFirst(tmp);
-            tmp = from[tmp];
+            tmp = from[(int) tmp];
         }
 
         way.addFirst(u);
