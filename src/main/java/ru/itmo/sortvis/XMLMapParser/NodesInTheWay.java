@@ -3,14 +3,14 @@ package ru.itmo.sortvis.XMLMapParser;
 import javax.xml.bind.annotation.XmlAttribute;
 
 public class NodesInTheWay {
-    int ref;
+    long ref;
 
-    public int getRef() {
+    public long getRef() {
         return ref;
     }
 
     @XmlAttribute
-    public void setRef(int ref) {
+    public void setRef(long ref) {
         this.ref = ref;
     }
 }

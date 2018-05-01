@@ -11,10 +11,10 @@ public class Node {
     String user, timestamp;
     double lat, lon;
     long id, uid, changeset;
-    List<Tag> tagList = new ArrayList<Tag>();
+    ArrayList<Tag> tagList = new ArrayList<Tag>();
 
     @XmlElement(name = "tag")
-    public List<Tag> getTagList() {
+    public ArrayList<Tag> getTagList() {
         return tagList;
     }
 

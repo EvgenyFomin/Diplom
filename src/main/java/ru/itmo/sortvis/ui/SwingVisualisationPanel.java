@@ -24,7 +24,7 @@ public class SwingVisualisationPanel extends JPanel  {
         this.graphModel = graphModel;
         this.coord = new HashMap<>();
         this.vertexCoord = new HashMap<>();
-        this.vertexCount = graphModel.getVertexCount();
+        this.vertexCount = graphModel.getCountOfNodes();
         calculateCoords();
     }
 

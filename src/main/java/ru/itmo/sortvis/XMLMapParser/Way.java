@@ -11,16 +11,16 @@ public class Way {
     int version;
     String user, timestamp;
     long id, uid, changeset;
-    List<Tag> tagList = new LinkedList<Tag>();
-    List<NodesInTheWay> ndList = new LinkedList<NodesInTheWay>();
+    ArrayList<Tag> tagList = new ArrayList<Tag>();
+    ArrayList<NodesInTheWay> ndList = new ArrayList<>();
 
     @XmlElement(name = "tag")
-    public List<Tag> getTagList() {
+    public ArrayList<Tag> getTagList() {
         return tagList;
     }
 
     @XmlElement(name = "nd")
-    public List<NodesInTheWay> getNdList() {
+    public ArrayList<NodesInTheWay> getNdList() {
         return ndList;
     }
 

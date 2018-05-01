@@ -7,7 +7,7 @@ public class AdjListGraph implements GraphModel<String> {
     private final int countOfEdges;
     private final boolean isOrientedGraph;
     private final List<GraphWalkerListener> listenerList;
-    private Map adjList; // для хранения вершин под разными типами
+    private Map<Long, Set<Long>> adjList; // для хранения вершин под разными типами
     private Map<String, Integer> weight;
 
     public AdjListGraph(int countOfNodes, int countOfEdges, boolean isOrientedGraph, HashMap adjList, HashMap weight) {
@@ -36,12 +36,19 @@ public class AdjListGraph implements GraphModel<String> {
 
     @Override
     public int getEdge(long i, long j) {
-        return weight.get(String.valueOf(i) + " " + String.valueOf(j));
+        return weight.get(String.valueOf(i) + "-" + String.valueOf(j));
     }
 
     @Override
     public long[] getNeighbours(long i) {
-        return new long[0];
+        long[] neighbours = new long[adjList.get(i).size()];
+        int iterator = 0;
+
+        for (long obj : adjList.get(i)) {
+            neighbours[iterator++] = obj;
+        }
+
+        return neighbours;
     }
 
     // Пофиксить, работоспособность не проверял

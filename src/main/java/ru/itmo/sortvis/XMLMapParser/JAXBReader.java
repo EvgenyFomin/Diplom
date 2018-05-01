@@ -1,22 +1,22 @@
 package ru.itmo.sortvis.XMLMapParser;
 
+import ru.itmo.sortvis.AdjListGraph;
 import ru.itmo.sortvis.GraphModel;
-import ru.itmo.sortvis.MatrixGraph;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
-import javax.xml.bind.Marshaller;
 import javax.xml.bind.Unmarshaller;
 import java.io.File;
-import java.util.List;
+import java.util.*;
 
 public class JAXBReader {
     int countOfNodes;
     int countOfEdges;
     boolean isOrientedGraph = false;
-    int[][] matrix;
-    List<Node> nodeList;
-    List<Way> wayList;
+    private HashMap<Long, Set<Long>> adjList;
+    private HashMap<String, Integer> weight;
+    private List<Node> nodeList;
+    private List<Way> wayList;
 
     public GraphModel parse(String path) throws JAXBException {
         File file = new File(path);
@@ -33,11 +33,44 @@ public class JAXBReader {
         nodeList = xmlParser.getNodeList();
         wayList = xmlParser.getWayList();
 
-        matrix = new int[nodeList.size()][nodeList.size()];
+        countOfNodes = nodeList.size();
+        adjList = new HashMap<>();
+        for (Way currentWay : wayList) {
+            ArrayList<NodesInTheWay> currentArrayList;
+            currentArrayList = currentWay.getNdList();
+            int sizeOfNodesList = currentArrayList.size();
+            for (int i = 0; i < sizeOfNodesList - 1; i++) {
+                if (adjList.containsKey(currentArrayList.get(i).getRef())) {
+                    adjList.get(currentArrayList.get(i).getRef()).add(currentArrayList.get(i + 1).getRef());
+                } else {
+                    adjList.put(currentArrayList.get(i).getRef(), new HashSet<>());
+                    adjList.get(currentArrayList.get(i).getRef()).add(currentArrayList.get(i + 1).getRef());
+                }
 
-        System.out.println(nodeList.size());
+                if (adjList.containsKey(currentArrayList.get(i + 1).getRef())) {
+                    adjList.get(currentArrayList.get(i + 1).getRef()).add(currentArrayList.get(i).getRef());
+                } else {
+                    adjList.put(currentArrayList.get(i + 1).getRef(), new HashSet<>());
+                    adjList.get(currentArrayList.get(i + 1).getRef()).add(currentArrayList.get(i).getRef());
+                }
+            }
+        }
 
-        return null;
+        countOfEdges = 0;
+
+        for (Node currentNode : nodeList) {
+            try {
+                countOfEdges += adjList.get(currentNode.getId()).size();
+                for (long id : adjList.get(currentNode.getId())) {
+                    weight.put(String.valueOf(currentNode.getId()) + "-" + String.valueOf(id), 1);
+                }
+            } catch (NullPointerException e) {
+//                System.out.println(currentNode.getId()); // вершины, которые не используются в путях
+            }
+        }
+
+        System.out.println(countOfNodes + " " + countOfEdges);
+        return new AdjListGraph(countOfNodes, countOfEdges, false, adjList, weight);
     }
 
     private void printer() {
@@ -50,7 +83,10 @@ public class JAXBReader {
         System.out.println("Ways: ");
 
         for (Way obj : wayList) {
-            System.out.println(obj.getId());
+            for (NodesInTheWay nodesInTheWay : obj.getNdList()) {
+                System.out.println(nodesInTheWay.getRef());
+            }
+//            System.out.println(obj.getId());
         }
     }
 }
