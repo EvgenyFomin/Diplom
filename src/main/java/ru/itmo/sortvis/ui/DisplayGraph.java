@@ -8,6 +8,6 @@ public class DisplayGraph {
         this.graph = graph;
     }
     public void display() {
-        graph.display();
+        graph.display(false);
     }
 }

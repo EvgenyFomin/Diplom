@@ -1,5 +1,6 @@
 package ru.itmo.sortvis.XMLMapParser;
 
+import org.apache.commons.lang3.tuple.Pair;
 import ru.itmo.sortvis.AdjListGraph;
 import ru.itmo.sortvis.GraphModel;
 
@@ -14,7 +15,7 @@ public class JAXBReader {
     int countOfEdges;
     boolean isOrientedGraph = false;
     private HashMap<Long, Set<Long>> adjList;
-    private HashMap<String, Integer> weight;
+    private HashMap<Pair<Long, Long>, Integer> weight;
     private List<Node> nodeList;
     private List<Way> wayList;
 
@@ -58,19 +59,32 @@ public class JAXBReader {
 
         countOfEdges = 0;
 
+        Map<Long, Node> idToNode = new HashMap<>();
+        weight = new HashMap<>();
+
         for (Node currentNode : nodeList) {
             try {
-                countOfEdges += adjList.get(currentNode.getId()).size();
-                for (long id : adjList.get(currentNode.getId())) {
-                    weight.put(String.valueOf(currentNode.getId()) + "-" + String.valueOf(id), 1);
+                long currentNodeId = currentNode.getId();
+
+                idToNode.put(currentNodeId, currentNode);
+
+                if (adjList.get(currentNodeId) == null) {
+                    // Не используется в маршрутах way (памятник, например)
+                    continue;
+                }
+
+                countOfEdges += adjList.get(currentNodeId).size();
+                for (long id : adjList.get(currentNodeId)) {
+                    weight.put(Pair.of(currentNodeId, id), 1);
                 }
             } catch (NullPointerException e) {
+                e.printStackTrace();
 //                System.out.println(currentNode.getId()); // вершины, которые не используются в путях
             }
         }
 
         System.out.println(countOfNodes + " " + countOfEdges);
-        return new AdjListGraph(countOfNodes, countOfEdges, false, adjList, weight);
+        return new AdjListGraph(countOfNodes, countOfEdges, false, idToNode, adjList, weight);
     }
 
     private void printer() {

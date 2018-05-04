@@ -1,18 +1,19 @@
 node { 
-	size: 15px, 15px;
-	fill-mode: gradient-radial;
-    fill-color: black, white;
-    text-background-mode: plain;
-    text-alignment: at-left;
+	size: 3px;
+	/*fill-mode: gradient-radial;*/
+    fill-color: black;
+    /*text-background-mode: plain;*/
+	text-mode: hidden;
+	z-index: 0;
 }
 
 edge {
     shape: line;
-    arrow-shape: arrow;
-	arrow-size: 10px, 4px;
-    text-background-mode: plain;
-    text-alignment: along;
-    text-color: red;
+    /*arrow-shape: arrow;*/
+    /*arrow-size: 3px, 2px;*/
+    /*text-background-mode: plain;*/
+    /*text-alignment: along;*/
+    /*text-color: red;*/
 }
 
 edge.forward {

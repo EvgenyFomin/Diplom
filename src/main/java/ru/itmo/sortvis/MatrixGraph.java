@@ -1,5 +1,7 @@
 package ru.itmo.sortvis;
 
+import org.apache.commons.lang3.tuple.Pair;
+
 import java.util.*;
 
 public class MatrixGraph implements GraphModel<String> {
@@ -44,6 +46,18 @@ public class MatrixGraph implements GraphModel<String> {
             }
         }
         return neighbourList.stream().mapToLong(k -> k).toArray();
+    }
+
+    @Override
+    public Set<Long> getAllIds() {
+        // TODO implement
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public Set<Pair<Long, Long>> getEdges() {
+        // TODO implement
+        throw new UnsupportedOperationException();
     }
 
     private void print() {

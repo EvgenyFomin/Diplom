@@ -1,22 +1,19 @@
 package ru.itmo.sortvis;
 
-import org.graphstream.graph.Edge;
+import org.apache.commons.lang3.tuple.Pair;
 import org.graphstream.graph.Graph;
-import org.graphstream.graph.Node;
-import org.graphstream.graph.implementations.AbstractGraph;
+import org.graphstream.graph.implementations.MultiGraph;
 import org.graphstream.graph.implementations.SingleGraph;
-import ru.itmo.sortvis.ui.DisplayGraph;
+import ru.itmo.sortvis.XMLMapParser.Node;
 
 import java.io.File;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.Set;
 
-public class GsGraphAdapter<T> implements GraphModel<T>, GraphWalkerListener {
+public class GsGraphAdapter implements GraphModel<Node>, GraphWalkerListener {
     private Graph gsGraph;
-    private GraphModel<T> delegateGraph;
+    private GraphModel<Node> delegateGraph;
 
-    public GsGraphAdapter(GraphModel<T> delegateGraph) {
+    public GsGraphAdapter(GraphModel<Node> delegateGraph) {
         this.delegateGraph = delegateGraph;
     }
 
@@ -71,7 +68,6 @@ public class GsGraphAdapter<T> implements GraphModel<T>, GraphWalkerListener {
     @Override
     public void initGraph() {
         gsGraph = new SingleGraph("Simple Graph");
-        int countOfNodes = delegateGraph.getCountOfNodes();
 
         gsGraph.addAttribute("ui.quality");
         gsGraph.addAttribute("ui.antialias");
@@ -81,16 +77,24 @@ public class GsGraphAdapter<T> implements GraphModel<T>, GraphWalkerListener {
 
         gsGraph.addAttribute("ui.stylesheet", "url('file:///" + cssFileFullPath + "')");
 
-        for (int i = 0; i < countOfNodes; i++) {
-            gsGraph.addNode(Integer.toString(i)).addAttribute("ui.label", "Node " + i);
+        for (long id : delegateGraph.getAllIds()) {
+            String nodeId = Long.toString(id);
+            gsGraph.addNode(nodeId).addAttribute("ui.label", "Node "     + id);
+            int x = (int) (delegateGraph.getData(id).getLon() * 1000000);
+            int y = (int) (delegateGraph.getData(id).getLat() * 1000000);
+            System.out.println(delegateGraph.getData(id).getLat() + " " + delegateGraph.getData(id).getLon());
+            System.out.printf("Adding node %s: (%d, %d)%n", nodeId, x, y);
+            gsGraph.getNode(nodeId).setAttribute("xyz", x, y, 0);
+            gsGraph.getNode(nodeId).setAttribute("xyz", x, y, 0);
         }
 
-        for (int i = 0; i < countOfNodes; i++) {
-            for (int j = i + 1; j < countOfNodes; j++) {
-                if (delegateGraph.getEdge(i, j) > 0) {
-                    gsGraph.addEdge(getGsEdgeId(i, j), i, j);
-                }
+        for (Pair<Long, Long> edge : delegateGraph.getEdges()) {
+            if (gsGraph.getEdge(edge.getRight() + "-" + edge.getLeft()) != null) {
+                System.out.println("Inverted edge exists, not adding: " + edge.getLeft() + "-" + edge.getRight());
+                continue;
             }
+            System.out.println("Adding edge " + edge.getLeft() + "-" + edge.getRight());
+            gsGraph.addEdge(edge.getLeft() + "-" + edge.getRight(), Long.toString(edge.getLeft()), Long.toString(edge.getRight()), false);
         }
     }
 
@@ -100,7 +104,7 @@ public class GsGraphAdapter<T> implements GraphModel<T>, GraphWalkerListener {
     }
 
     @Override
-    public T getData(long i) {
+    public Node getData(long i) {
         return delegateGraph.getData(i);
     }
 
@@ -112,6 +116,16 @@ public class GsGraphAdapter<T> implements GraphModel<T>, GraphWalkerListener {
     @Override
     public long[] getNeighbours(long i) {
         return delegateGraph.getNeighbours(i);
+    }
+
+    @Override
+    public Set<Long> getAllIds() {
+        return delegateGraph.getAllIds();
+    }
+
+    @Override
+    public Set<Pair<Long, Long>> getEdges() {
+        return delegateGraph.getEdges();
     }
 
     private String getGsEdgeId(long i, long j) {

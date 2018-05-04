@@ -16,25 +16,25 @@ public class Launcher {
         System.setProperty("org.graphstream.ui.renderer", "org.graphstream.ui.j2dviewer.J2DGraphRenderer");
 
         JAXBReader reader = new JAXBReader();
-        GraphModel graphModel = reader.parse("src/main/resources/map.osm");
+        GraphModel graphModel = reader.parse("src/main/resources/o-kotlin-north.osm");
 
         // плохо что такой путь передаём
 
 //        GraphModel graphModel = graphParserService.parse(new File("src/main/resources/Graph.txt"));
 //        graphModel.initGraph();
-
+//
 //        GraphModel graphModel = new AdjListGraph();
 
-//        GsGraphAdapter gsGraphAdapter = new GsGraphAdapter(graphModel);
-//        GraphWalker graphWalker = new GraphWalker(gsGraphAdapter);
-//        graphWalker.addListener(gsGraphAdapter);
-//
-//        gsGraphAdapter.initGraph();
-//
-//        SwingUtilities.invokeLater(() -> {
-//            DisplayGraph displayGraph = new DisplayGraph(gsGraphAdapter.getGsGraph());
-//            displayGraph.display();
-//        });
+        GsGraphAdapter gsGraphAdapter = new GsGraphAdapter(graphModel);
+        GraphWalker graphWalker = new GraphWalker(gsGraphAdapter);
+        graphWalker.addListener(gsGraphAdapter);
+
+        gsGraphAdapter.initGraph();
+
+        SwingUtilities.invokeLater(() -> {
+            DisplayGraph displayGraph = new DisplayGraph(gsGraphAdapter.getGsGraph());
+            displayGraph.display();
+        });
 
         // обход в глубину
 //        dfs(graphWalker, 0);
