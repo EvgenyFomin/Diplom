@@ -29,7 +29,7 @@ public class Launcher {
 //        GraphWalker graphWalker = new GraphWalker(gsGraphAdapter);
 //        graphWalker.addListener(gsGraphAdapter);
 
-        GraphWalker_NEW graphWalker_new = new GraphWalker_NEW(gsGraphAdapter);
+        GraphWalker_NEW<Integer> graphWalker_new = new GraphWalker_NEW(gsGraphAdapter);
         graphWalker_new.addListener(gsGraphAdapter);
         gsGraphAdapter.initGraph();
 
@@ -40,13 +40,15 @@ public class Launcher {
 
         // обход в глубину
 //        dfs(graphWalker_new, 886609116);
+//        dfs(graphWalker_new, 1478011807);
         // обход в ширину
-//        bfs(graphWalker, 0, 3);
+        bfs(graphWalker_new, 1478011807, 1620097881);
         // Дейкстра
 //        dijkstra(graphWalker, 0);
+//        checkMarker(graphWalker_new, 1460516946);
     }
 
-    private static void dfs(GraphWalker_NEW graphWalker_new, long startVertex) {
+    private static void dfs(GraphWalker_NEW graphWalker_new, long startNode) {
         System.out.println("START!");
         for (int i = 5; i > -1; i--) {
             try {
@@ -56,10 +58,10 @@ public class Launcher {
             }
             System.out.println(i);
         }
-        graphWalker_new.dfs(startVertex);
+        graphWalker_new.dfs(startNode);
     }
 
-    private static void bfs(GraphWalker graphWalker, int fromVertex, int toVertex) {
+    private static void bfs(GraphWalker_NEW graphWalker_new, int fromNode, int toNode) {
         System.out.println("START!");
         for (int i = 5; i > -1; i--) {
             try {
@@ -69,10 +71,10 @@ public class Launcher {
             }
             System.out.println(i);
         }
-        graphWalker.bfs(fromVertex, toVertex);
+        graphWalker_new.bfs(fromNode, toNode);
     }
 
-    private static void dijkstra(GraphWalker graphWalker, int startVertex) {
+    private static void dijkstra(GraphWalker graphWalker, int startNode) {
 //        GsGraphAdapter.initNodesData();
 //        GsGraphAdapter.initEdgesWeight();
         System.out.println("START!");
@@ -84,6 +86,10 @@ public class Launcher {
             }
             System.out.println(i);
         }
-        graphWalker.dijkstra(startVertex);
+        graphWalker.dijkstra(startNode);
+    }
+
+    private static void checkMarker(GraphWalker_NEW graphWalker_new, long u) {
+        graphWalker_new.checkMarker(u);
     }
 }

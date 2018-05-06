@@ -75,27 +75,27 @@ public class GraphWalker<T> {
     void bfs(long u, long v) {
         LinkedList<Long> way; // путь от u до v. Сюда кладем уже верный путь от u до v.
         boolean isWayExists = false;
-        Queue<Long> currentVertexQueue = new LinkedList<>();
-        currentVertexQueue.add(u);
+        Queue<Long> currentNodeQueue = new LinkedList<>();
+        currentNodeQueue.add(u);
         color[(int) u] = GRAY;
         distance[(int) u] = WHITE;
 
-        while (!currentVertexQueue.isEmpty()) {
-            if (currentVertexQueue.peek() == v) {
+        while (!currentNodeQueue.isEmpty()) {
+            if (currentNodeQueue.peek() == v) {
                 isWayExists = true;
                 break;
             }
 
-            for (long obj : graphModel.getNeighbours(currentVertexQueue.peek())) {
+            for (long obj : graphModel.getNeighbours(currentNodeQueue.peek())) {
                 if (color[(int) obj] == WHITE) {
                     color[(int) obj] = GRAY;
-                    distance[(int) obj] = distance[Math.toIntExact(currentVertexQueue.peek())] + 1;
-                    currentVertexQueue.add(obj);
-                    from[(int) obj] = currentVertexQueue.peek();
+                    distance[(int) obj] = distance[Math.toIntExact(currentNodeQueue.peek())] + 1;
+                    currentNodeQueue.add(obj);
+                    from[(int) obj] = currentNodeQueue.peek();
                 }
             }
 
-            currentVertexQueue.poll();
+            currentNodeQueue.poll();
         }
 
         if (isWayExists) {
