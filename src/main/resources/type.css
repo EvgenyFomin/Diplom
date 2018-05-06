@@ -19,31 +19,32 @@ edge {
 edge.forward {
     shape: line;
 	fill-color: yellow;
-	arrow-size: 5px, 2px;
+	/*arrow-size: 5px, 2px;*/
 }
 
 edge.back {
     shape: line;
 	fill-color: red;
-	arrow-size: 5px, 2px;
+	/*arrow-size: 5px, 2px;*/
 }
 
 node.in {
-	size: 15px, 15px;
+    fill-color: yellow;
+	/*size: 15px, 15px;
 	fill-mode: plain;
-	fill-color: yellow;
     text-background-mode: plain;
     text-alignment: under;
 	stroke-mode: plain;
-	stroke-color: blue;
+	stroke-color: blue;*/
 }
 
 node.out {
-	size: 15px, 15px;
+    fill-color: red;
+	/*size: 15px, 15px;
 	fill-mode: plain;
 	fill-color: red;
     text-background-mode: plain;
     text-alignment: under;
 	stroke-mode: plain;
-	stroke-color: blue;
+	stroke-color: blue;*/
 }

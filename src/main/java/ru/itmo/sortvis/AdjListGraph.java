@@ -11,7 +11,7 @@ public class AdjListGraph<T> implements GraphModel<T> {
     private final boolean isOrientedGraph;
     private final List<GraphWalkerListener> listenerList;
     private final Map<Long, T> nodes;
-    private Map<Long, Set<Long>> adjList; // для хранения вершин под разными типами
+    private Map<Long, Set<Long>> adjList;
     private Map<Pair<Long, Long>, Integer> weight;
 
     public AdjListGraph(int countOfNodes, int countOfEdges, boolean isOrientedGraph, Map<Long, T> nodes, Map<Long, Set<Long>> adjList, Map<Pair<Long, Long>, Integer> weight) {

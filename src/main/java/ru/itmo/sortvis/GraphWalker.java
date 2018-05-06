@@ -17,13 +17,13 @@ public class GraphWalker<T> {
 
     GraphWalker(GraphModel<T> graphModel) {
         this.graphModel = graphModel;
-        int vertexCount = graphModel.getCountOfNodes();
+        int countOfNodes = graphModel.getCountOfNodes();
 
-        this.color = new byte[vertexCount];
+        this.color = new byte[countOfNodes];
         Arrays.fill(this.color, WHITE);
 
-        this.distance = new int[vertexCount];
-        this.from = new long[vertexCount];
+        this.distance = new int[countOfNodes];
+        this.from = new long[countOfNodes];
 
         this.listeners = new ArrayList<>();
     }

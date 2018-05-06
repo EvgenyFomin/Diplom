@@ -26,9 +26,11 @@ public class Launcher {
 //        GraphModel graphModel = new AdjListGraph();
 
         GsGraphAdapter gsGraphAdapter = new GsGraphAdapter(graphModel);
-        GraphWalker graphWalker = new GraphWalker(gsGraphAdapter);
-        graphWalker.addListener(gsGraphAdapter);
+//        GraphWalker graphWalker = new GraphWalker(gsGraphAdapter);
+//        graphWalker.addListener(gsGraphAdapter);
 
+        GraphWalker_NEW graphWalker_new = new GraphWalker_NEW(gsGraphAdapter);
+        graphWalker_new.addListener(gsGraphAdapter);
         gsGraphAdapter.initGraph();
 
         SwingUtilities.invokeLater(() -> {
@@ -37,14 +39,14 @@ public class Launcher {
         });
 
         // обход в глубину
-//        dfs(graphWalker, 0);
+        dfs(graphWalker_new, 886609116);
         // обход в ширину
 //        bfs(graphWalker, 0, 3);
         // Дейкстра
 //        dijkstra(graphWalker, 0);
     }
 
-    private static void dfs(GraphWalker graphWalker, int startVertex) {
+    private static void dfs(GraphWalker_NEW graphWalker_new, long startVertex) {
         System.out.println("START!");
         for (int i = 5; i > -1; i--) {
             try {
@@ -54,7 +56,7 @@ public class Launcher {
             }
             System.out.println(i);
         }
-        graphWalker.dfs(startVertex);
+        graphWalker_new.dfs(startVertex);
     }
 
     private static void bfs(GraphWalker graphWalker, int fromVertex, int toVertex) {
