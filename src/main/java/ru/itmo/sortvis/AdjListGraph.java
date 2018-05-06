@@ -46,14 +46,19 @@ public class AdjListGraph<T> implements GraphModel<T> {
 
     @Override
     public long[] getNeighbours(long i) {
-        long[] neighbours = new long[adjList.get(i).size()];
-        int iterator = 0;
+        try {
+            long[] neighbours = new long[adjList.get(i).size()];
+            int iterator = 0;
 
-        for (long obj : adjList.get(i)) {
-            neighbours[iterator++] = obj;
+            for (long obj : adjList.get(i)) {
+                neighbours[iterator++] = obj;
+            }
+
+            return neighbours;
+
+        } catch (NullPointerException e) {
+            return new long[0];
         }
-
-        return neighbours;
     }
 
     @Override

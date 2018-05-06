@@ -39,7 +39,7 @@ public class Launcher {
         });
 
         // обход в глубину
-        dfs(graphWalker_new, 886609116);
+//        dfs(graphWalker_new, 886609116);
         // обход в ширину
 //        bfs(graphWalker, 0, 3);
         // Дейкстра

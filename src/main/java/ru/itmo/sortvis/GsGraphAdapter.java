@@ -82,18 +82,18 @@ public class GsGraphAdapter implements GraphModel<Node>, GraphWalkerListener {
             gsGraph.addNode(nodeId).addAttribute("ui.label", "Node "     + id);
             int x = (int) (delegateGraph.getData(id).getLon() * 1000000);
             int y = (int) (delegateGraph.getData(id).getLat() * 1000000);
-            System.out.println(delegateGraph.getData(id).getLat() + " " + delegateGraph.getData(id).getLon());
-            System.out.printf("Adding node %s: (%d, %d)%n", nodeId, x, y);
+//            System.out.println(delegateGraph.getData(id).getLat() + " " + delegateGraph.getData(id).getLon());
+//            System.out.printf("Adding node %s: (%d, %d)%n", nodeId, x, y);
             gsGraph.getNode(nodeId).setAttribute("xyz", x, y, 0);
             gsGraph.getNode(nodeId).setAttribute("xyz", x, y, 0);
         }
 
         for (Pair<Long, Long> edge : delegateGraph.getEdges()) {
             if (gsGraph.getEdge(edge.getRight() + "-" + edge.getLeft()) != null) {
-                System.out.println("Inverted edge exists, not adding: " + edge.getLeft() + "-" + edge.getRight());
+//                System.out.println("Inverted edge exists, not adding: " + edge.getLeft() + "-" + edge.getRight());
                 continue;
             }
-            System.out.println("Adding edge " + edge.getLeft() + "-" + edge.getRight());
+//            System.out.println("Adding edge " + edge.getLeft() + "-" + edge.getRight());
             gsGraph.addEdge(edge.getLeft() + "-" + edge.getRight(), Long.toString(edge.getLeft()), Long.toString(edge.getRight()), false);
         }
     }

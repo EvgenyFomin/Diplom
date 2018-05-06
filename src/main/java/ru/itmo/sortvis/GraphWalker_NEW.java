@@ -37,24 +37,19 @@ public class GraphWalker_NEW<T> {
         notify(l -> l.nodeIn(String.valueOf(i)));
 
         color.put(i, Color.GRAY);
-        System.out.println("in " + i);
-
-        try {
-            long[] neighbours = graphModel.getNeighbours(i); // !!! тут иногда возвращается Null. По сути алгоритм продолжает работать нормально.
-            for (long obj : neighbours) {
-                if (!color.containsKey(obj)) {
-                    try {
-                        Thread.sleep(10);
-                        notify(l -> l.edgeForward(i, obj));
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
-                    from.put(obj, i);
-                    depthFirstSearch(obj);
+//        System.out.println("in " + i);
+        long[] neighbours = graphModel.getNeighbours(i);
+        for (long obj : neighbours) {
+            if (!color.containsKey(obj)) {
+                try {
+                    Thread.sleep(10);
+                    notify(l -> l.edgeForward(i, obj));
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
                 }
+                from.put(obj, i);
+                depthFirstSearch(obj);
             }
-        } catch (NullPointerException e) {
-
         }
 
         try {
@@ -69,7 +64,7 @@ public class GraphWalker_NEW<T> {
         color.remove(i);
         color.put(i, Color.BLACK);
 
-        System.out.println("out " + i);
+//        System.out.println("out " + i);
     }
 
     public void addListener(GraphWalkerListener l) {

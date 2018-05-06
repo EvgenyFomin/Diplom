@@ -18,6 +18,7 @@ public class JAXBReader {
     private HashMap<Pair<Long, Long>, Integer> weight;
     private List<Node> nodeList;
     private List<Way> wayList;
+    private boolean filterOut = true;
 
     public GraphModel parse(String path) throws JAXBException {
         File file = new File(path);
@@ -37,6 +38,17 @@ public class JAXBReader {
         countOfNodes = nodeList.size();
         adjList = new HashMap<>();
         for (Way currentWay : wayList) {
+
+            if (filterOut) {
+                for (Tag currentTag : currentWay.getTagList()) {
+                    if (currentTag.getV().equals("footway") || currentTag.getV().equals("sidewalk") ||
+                            currentTag.getV().equals("park")) {
+                        System.out.println("Warning. Way " + currentWay.getId() + " is under filter");
+                        break;
+                    }
+                }
+            }
+
             ArrayList<NodesInTheWay> currentArrayList;
             currentArrayList = currentWay.getNdList();
             int sizeOfNodesList = currentArrayList.size();
@@ -55,6 +67,7 @@ public class JAXBReader {
                     adjList.get(currentArrayList.get(i + 1).getRef()).add(currentArrayList.get(i).getRef());
                 }
             }
+
         }
 
         countOfEdges = 0;
@@ -63,23 +76,18 @@ public class JAXBReader {
         weight = new HashMap<>();
 
         for (Node currentNode : nodeList) {
-            try {
-                long currentNodeId = currentNode.getId();
+            long currentNodeId = currentNode.getId();
 
-                idToNode.put(currentNodeId, currentNode);
+            idToNode.put(currentNodeId, currentNode);
 
-                if (adjList.get(currentNodeId) == null) {
-                    // Не используется в маршрутах way (памятник, например)
-                    continue;
-                }
+            if (adjList.get(currentNodeId) == null) {
+                // Не используется в маршрутах way (памятник, например)
+                continue;
+            }
 
-                countOfEdges += adjList.get(currentNodeId).size();
-                for (long id : adjList.get(currentNodeId)) {
-                    weight.put(Pair.of(currentNodeId, id), 1);
-                }
-            } catch (NullPointerException e) {
-                e.printStackTrace();
-//                System.out.println(currentNode.getId()); // вершины, которые не используются в путях
+            countOfEdges += adjList.get(currentNodeId).size();
+            for (long id : adjList.get(currentNodeId)) {
+                weight.put(Pair.of(currentNodeId, id), 1);
             }
         }
 
