@@ -6,7 +6,7 @@ import java.util.function.Consumer;
 public class GraphWalker<T> {
     private GraphModel<T> graphModel;
     private byte[] color;
-    private int[] distance;
+    private double[] distance;
     private long[] from;
 
     private final List<GraphWalkerListener> listeners;
@@ -22,7 +22,7 @@ public class GraphWalker<T> {
         this.color = new byte[countOfNodes];
         Arrays.fill(this.color, WHITE);
 
-        this.distance = new int[countOfNodes];
+        this.distance = new double[countOfNodes];
         this.from = new long[countOfNodes];
 
         this.listeners = new ArrayList<>();

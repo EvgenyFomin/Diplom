@@ -17,6 +17,7 @@ public class JAXBReader {
     private ArrayList<Bounds> bounds;
     private HashMap<Long, Set<Long>> adjList;
     private HashMap<Pair<Long, Long>, Integer> weight;
+    Map<Long, Node> idToNode = new HashMap<>();
 
     private List<Node> nodeList;
     private List<Way> wayList;
@@ -55,8 +56,6 @@ public class JAXBReader {
                 i--;
             }
         }
-
-        Map<Long, Node> idToNode = new HashMap<>();
 
         for (Node currentNode : nodeList) {
             long currentNodeId = currentNode.getId();
@@ -114,8 +113,13 @@ public class JAXBReader {
             }
 
             countOfEdges += adjList.get(currentNodeId).size();
+
+            int x0 = (int) (idToNode.get(currentNodeId).getLon() * 1000000);
+            int y0 = (int) (idToNode.get(currentNodeId).getLat() * 1000000);
             for (long id : adjList.get(currentNodeId)) {
-                weight.put(Pair.of(currentNodeId, id), 1);
+                int x1 = (int) (idToNode.get(id).getLon() * 1000000);
+                int y1 = (int) (idToNode.get(id).getLat() * 1000000);
+                weight.put(Pair.of(currentNodeId, id), (int) (Math.sqrt(Math.pow((x1 - x0)/100000.0, 2) + Math.pow((y1 - y0)/100000.0, 2)) * 100000));
             }
         }
 

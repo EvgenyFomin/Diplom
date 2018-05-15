@@ -130,6 +130,40 @@ public class GraphWalker_NEW<T> {
         }
     }
 
+    public void dijkstra(long u) {
+        Queue<Long> nodePriorityQueue = new PriorityQueue<Long>(new CompareByDistance_NEW(distance));
+        LinkedList<Long> neighbours = new LinkedList<>();
+
+        distance.put(u, 0);
+
+        while (!neighbours.isEmpty()) {
+            long currentNode = neighbours.poll();
+            color.put(currentNode, Color.BLACK);
+
+            for (long currentNeighbour : graphModel.getNeighbours(currentNode)) {
+                if (!color.containsKey(currentNeighbour)) {
+                    neighbours.add(currentNeighbour);
+                }
+            }
+
+            for (long currentNeighbour : neighbours) {
+                if (!distance.containsKey(currentNeighbour)) {
+                    distance.put(currentNeighbour, graphModel.getEdge(currentNode, currentNeighbour));
+                } else if (distance.get(currentNeighbour) > distance.get(currentNode) + graphModel.getEdge(currentNode, currentNeighbour)) {
+                    distance.remove(currentNeighbour);
+                    distance.put(currentNeighbour, graphModel.getEdge(currentNode, currentNeighbour));
+                }
+            }
+
+            nodePriorityQueue.addAll(neighbours);
+            neighbours.clear();
+        }
+
+        for (Map.Entry<Long, Integer> pair : distance.entrySet()) {
+            System.out.println("Distance from " + u + " to " + pair.getKey() + " = " + pair.getValue());
+        }
+    }
+
     public void checkMarker(long u) {
         while (true) {
             try {

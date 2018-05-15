@@ -16,7 +16,7 @@ public class Launcher {
         System.setProperty("org.graphstream.ui.renderer", "org.graphstream.ui.j2dviewer.J2DGraphRenderer");
 
         JAXBReader reader = new JAXBReader();
-        GraphModel graphModel = reader.parse("src/main/resources/o-kotlin.osm");
+        GraphModel graphModel = reader.parse("src/main/resources/o-kotlin-north.osm");
 
         // плохо что такой путь передаём
 
