@@ -11,11 +11,11 @@ public class DisplayGraph {
     }
     public void display() {
         Viewer viewer = graph.display(false);
-        View view = viewer.getDefaultView();
-        viewer.disableAutoLayout();
-        view.getCamera().setViewCenter( 29.7739619 * 1000000, 60.0032097 * 1000000, 0);
-        view.getCamera().setViewPercent(0.005);
-//        view.getCamera().resetView();
-        System.out.println(view.getCamera());
+//        View view = viewer.getDefaultView();
+//        viewer.disableAutoLayout();
+//        view.getCamera().setViewCenter( 23 * 1000000, 60.0556000 * 1000000, 0);
+////        view.getCamera().setViewPercent(1.5);
+////        view.getCamera().resetView();
+//        System.out.println(view.getCamera());
     }
 }

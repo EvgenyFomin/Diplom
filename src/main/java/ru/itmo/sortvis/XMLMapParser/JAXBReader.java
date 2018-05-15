@@ -14,10 +14,13 @@ public class JAXBReader {
     int countOfNodes;
     int countOfEdges;
     boolean isOrientedGraph = false;
+    private ArrayList<Bounds> bounds;
     private HashMap<Long, Set<Long>> adjList;
     private HashMap<Pair<Long, Long>, Integer> weight;
+
     private List<Node> nodeList;
     private List<Way> wayList;
+    private double minlat, minlon, maxlat, maxlon;
     private boolean filterOut = true;
 
     public GraphModel parse(String path) throws JAXBException {
@@ -32,8 +35,33 @@ public class JAXBReader {
 //        marshaller.marshal(xmlParser, System.out);
 //        marshaller.marshal(xmlParser, new File("src/main/resources/newMap.xml"));
 
+        bounds = xmlParser.getBounds();
+        minlat = bounds.get(0).getMinlat();
+        maxlat = bounds.get(0).getMaxlat();
+        minlon = bounds.get(0).getMinlon();
+        maxlon = bounds.get(0).getMaxlon();
+
+        System.out.println(minlat + " " + maxlat + " " + minlon + " " + maxlon);
+
         nodeList = xmlParser.getNodeList();
         wayList = xmlParser.getWayList();
+
+        for (int i = 0; i < nodeList.size(); i++) {
+            if (nodeList.get(i).getLat() < minlat ||
+                    nodeList.get(i).getLat() > maxlat ||
+                    nodeList.get(i).getLon() < minlon ||
+                    nodeList.get(i).getLon() > maxlon) {
+                nodeList.remove(i);
+                i--;
+            }
+        }
+
+        Map<Long, Node> idToNode = new HashMap<>();
+
+        for (Node currentNode : nodeList) {
+            long currentNodeId = currentNode.getId();
+            idToNode.put(currentNodeId, currentNode);
+        }
 
         countOfNodes = nodeList.size();
         adjList = new HashMap<>();
@@ -49,36 +77,36 @@ public class JAXBReader {
                 }
             }
 
-            ArrayList<NodesInTheWay> currentArrayList;
-            currentArrayList = currentWay.getNdList();
-            int sizeOfNodesList = currentArrayList.size();
+            ArrayList<NodesInTheWay> currentNodeList;
+            currentNodeList = currentWay.getNdList();
+            int sizeOfNodesList = currentNodeList.size();
             for (int i = 0; i < sizeOfNodesList - 1; i++) {
-                if (adjList.containsKey(currentArrayList.get(i).getRef())) {
-                    adjList.get(currentArrayList.get(i).getRef()).add(currentArrayList.get(i + 1).getRef());
-                } else {
-                    adjList.put(currentArrayList.get(i).getRef(), new HashSet<>());
-                    adjList.get(currentArrayList.get(i).getRef()).add(currentArrayList.get(i + 1).getRef());
-                }
 
-                if (adjList.containsKey(currentArrayList.get(i + 1).getRef())) {
-                    adjList.get(currentArrayList.get(i + 1).getRef()).add(currentArrayList.get(i).getRef());
-                } else {
-                    adjList.put(currentArrayList.get(i + 1).getRef(), new HashSet<>());
-                    adjList.get(currentArrayList.get(i + 1).getRef()).add(currentArrayList.get(i).getRef());
+                if (idToNode.containsKey(currentNodeList.get(i).getRef()) &&
+                        idToNode.containsKey(currentNodeList.get(i + 1).getRef())) {
+                    if (adjList.containsKey(currentNodeList.get(i).getRef())) {
+                        adjList.get(currentNodeList.get(i).getRef()).add(currentNodeList.get(i + 1).getRef());
+                    } else {
+                        adjList.put(currentNodeList.get(i).getRef(), new HashSet<>());
+                        adjList.get(currentNodeList.get(i).getRef()).add(currentNodeList.get(i + 1).getRef());
+                    }
+
+                    if (adjList.containsKey(currentNodeList.get(i + 1).getRef())) {
+                        adjList.get(currentNodeList.get(i + 1).getRef()).add(currentNodeList.get(i).getRef());
+                    } else {
+                        adjList.put(currentNodeList.get(i + 1).getRef(), new HashSet<>());
+                        adjList.get(currentNodeList.get(i + 1).getRef()).add(currentNodeList.get(i).getRef());
+                    }
                 }
             }
-
         }
 
         countOfEdges = 0;
 
-        Map<Long, Node> idToNode = new HashMap<>();
         weight = new HashMap<>();
 
         for (Node currentNode : nodeList) {
             long currentNodeId = currentNode.getId();
-
-            idToNode.put(currentNodeId, currentNode);
 
             if (adjList.get(currentNodeId) == null) {
                 // Не используется в маршрутах way (памятник, например)
@@ -92,6 +120,8 @@ public class JAXBReader {
         }
 
         System.out.println(countOfNodes + " " + countOfEdges);
+
+//        System.exit(0);
         return new AdjListGraph(countOfNodes, countOfEdges, false, idToNode, adjList, weight);
     }
 

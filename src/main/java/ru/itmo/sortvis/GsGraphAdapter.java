@@ -80,8 +80,8 @@ public class GsGraphAdapter implements GraphModel<Node>, GraphWalkerListener {
         for (long id : delegateGraph.getAllIds()) {
             String nodeId = Long.toString(id);
             gsGraph.addNode(nodeId).addAttribute("ui.label", "Node "     + id);
-            int x = (int) (delegateGraph.getData(id).getLon() * 1000000);
-            int y = (int) (delegateGraph.getData(id).getLat() * 1000000);
+            double x = delegateGraph.getData(id).getLon() * 1000000;
+            double y = delegateGraph.getData(id).getLat() * 1000000;
 //            System.out.println(delegateGraph.getData(id).getLat() + " " + delegateGraph.getData(id).getLon());
 //            System.out.printf("Adding node %s: (%d, %d)%n", nodeId, x, y);
             gsGraph.getNode(nodeId).setAttribute("xyz", x, y, 0);
