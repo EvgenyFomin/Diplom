@@ -45,7 +45,7 @@ public class Launcher {
         // обход в ширину
 //        bfs(graphWalker_new, 1478011807, 1620097881);
         // Дейкстра
-        dijkstra(graphWalker_new, 508239427);
+        dijkstra(graphWalker_new, 508239427); 
 //        checkMarker(graphWalker_new, 1460516946);
     }
 
