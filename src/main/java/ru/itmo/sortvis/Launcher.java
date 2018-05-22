@@ -16,7 +16,7 @@ public class Launcher {
         System.setProperty("org.graphstream.ui.renderer", "org.graphstream.ui.j2dviewer.J2DGraphRenderer");
 
         JAXBReader reader = new JAXBReader();
-        GraphModel graphModel = reader.parse("src/main/resources/o-kotlin-north.osm");
+        GraphModel graphModel = reader.parse("src/main/resources/o-kotlin.osm");
 
         // плохо что такой путь передаём
 
@@ -45,7 +45,7 @@ public class Launcher {
         // обход в ширину
 //        bfs(graphWalker_new, 1478011807, 1620097881);
         // Дейкстра
-//        dijkstra(graphWalker, 0);
+        dijkstra(graphWalker_new, 508239427);
 //        checkMarker(graphWalker_new, 1460516946);
     }
 
@@ -62,7 +62,7 @@ public class Launcher {
         graphWalker_new.dfs(startNode);
     }
 
-    private static void bfs(GraphWalker_NEW graphWalker_new, int fromNode, int toNode) {
+    private static void bfs(GraphWalker_NEW graphWalker_new, long fromNode, long toNode) {
         System.out.println("START!");
         for (int i = 30; i > -1; i--) {
             try {
@@ -75,11 +75,11 @@ public class Launcher {
         graphWalker_new.bfs(fromNode, toNode);
     }
 
-    private static void dijkstra(GraphWalker graphWalker, int startNode) {
+    private static void dijkstra(GraphWalker_NEW graphWalker_new, long startNode) {
 //        GsGraphAdapter.initNodesData();
 //        GsGraphAdapter.initEdgesWeight();
         System.out.println("START!");
-        for (int i = 5; i > -1; i--) {
+        for (int i = 10; i > -1; i--) {
             try {
                 Thread.sleep(1000);
             } catch (InterruptedException e) {
@@ -87,7 +87,7 @@ public class Launcher {
             }
             System.out.println(i);
         }
-        graphWalker.dijkstra(startNode);
+        graphWalker_new.dijkstra(startNode);
     }
 
     private static void checkMarker(GraphWalker_NEW graphWalker_new, long u) {

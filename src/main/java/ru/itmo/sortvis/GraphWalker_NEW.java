@@ -46,7 +46,7 @@ public class GraphWalker_NEW<T> {
         for (long obj : neighbours) {
             if (!color.containsKey(obj)) {
                 try {
-                    Thread.sleep(10);
+                    Thread.sleep(100);
                     notify(l -> l.edgeForward(u, obj));
                 } catch (InterruptedException e) {
                     e.printStackTrace();
@@ -57,7 +57,7 @@ public class GraphWalker_NEW<T> {
         }
 
         try {
-            Thread.sleep(10);
+            Thread.sleep(100);
             notify(l -> l.nodeOut(String.valueOf(u)));
             if (from.get(u) != -1L) {
                 notify(l -> l.edgeBack(u, from.get(u)));
@@ -135,9 +135,10 @@ public class GraphWalker_NEW<T> {
         LinkedList<Long> neighbours = new LinkedList<>();
 
         distance.put(u, 0);
+        nodePriorityQueue.add(u);
 
-        while (!neighbours.isEmpty()) {
-            long currentNode = neighbours.poll();
+        while (!nodePriorityQueue.isEmpty()) {
+            long currentNode = nodePriorityQueue.poll();
             color.put(currentNode, Color.BLACK);
 
             for (long currentNeighbour : graphModel.getNeighbours(currentNode)) {
