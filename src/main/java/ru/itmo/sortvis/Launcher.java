@@ -16,7 +16,7 @@ public class Launcher {
         System.setProperty("org.graphstream.ui.renderer", "org.graphstream.ui.j2dviewer.J2DGraphRenderer");
 
         JAXBReader reader = new JAXBReader();
-        GraphModel graphModel = reader.parse("src/main/resources/o-kotlin.osm");
+        GraphModel graphModel = reader.parse("src/main/resources/o-kotlin-north.osm");
 
         // плохо что такой путь передаём
 
@@ -29,8 +29,8 @@ public class Launcher {
 //        GraphWalker graphWalker = new GraphWalker(gsGraphAdapter);
 //        graphWalker.addListener(gsGraphAdapter);
 
-        GraphWalker_NEW<Integer> graphWalker_new = new GraphWalker_NEW(gsGraphAdapter);
-        graphWalker_new.addListener(gsGraphAdapter);
+//        GraphWalker_NEW<Integer> graphWalker_new = new GraphWalker_NEW(gsGraphAdapter);
+//        graphWalker_new.addListener(gsGraphAdapter);
         gsGraphAdapter.initGraph();
 
         SwingUtilities.invokeLater(() -> {
@@ -39,13 +39,16 @@ public class Launcher {
         });
 
         // обход в глубину
+        DepthFirstSearch depthFirstSearch = new DepthFirstSearch(gsGraphAdapter, 886609116);
+        depthFirstSearch.addListener(gsGraphAdapter);
+        depthFirstSearch.algorithm();
 //        dfs(graphWalker_new, 886609116);
 //        dfs(graphWalker_new, 1478011807);
 //        dfs(graphWalker_new, 5563593582L);
         // обход в ширину
 //        bfs(graphWalker_new, 1478011807, 1620097881);
         // Дейкстра
-        dijkstra(graphWalker_new, 508239427); 
+//        dijkstra(graphWalker_new, 508239427);
 //        checkMarker(graphWalker_new, 1460516946);
     }
 
