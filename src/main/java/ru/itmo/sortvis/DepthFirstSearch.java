@@ -10,13 +10,11 @@ public class DepthFirstSearch<T> implements GraphWalker_Interface {
     private HashMap<Long, Color> color = new HashMap<>();
     private HashMap<Long, Long> from = new HashMap<>();
     private Set<Long> nodes = new HashSet<>();
-    private HashMap<Long, Integer> distance = new HashMap<>();
-    private LinkedList<Long> way = new LinkedList<>();
     private long startNode;
 
     private final List<GraphWalkerListener> listeners;
 
-    DepthFirstSearch(GraphModel graphModel, long startNode) {
+    DepthFirstSearch(GraphModel<T> graphModel, long startNode) {
         this.graphModel = graphModel;
         nodes = graphModel.getAllIds();
         this.listeners = new ArrayList<>();
@@ -43,6 +41,7 @@ public class DepthFirstSearch<T> implements GraphWalker_Interface {
                     from.put(obj, -1L);
                     depthFirstSearch(obj);
                     from.clear();
+                    color.clear();
                 }
             }
         }
@@ -81,6 +80,13 @@ public class DepthFirstSearch<T> implements GraphWalker_Interface {
         color.put(u, Color.BLACK);
 
         System.out.println("out " + u);
+    }
+
+    @Override
+    public HashMap<String, Object> statistics() {
+        HashMap<String, Object> stat = new HashMap<>();
+        stat.put("Size of Color", color.size());
+        return stat;
     }
 
     public void addListener(GraphWalkerListener l) {

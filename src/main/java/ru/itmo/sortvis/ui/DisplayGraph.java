@@ -17,5 +17,7 @@ public class DisplayGraph {
 ////        view.getCamera().setViewPercent(1.5);
 ////        view.getCamera().resetView();
 //        System.out.println(view.getCamera());
+
+
     }
 }

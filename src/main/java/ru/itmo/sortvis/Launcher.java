@@ -39,9 +39,14 @@ public class Launcher {
         });
 
         // обход в глубину
-        DepthFirstSearch depthFirstSearch = new DepthFirstSearch(gsGraphAdapter, 886609116);
+        DepthFirstSearch depthFirstSearch = new DepthFirstSearch(gsGraphAdapter, 4343681984L);
         depthFirstSearch.addListener(gsGraphAdapter);
+        UpdateStatistics updateStatistics = new UpdateStatistics(depthFirstSearch);
+        gsGraphAdapter.setStat(updateStatistics);
         depthFirstSearch.algorithm();
+
+
+
 //        dfs(graphWalker_new, 886609116);
 //        dfs(graphWalker_new, 1478011807);
 //        dfs(graphWalker_new, 5563593582L);

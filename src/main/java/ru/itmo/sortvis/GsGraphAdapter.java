@@ -7,11 +7,15 @@ import org.graphstream.graph.implementations.SingleGraph;
 import ru.itmo.sortvis.XMLMapParser.Node;
 
 import java.io.File;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Set;
 
 public class GsGraphAdapter implements GraphModel<Node>, GraphWalkerListener {
     private Graph gsGraph;
     private GraphModel<Node> delegateGraph;
+    private HashMap<String, Object> stat;
+    private UpdateStatistics updateStatistics;
 
     public GsGraphAdapter(GraphModel<Node> delegateGraph) {
         this.delegateGraph = delegateGraph;
@@ -26,20 +30,24 @@ public class GsGraphAdapter implements GraphModel<Node>, GraphWalkerListener {
         if (gsGraph.getEdge(getGsEdgeId(i, j)) != null)
             gsGraph.getEdge(getGsEdgeId(i, j)).addAttribute("ui.class", "forward");
         else gsGraph.getEdge(getGsEdgeId(j, i)).addAttribute("ui.class", "forward");
+        updateStat();
     }
 
     public void edgeBack(long i, long j) {
         if (gsGraph.getEdge(getGsEdgeId(i, j)) != null)
             gsGraph.getEdge(getGsEdgeId(i, j)).addAttribute("ui.class", "back");
         else gsGraph.getEdge(getGsEdgeId(j, i)).addAttribute("ui.class", "back");
+        updateStat();
     }
 
     public void nodeIn(String node) {
         gsGraph.getNode(node).addAttribute("ui.class", "in");
+        updateStat();
     }
 
     public void nodeOut(String node) {
         gsGraph.getNode(node).addAttribute("ui.class", "out");
+        updateStat();
     }
 
     // Закомментировал - не компилировалось - а пофиксить не могу тк не понимаю что тут происходит
@@ -134,5 +142,16 @@ public class GsGraphAdapter implements GraphModel<Node>, GraphWalkerListener {
 
     public Graph getGsGraph() {
         return gsGraph;
+    }
+
+    public void setStat(UpdateStatistics updateStatistics) {
+        this.updateStatistics = updateStatistics;
+    }
+
+    private void updateStat() {
+        stat = updateStatistics.getStat();
+        for (Map.Entry<String, Object> obj : stat.entrySet()) {
+            System.out.println("                Statistics: " + obj.getKey() + " = " + obj.getValue());
+        }
     }
 }
