@@ -21,11 +21,6 @@ public class GsGraphAdapter implements GraphModel<Node>, GraphWalkerListener {
         this.delegateGraph = delegateGraph;
     }
 
-    // Ниже я определяю цвета ребер и вершин.
-    // Крашу их в какой-то цвет, когда иду вперед/назад по ребру, вхожу в вершину или выхожу из нее
-    // Используются css файлы из папки resources
-    // Пока вызываю эти методы из класса GraphWalker
-
     public void edgeForward(long i, long j) {
         if (gsGraph.getEdge(getGsEdgeId(i, j)) != null)
             gsGraph.getEdge(getGsEdgeId(i, j)).addAttribute("ui.class", "forward");

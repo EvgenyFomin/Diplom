@@ -3,9 +3,9 @@ package ru.itmo.sortvis;
 import java.util.HashMap;
 
 public class UpdateStatistics {
-    GraphWalker_Interface alg;
+    GraphWalker alg;
 
-    public UpdateStatistics(GraphWalker_Interface alg) {
+    public UpdateStatistics(GraphWalker alg) {
         this.alg = alg;
     }
 

@@ -26,11 +26,6 @@ public class Launcher {
 //        GraphModel graphModel = new AdjListGraph();
 
         GsGraphAdapter gsGraphAdapter = new GsGraphAdapter(graphModel);
-//        GraphWalker graphWalker = new GraphWalker(gsGraphAdapter);
-//        graphWalker.addListener(gsGraphAdapter);
-
-//        GraphWalker_NEW<Integer> graphWalker_new = new GraphWalker_NEW(gsGraphAdapter);
-//        graphWalker_new.addListener(gsGraphAdapter);
         gsGraphAdapter.initGraph();
 
         SwingUtilities.invokeLater(() -> {
@@ -59,60 +54,5 @@ public class Launcher {
         UpdateStatistics updateStatistics = new UpdateStatistics(dijkstra);
         gsGraphAdapter.setStat(updateStatistics);
         dijkstra.algorithm();
-
-
-//        dfs(graphWalker_new, 886609116);
-//        dfs(graphWalker_new, 1478011807);
-//        dfs(graphWalker_new, 5563593582L);
-        // обход в ширину
-//        bfs(graphWalker_new, 1478011807, 1620097881);
-        // Дейкстра
-//        dijkstra(graphWalker_new, 508239427);
-//        checkMarker(graphWalker_new, 1460516946);
-    }
-
-    private static void dfs(GraphWalker_NEW graphWalker_new, long startNode) {
-        System.out.println("START!");
-        for (int i = 10; i > -1; i--) {
-            try {
-                Thread.sleep(1000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-            System.out.println(i);
-        }
-        graphWalker_new.dfs(startNode);
-    }
-
-    private static void bfs(GraphWalker_NEW graphWalker_new, long fromNode, long toNode) {
-        System.out.println("START!");
-        for (int i = 30; i > -1; i--) {
-            try {
-                Thread.sleep(1000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-            System.out.println(i);
-        }
-        graphWalker_new.bfs(fromNode, toNode);
-    }
-
-    private static void dijkstra(GraphWalker_NEW graphWalker_new, long startNode) {
-//        GsGraphAdapter.initNodesData();
-//        GsGraphAdapter.initEdgesWeight();
-        System.out.println("START!");
-        for (int i = 10; i > -1; i--) {
-            try {
-                Thread.sleep(1000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-            System.out.println(i);
-        }
-        graphWalker_new.dijkstra(startNode);
-    }
-
-    private static void checkMarker(GraphWalker_NEW graphWalker_new, long u) {
-        graphWalker_new.checkMarker(u);
     }
 }

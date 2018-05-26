@@ -5,7 +5,7 @@ import java.util.*;
 import java.util.List;
 import java.util.function.Consumer;
 
-public class Dijkstra<T> implements GraphWalker_Interface {
+public class Dijkstra<T> implements GraphWalker {
     private GraphModel<T> graphModel;
     private HashMap<Long, Color> color = new HashMap<>();
     private HashMap<Long, Long> from = new HashMap<>();
@@ -71,7 +71,7 @@ public class Dijkstra<T> implements GraphWalker_Interface {
             neighbours.clear();
 
             notify(l -> l.nodeOut(String.valueOf(currentNode)));
-            
+
             try {
                 Thread.sleep(50);
             } catch (InterruptedException e) {

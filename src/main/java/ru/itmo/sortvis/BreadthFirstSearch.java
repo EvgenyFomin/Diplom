@@ -5,7 +5,7 @@ import java.util.*;
 import java.util.List;
 import java.util.function.Consumer;
 
-public class BreadthFirstSearch<T> implements GraphWalker_Interface {
+public class BreadthFirstSearch<T> implements GraphWalker {
     private GraphModel<T> graphModel;
     private HashMap<Long, Color> color = new HashMap<>();
     private HashMap<Long, Long> from = new HashMap<>();
