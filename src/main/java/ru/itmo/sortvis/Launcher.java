@@ -46,12 +46,19 @@ public class Launcher {
 //        depthFirstSearch.algorithm();
 
         // обход в ширину
-        BreadthFirstSearch breadthFirstSearch = new BreadthFirstSearch(gsGraphAdapter, 892238166, 1455269899);
-        breadthFirstSearch.addListener(gsGraphAdapter);
-        UpdateStatistics updateStatistics = new UpdateStatistics(breadthFirstSearch);
-        gsGraphAdapter.setStat(updateStatistics);
-        breadthFirstSearch.algorithm();
+//        BreadthFirstSearch breadthFirstSearch = new BreadthFirstSearch(gsGraphAdapter, 892238166, 1455269899);
+//        breadthFirstSearch.addListener(gsGraphAdapter);
+//        UpdateStatistics updateStatistics = new UpdateStatistics(breadthFirstSearch);
+//        gsGraphAdapter.setStat(updateStatistics);
+//        breadthFirstSearch.algorithm();
 
+        // Дейкстра
+
+        Dijkstra dijkstra = new Dijkstra(gsGraphAdapter, 892238166);
+        dijkstra.addListener(gsGraphAdapter);
+        UpdateStatistics updateStatistics = new UpdateStatistics(dijkstra);
+        gsGraphAdapter.setStat(updateStatistics);
+        dijkstra.algorithm();
 
 
 //        dfs(graphWalker_new, 886609116);
