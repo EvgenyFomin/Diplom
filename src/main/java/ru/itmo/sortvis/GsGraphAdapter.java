@@ -150,8 +150,10 @@ public class GsGraphAdapter implements GraphModel<Node>, GraphWalkerListener {
 
     private void updateStat() {
         stat = updateStatistics.getStat();
-        for (Map.Entry<String, Object> obj : stat.entrySet()) {
-            System.out.println("                Statistics: " + obj.getKey() + " = " + obj.getValue());
+        if (stat != null) {
+            for (Map.Entry<String, Object> obj : stat.entrySet()) {
+                System.out.println("                Statistics: " + obj.getKey() + " = " + obj.getValue());
+            }
         }
     }
 }

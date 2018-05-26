@@ -9,7 +9,7 @@ public class DepthFirstSearch<T> implements GraphWalker_Interface {
     private GraphModel<T> graphModel;
     private HashMap<Long, Color> color = new HashMap<>();
     private HashMap<Long, Long> from = new HashMap<>();
-    private Set<Long> nodes = new HashSet<>();
+    private Set<Long> nodes = new HashSet<>(); // можно ли его не создавать
     private long startNode;
 
     private final List<GraphWalkerListener> listeners;

@@ -39,11 +39,18 @@ public class Launcher {
         });
 
         // обход в глубину
-        DepthFirstSearch depthFirstSearch = new DepthFirstSearch(gsGraphAdapter, 4343681984L);
-        depthFirstSearch.addListener(gsGraphAdapter);
-        UpdateStatistics updateStatistics = new UpdateStatistics(depthFirstSearch);
+//        DepthFirstSearch depthFirstSearch = new DepthFirstSearch(gsGraphAdapter, 4343681984L);
+//        depthFirstSearch.addListener(gsGraphAdapter);
+//        UpdateStatistics updateStatistics = new UpdateStatistics(depthFirstSearch);
+//        gsGraphAdapter.setStat(updateStatistics);
+//        depthFirstSearch.algorithm();
+
+        // обход в ширину
+        BreadthFirstSearch breadthFirstSearch = new BreadthFirstSearch(gsGraphAdapter, 892238166, 1455269899);
+        breadthFirstSearch.addListener(gsGraphAdapter);
+        UpdateStatistics updateStatistics = new UpdateStatistics(breadthFirstSearch);
         gsGraphAdapter.setStat(updateStatistics);
-        depthFirstSearch.algorithm();
+        breadthFirstSearch.algorithm();
 
 
 
