@@ -26,7 +26,7 @@ public class DepthFirstSearch<T> implements GraphWalker {
         System.out.println("START!");
         for (int i = 10; i > -1; i--) {
             try {
-                Thread.sleep(1000);
+                Thread.sleep(Launcher.stepSleepTime);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
@@ -57,7 +57,7 @@ public class DepthFirstSearch<T> implements GraphWalker {
         for (long obj : neighbours) {
             if (!color.containsKey(obj)) {
                 try {
-                    Thread.sleep(100);
+                    Thread.sleep(Launcher.stepSleepTime);
                     notify(l -> l.edgeForward(u, obj));
                 } catch (InterruptedException e) {
                     e.printStackTrace();
@@ -68,7 +68,7 @@ public class DepthFirstSearch<T> implements GraphWalker {
         }
 
         try {
-            Thread.sleep(100);
+            Thread.sleep(Launcher.stepSleepTime);
             notify(l -> l.nodeOut(String.valueOf(u)));
             if (from.get(u) != -1L) {
                 notify(l -> l.edgeBack(u, from.get(u)));

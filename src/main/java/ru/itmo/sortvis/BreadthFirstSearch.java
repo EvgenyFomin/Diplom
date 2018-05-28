@@ -27,7 +27,7 @@ public class BreadthFirstSearch<T> implements GraphWalker {
         System.out.println("START!");
         for (int i = 10; i > -1; i--) {
             try {
-                Thread.sleep(1000);
+                Thread.sleep(Launcher.stepSleepTime);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
@@ -55,7 +55,7 @@ public class BreadthFirstSearch<T> implements GraphWalker {
                             notify(l -> l.nodeIn(String.valueOf(currentNeighbour)));
                             if (from.get(currentNode) != -1L)
                                 notify(l -> l.edgeBack(currentNode, from.get(currentNode)));
-                            Thread.sleep(30);
+                            Thread.sleep(Launcher.stepSleepTime);
                         } catch (InterruptedException e) {
                             e.printStackTrace();
                         }

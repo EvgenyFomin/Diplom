@@ -25,7 +25,7 @@ public class Dijkstra<T> implements GraphWalker {
         System.out.println("START!");
         for (int i = 10; i > -1; i--) {
             try {
-                Thread.sleep(1000);
+                Thread.sleep(Launcher.stepSleepTime);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
@@ -73,7 +73,7 @@ public class Dijkstra<T> implements GraphWalker {
             notify(l -> l.nodeOut(String.valueOf(currentNode)));
 
             try {
-                Thread.sleep(50);
+                Thread.sleep(Launcher.stepSleepTime);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
