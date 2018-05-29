@@ -6,20 +6,21 @@ import ru.itmo.sortvis.XMLMapParser.Node;
 import java.util.*;
 
 public class AdjListGraph<T> implements GraphModel<T> {
-    private final int countOfNodes;
-    private final int countOfEdges;
+    // Тут похоже куча лишних переменных
+//    private final List<GraphWalkerListener> listenerList;
+//    private final int countOfNodes;
+//    private final int countOfEdges;
     private final boolean isOrientedGraph;
-    private final List<GraphWalkerListener> listenerList;
     private final Map<Long, T> nodes;
     private Map<Long, Set<Long>> adjList;
     private Map<Pair<Long, Long>, Integer> weight;
 
-    public AdjListGraph(int countOfNodes, int countOfEdges, boolean isOrientedGraph, Map<Long, T> nodes, Map<Long, Set<Long>> adjList, Map<Pair<Long, Long>, Integer> weight) {
-        this.countOfNodes = countOfNodes;
-        this.countOfEdges = countOfEdges;
+    public AdjListGraph(/*int countOfNodes, int countOfEdges,*/ boolean isOrientedGraph, Map<Long, T> nodes, Map<Long, Set<Long>> adjList, Map<Pair<Long, Long>, Integer> weight) {
+//        this.countOfNodes = countOfNodes;
+//        this.countOfEdges = countOfEdges;
+//        this.listenerList = new ArrayList<>();
         this.isOrientedGraph = isOrientedGraph;
         this.nodes = nodes;
-        this.listenerList = new ArrayList<>();
         this.weight = weight;
         this.adjList = adjList;
     }
@@ -63,12 +64,16 @@ public class AdjListGraph<T> implements GraphModel<T> {
 
     @Override
     public Set<Long> getAllIds() {
-        return nodes.keySet();
+        return adjList.keySet();
     }
 
     @Override
     public Set<Pair<Long, Long>> getEdges() {
         return weight.keySet();
+    }
+
+    public boolean isOrientedGraph() {
+        return isOrientedGraph;
     }
 
     // Пофиксить, работоспособность не проверял

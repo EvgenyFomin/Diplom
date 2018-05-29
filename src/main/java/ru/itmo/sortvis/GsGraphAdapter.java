@@ -16,6 +16,7 @@ public class GsGraphAdapter implements GraphModel<Node>, GraphWalkerListener {
     private GraphModel<Node> delegateGraph;
     private HashMap<String, Object> stat;
     private UpdateStatistics updateStatistics;
+    private boolean isOrientedGraph;
 
     public GsGraphAdapter(GraphModel<Node> delegateGraph) {
         this.delegateGraph = delegateGraph;
@@ -45,29 +46,6 @@ public class GsGraphAdapter implements GraphModel<Node>, GraphWalkerListener {
         updateStat();
     }
 
-    // Закомментировал - не компилировалось - а пофиксить не могу тк не понимаю что тут происходит
-//    public void initNodesData() {
-//        for (Node node : gsGraph) {
-//            node.removeAttribute("ui.label");
-////            nodesData.put(node.getId(), Integer.MAX_VALUE);
-//            node.addAttribute("ui.label", node.getId() + " / dist: inf");
-//        }
-//    }
-//
-//    public void initEdgesWeight() {
-//        for (Edge edge : gsGraph.getEachEdge()) {
-//            edge.addAttribute("ui.label", "weight: " + edgesWeight.get(edge.getId()));
-//        }
-//    }
-
-//    public static void relaxEdge(int i, int j) {
-//        if (edgesWeight.get()) {
-//            nodesData.put()
-//            gsGraph.getEdge(getGsEdgeId(i, j)).addAttribute("ui.label", "weight: 1");
-//        }
-//        else gsGraph.getEdge(getGsEdgeId(j, i)).addAttribute("ui.label", "weight: 1");
-//    }
-
     @Override
     public void initGraph() {
         gsGraph = new SingleGraph("Simple Graph");
@@ -80,24 +58,42 @@ public class GsGraphAdapter implements GraphModel<Node>, GraphWalkerListener {
 
         gsGraph.addAttribute("ui.stylesheet", "url('file:///" + cssFileFullPath + "')");
 
-        for (long id : delegateGraph.getAllIds()) {
-            String nodeId = Long.toString(id);
-            gsGraph.addNode(nodeId).addAttribute("ui.label", "Node "     + id);
-            double x = delegateGraph.getData(id).getLon() * 1000000;
-            double y = delegateGraph.getData(id).getLat() * 1000000;
+        try {
+            for (long id : delegateGraph.getAllIds()) {
+                String nodeId = Long.toString(id);
+                double x = delegateGraph.getData(id).getLon() * 1000000;
+                double y = delegateGraph.getData(id).getLat() * 1000000;
+                gsGraph.addNode(nodeId).addAttribute("ui.label", "Node " + id);
 //            System.out.println(delegateGraph.getData(id).getLat() + " " + delegateGraph.getData(id).getLon());
 //            System.out.printf("Adding node %s: (%d, %d)%n", nodeId, x, y);
-            gsGraph.getNode(nodeId).setAttribute("xyz", x, y, 0);
-            gsGraph.getNode(nodeId).setAttribute("xyz", x, y, 0);
-        }
-
-        for (Pair<Long, Long> edge : delegateGraph.getEdges()) {
-            if (gsGraph.getEdge(edge.getRight() + "-" + edge.getLeft()) != null) {
-//                System.out.println("Inverted edge exists, not adding: " + edge.getLeft() + "-" + edge.getRight());
-                continue;
+                gsGraph.getNode(nodeId).setAttribute("xyz", x, y, 0);
+                gsGraph.getNode(nodeId).setAttribute("xyz", x, y, 0);
             }
+
+            for (Pair<Long, Long> edge : delegateGraph.getEdges()) {
+                if (gsGraph.getEdge(edge.getRight() + "-" + edge.getLeft()) != null) {
+//                System.out.println("Inverted edge exists, not adding: " + edge.getLeft() + "-" + edge.getRight());
+                    continue;
+                }
 //            System.out.println("Adding edge " + edge.getLeft() + "-" + edge.getRight());
-            gsGraph.addEdge(edge.getLeft() + "-" + edge.getRight(), Long.toString(edge.getLeft()), Long.toString(edge.getRight()), false);
+                gsGraph.addEdge(edge.getLeft() + "-" + edge.getRight(), Long.toString(edge.getLeft()), Long.toString(edge.getRight()), false);
+            }
+        } catch (NullPointerException e) {
+            for (long id : delegateGraph.getAllIds()) {
+                gsGraph.addNode(Long.toString(id));
+            }
+
+            if (isOrientedGraph) {
+                for (Pair<Long, Long> edge : delegateGraph.getEdges()) {
+                    gsGraph.addEdge(edge.getLeft() + "-" + edge.getRight(), Long.toString(edge.getLeft()), Long.toString(edge.getRight()), true);
+                }
+            } else {
+                for (Pair<Long, Long> edge : delegateGraph.getEdges()) {
+                    if (gsGraph.getEdge(edge.getLeft() + "-" + edge.getRight()) == null &&
+                            gsGraph.getEdge(edge.getRight() + "-" + edge.getLeft()) == null)
+                        gsGraph.addEdge(edge.getLeft() + "-" + edge.getRight(), Long.toString(edge.getLeft()), Long.toString(edge.getRight()));
+                }
+            }
         }
     }
 
@@ -139,16 +135,22 @@ public class GsGraphAdapter implements GraphModel<Node>, GraphWalkerListener {
         return gsGraph;
     }
 
+    @Override
+    public boolean isOrientedGraph() {
+        return delegateGraph.isOrientedGraph();
+    }
+
     public void setStat(UpdateStatistics updateStatistics) {
         this.updateStatistics = updateStatistics;
     }
 
     private void updateStat() {
         stat = updateStatistics.getStat();
-        if (stat != null) {
-            for (Map.Entry<String, Object> obj : stat.entrySet()) {
-                System.out.println("                Statistics: " + obj.getKey() + " = " + obj.getValue());
+        if (Launcher.enableDebugOutput)
+            if (stat != null) {
+                for (Map.Entry<String, Object> obj : stat.entrySet()) {
+                    System.out.println("                Statistics: " + obj.getKey() + " = " + obj.getValue());
+                }
             }
-        }
     }
 }

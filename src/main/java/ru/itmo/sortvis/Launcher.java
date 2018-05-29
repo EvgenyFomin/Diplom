@@ -18,6 +18,7 @@ public class Launcher {
 
     public static int stepSleepTime;
     public static boolean displayStatistics;
+    public static boolean enableDebugOutput;
 
     public static void launch(int stepSleepTime, boolean displayStatistics) {
         Launcher.stepSleepTime = stepSleepTime;
@@ -32,15 +33,20 @@ public class Launcher {
                 try {
                     JAXBReader reader = new JAXBReader();
                     GraphModel graphModel = null;
+                    GraphParserService graphParserService = new GraphParserService();
                     int N = 4;
                     GraphModel[] graphModels = new GraphModel[N];
                     try {
                         // Плохой код
-                        graphModels[0] = reader.parse("src/main/resources/o-kotlin-north.osm");
-                        graphModels[1] = reader.parse("src/main/resources/o-kotlin-north.osm");
-                    graphModels[2] = reader.parse("src/main/resources/o-kotlin-north.osm");
-                    graphModels[3] = reader.parse("src/main/resources/o-kotlin-north.osm");
-                    } catch (JAXBException e) {
+                        graphModels[0] = graphParserService.parse("src/main/resources/Graph.txt");
+                        graphModels[1] = graphParserService.parse("src/main/resources/Graph.txt");
+                        graphModels[2] = graphParserService.parse("src/main/resources/Graph.txt");
+                        graphModels[3] = graphParserService.parse("src/main/resources/Graph.txt");
+//                        graphModels[0] = reader.parse("src/main/resources/o-kotlin-north.osm");
+//                        graphModels[1] = reader.parse("src/main/resources/o-kotlin-north.osm");
+//                        graphModels[2] = reader.parse("src/main/resources/o-kotlin-north.osm");
+//                        graphModels[3] = reader.parse("src/main/resources/o-kotlin-north.osm");
+                    } catch (Exception e) {
                         e.printStackTrace();
                     }
 
@@ -69,16 +75,16 @@ public class Launcher {
 
 
 //                // обход в глубину
-                    runTaskInBG(new Runnable() {
-                        @Override
-                        public void run() {
-                            DepthFirstSearch depthFirstSearch = new DepthFirstSearch(gsGraphAdapters[0], 892238166);
-                            depthFirstSearch.addListener(gsGraphAdapters[0]);
-                            UpdateStatistics updateStatistics0 = new UpdateStatistics(depthFirstSearch);
-                            gsGraphAdapters[0].setStat(updateStatistics0);
-                            depthFirstSearch.algorithm();
-                        }
-                    });
+//                    runTaskInBG(new Runnable() {
+//                        @Override
+//                        public void run() {
+//                            DepthFirstSearch depthFirstSearch = new DepthFirstSearch(gsGraphAdapters[0], 892238166);
+//                            depthFirstSearch.addListener(gsGraphAdapters[0]);
+//                            UpdateStatistics updateStatistics0 = new UpdateStatistics(depthFirstSearch);
+//                            gsGraphAdapters[0].setStat(updateStatistics0);
+//                            depthFirstSearch.algorithm();
+//                        }
+//                    });
 //
 //                    runTaskInBG(new Runnable() {
 //                        @Override
@@ -91,16 +97,16 @@ public class Launcher {
 //
 //                        }
 //                    });
-                    runTaskInBG(new Runnable() {
-                        @Override
-                        public void run() {
-                            Dijkstra dijkstra = new Dijkstra(gsGraphAdapters[2], 892238166);
-                            dijkstra.addListener(gsGraphAdapters[2]);
-                            UpdateStatistics updateStatistics = new UpdateStatistics(dijkstra);
-                            gsGraphAdapters[2].setStat(updateStatistics);
-                            dijkstra.algorithm();
-                        }
-                    });
+//                    runTaskInBG(new Runnable() {
+//                        @Override
+//                        public void run() {
+//                            Dijkstra dijkstra = new Dijkstra(gsGraphAdapters[2], 892238166);
+//                            dijkstra.addListener(gsGraphAdapters[2]);
+//                            UpdateStatistics updateStatistics = new UpdateStatistics(dijkstra);
+//                            gsGraphAdapters[2].setStat(updateStatistics);
+//                            dijkstra.algorithm();
+//                        }
+//                    });
 
                 } catch (Exception e) {
                     e.printStackTrace();

@@ -1,20 +1,24 @@
 package ru.itmo.sortvis;
 
+import org.apache.commons.lang3.tuple.Pair;
+
 import java.io.*;
 import java.nio.file.Files;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.NoSuchElementException;
-import java.util.StringTokenizer;
+import java.util.*;
 
 public class GraphParserService {
-    public GraphModel parse(File file) throws IOException {
-        int countOfNodes;
-        int countOfEdges;
-        boolean isOrientedGraph;
-        int[][] matrix;
+    private HashMap<Long, Set<Long>> adjList;
+    private HashMap<Pair<Long, Long>, Integer> weight;
+    private int countOfNodes;
+    private int countOfEdges;
+    private boolean isOrientedGraph;
+
+    public GraphModel parse(String path) throws IOException {
+        File file = new File(path);
 
         Map<String, Integer> data = new HashMap<>();
+        adjList = new HashMap<>();
+        weight = new HashMap<>();
         try (BufferedReader bufferedGraphReader = Files.newBufferedReader(file.toPath())) {
             String tmp = bufferedGraphReader.readLine().trim();
             isOrientedGraph = Boolean.parseBoolean(tmp);
@@ -28,24 +32,27 @@ public class GraphParserService {
                 data.put(nodes.nextToken(), i);
             }
 
-            matrix = new int[countOfNodes][countOfNodes];
-
-            for (int i = 0; i < countOfNodes; i++) {
-                for (int j = 0; j < countOfNodes; j++) {
-                    matrix[i][i] = 0;
-                }
-            }
-
             if (isOrientedGraph) {
                 for (int i = 0; i < countOfEdges; i++) {
                     StringTokenizer currentEdge = new StringTokenizer(bufferedGraphReader.readLine());
                     String node1 = currentEdge.nextToken();
                     String node2 = currentEdge.nextToken();
+
+                    long node1_l = Long.valueOf(node1);
+                    long node2_l = Long.valueOf(node2);
                     try {
-                        matrix[data.get(node1)][data.get(node2)] =
-                                Integer.valueOf(currentEdge.nextToken());
+                        if (adjList.containsKey(node1_l))
+                            adjList.get(node1_l).add(node2_l);
+                        else {
+                            adjList.put(node1_l, new HashSet<>());
+                            adjList.get(node1_l).add(node2_l);
+                        }
+
+                        String currentWeight = currentEdge.nextToken();
+
+                        weight.put(Pair.of(node1_l, node2_l), Integer.valueOf(currentWeight));
                     } catch (NoSuchElementException err) {
-                        matrix[data.get(node1)][data.get(node2)] = 1;
+                        weight.put(Pair.of(node1_l, node2_l), 1);
                     }
                 }
             } else {
@@ -53,24 +60,36 @@ public class GraphParserService {
                     StringTokenizer currentEdge = new StringTokenizer(bufferedGraphReader.readLine());
                     String node1 = currentEdge.nextToken();
                     String node2 = currentEdge.nextToken();
+
+                    long node1_l = Long.valueOf(node1);
+                    long node2_l = Long.valueOf(node2);
                     try {
-                        matrix[data.get(node1)][data.get(node2)] =
-                                Integer.valueOf(currentEdge.nextToken());
-                        matrix[data.get(node2)][data.get(node1)] =
-                                matrix[data.get(node1)][data.get(node2)];
+                        if (adjList.containsKey(node1_l))
+                            adjList.get(node1_l).add(node2_l);
+                        else {
+                            adjList.put(node1_l, new HashSet<>());
+                            adjList.get(node1_l).add(node2_l);
+                        }
+
+                        if (adjList.containsKey(node2_l))
+                            adjList.get(node2_l).add(node1_l);
+                        else {
+                            adjList.put(node2_l, new HashSet<>());
+                            adjList.get(node2_l).add(node1_l);
+                        }
+
+                        String currentWeight = currentEdge.nextToken();
+
+                        weight.put(Pair.of(node1_l, node2_l), Integer.valueOf(currentWeight));
+                        weight.put(Pair.of(node2_l, node1_l), Integer.valueOf(currentWeight));
                     } catch (NoSuchElementException err) {
-                        matrix[data.get(node1)][data.get(node2)] = 1;
-                        matrix[data.get(node2)][data.get(node1)] = 1;
+                        weight.put(Pair.of(node1_l, node2_l), 1);
+                        weight.put(Pair.of(node2_l, node1_l), 1);
                     }
                 }
             }
 
-            // Не могу с ходу понять, "забываются" ли тут строковые имена нодов?
-            // Короче, здесь, кажется, надо сделать маппинг String -> int и передать его в StringGraphModel...
-//            new StringGraphModel<>(new MatrixGraph(....), stringToIntMap);
-            // как-то так
-
-            return new MatrixGraph(countOfNodes, countOfEdges, isOrientedGraph, matrix);
+            return new AdjListGraph(/*countOfNodes, countOfEdges, */isOrientedGraph, null, adjList, weight);
         }
     }
 }

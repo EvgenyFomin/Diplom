@@ -14,6 +14,7 @@ public class StartScreen {
     private JCheckBox displayStatisticsCheckbox;
     private JLabel stepSleepTimeLabel;
     private JLabel displayStatisticsLabel;
+    private JCheckBox printDebugInfo;
 
     public StartScreen() {
         launchButton.addActionListener(new ActionListener() {
@@ -21,6 +22,7 @@ public class StartScreen {
             public void actionPerformed(ActionEvent e) {
                 int stepSleepTime = Integer.valueOf(stepSleepTimeField.getText());
                 boolean displayStatistics = displayStatisticsCheckbox.isSelected();
+                Launcher.enableDebugOutput = printDebugInfo.isSelected();
 
                 Launcher.launch(stepSleepTime, displayStatistics);
             }

@@ -18,4 +18,6 @@ public interface GraphModel<T> {
     Set<Long> getAllIds();
 
     Set<Pair<Long, Long>> getEdges();
+
+    boolean isOrientedGraph();
 }

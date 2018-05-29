@@ -41,7 +41,6 @@ public class DepthFirstSearch<T> implements GraphWalker {
                     from.put(obj, -1L);
                     depthFirstSearch(obj);
                     from.clear();
-                    color.clear();
                 }
             }
         }
@@ -52,7 +51,8 @@ public class DepthFirstSearch<T> implements GraphWalker {
         notify(l -> l.nodeIn(String.valueOf(u)));
 
         color.put(u, Color.GRAY);
-        System.out.println("in " + u);
+        if (Launcher.enableDebugOutput)
+            System.out.println("in " + u);
         long[] neighbours = graphModel.getNeighbours(u);
         for (long obj : neighbours) {
             if (!color.containsKey(obj)) {
@@ -79,7 +79,8 @@ public class DepthFirstSearch<T> implements GraphWalker {
         color.remove(u);
         color.put(u, Color.BLACK);
 
-        System.out.println("out " + u);
+        if (Launcher.enableDebugOutput)
+            System.out.println("out " + u);
     }
 
     @Override

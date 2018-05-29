@@ -3,6 +3,7 @@ package ru.itmo.sortvis.XMLMapParser;
 import org.apache.commons.lang3.tuple.Pair;
 import ru.itmo.sortvis.AdjListGraph;
 import ru.itmo.sortvis.GraphModel;
+import ru.itmo.sortvis.Launcher;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
@@ -70,7 +71,8 @@ public class JAXBReader {
                 for (Tag currentTag : currentWay.getTagList()) {
                     if (currentTag.getV().equals("footway") || currentTag.getV().equals("sidewalk") ||
                             currentTag.getV().equals("park")) {
-                        System.out.println("Warning. Way " + currentWay.getId() + " is under filter");
+                        if (Launcher.enableDebugOutput)
+                            System.out.println("Warning. Way " + currentWay.getId() + " is under filter");
                         break;
                     }
                 }
@@ -123,10 +125,11 @@ public class JAXBReader {
             }
         }
 
-        System.out.println(countOfNodes + " " + countOfEdges);
+        if (Launcher.enableDebugOutput)
+            System.out.println(countOfNodes + " " + countOfEdges);
 
 //        System.exit(0);
-        return new AdjListGraph(countOfNodes, countOfEdges, false, idToNode, adjList, weight);
+        return new AdjListGraph(/*countOfNodes, countOfEdges,*/ false, idToNode, adjList, weight);
     }
 
     private void printer() {
