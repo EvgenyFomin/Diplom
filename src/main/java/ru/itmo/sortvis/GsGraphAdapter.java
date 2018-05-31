@@ -6,6 +6,7 @@ import org.graphstream.graph.implementations.MultiGraph;
 import org.graphstream.graph.implementations.SingleGraph;
 import ru.itmo.sortvis.XMLMapParser.Node;
 
+import java.awt.*;
 import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
@@ -44,6 +45,21 @@ public class GsGraphAdapter implements GraphModel<Node>, GraphWalkerListener {
     public void nodeOut(String node) {
         gsGraph.getNode(node).addAttribute("ui.class", "out");
         updateStat();
+    }
+
+    @Override
+    public void paintNode(long node, Color color) {
+        gsGraph.getNode(Long.toString(node)).addAttribute("ui.style",
+                "fill-color: rgb(" + color.getRed() + ", " + color.getGreen() + ", " + color.getBlue() + "); ");
+    }
+
+    @Override
+    public void paintEdge(long node1, long node2, Color color) {
+        if (gsGraph.getEdge(getGsEdgeId(node1, node2)) != null)
+            gsGraph.getEdge(getGsEdgeId(node1, node2)).addAttribute("ui.style",
+                    "fill-color: rgb(" + color.getRed() + ", " + color.getGreen() + ", " + color.getBlue() + "); ");
+        else gsGraph.getEdge(getGsEdgeId(node2, node1)).addAttribute("ui.style",
+                "fill-color: rgb(" + color.getRed() + ", " + color.getGreen() + ", " + color.getBlue() + "); ");
     }
 
     @Override

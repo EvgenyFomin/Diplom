@@ -38,14 +38,14 @@ public class Launcher {
                     GraphModel[] graphModels = new GraphModel[N];
                     try {
                         // Плохой код
-                        graphModels[0] = graphParserService.parse("src/main/resources/Graph.txt");
-                        graphModels[1] = graphParserService.parse("src/main/resources/Graph.txt");
-                        graphModels[2] = graphParserService.parse("src/main/resources/Graph.txt");
-                        graphModels[3] = graphParserService.parse("src/main/resources/Graph.txt");
-//                        graphModels[0] = reader.parse("src/main/resources/o-kotlin-north.osm");
-//                        graphModels[1] = reader.parse("src/main/resources/o-kotlin-north.osm");
-//                        graphModels[2] = reader.parse("src/main/resources/o-kotlin-north.osm");
-//                        graphModels[3] = reader.parse("src/main/resources/o-kotlin-north.osm");
+//                        graphModels[0] = graphParserService.parse("src/main/resources/Graph.txt");
+//                        graphModels[1] = graphParserService.parse("src/main/resources/Graph.txt");
+//                        graphModels[2] = graphParserService.parse("src/main/resources/Graph.txt");
+//                        graphModels[3] = graphParserService.parse("src/main/resources/Graph.txt");
+                        graphModels[0] = reader.parse("src/main/resources/o-kotlin-north.osm");
+                        graphModels[1] = reader.parse("src/main/resources/o-kotlin-north.osm");
+                        graphModels[2] = reader.parse("src/main/resources/o-kotlin-north.osm");
+                        graphModels[3] = reader.parse("src/main/resources/o-kotlin-north.osm");
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
@@ -75,16 +75,16 @@ public class Launcher {
 
 
 //                // обход в глубину
-//                    runTaskInBG(new Runnable() {
-//                        @Override
-//                        public void run() {
-//                            DepthFirstSearch depthFirstSearch = new DepthFirstSearch(gsGraphAdapters[0], 892238166);
-//                            depthFirstSearch.addListener(gsGraphAdapters[0]);
-//                            UpdateStatistics updateStatistics0 = new UpdateStatistics(depthFirstSearch);
-//                            gsGraphAdapters[0].setStat(updateStatistics0);
-//                            depthFirstSearch.algorithm();
-//                        }
-//                    });
+                    runTaskInBG(new Runnable() {
+                        @Override
+                        public void run() {
+                            DepthFirstSearch depthFirstSearch = new DepthFirstSearch(gsGraphAdapters[0], 892238166);
+                            depthFirstSearch.addListener(gsGraphAdapters[0]);
+                            UpdateStatistics updateStatistics0 = new UpdateStatistics(depthFirstSearch);
+                            gsGraphAdapters[0].setStat(updateStatistics0);
+                            depthFirstSearch.algorithm();
+                        }
+                    });
 //
 //                    runTaskInBG(new Runnable() {
 //                        @Override
