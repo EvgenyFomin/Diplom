@@ -33,10 +33,10 @@ public class BreadthFirstSearch<T> implements GraphWalker {
             }
             System.out.println(i);
         }
-        notify(l -> l.nodeIn(String.valueOf(startNode)));
+        notify(l -> l.nodeIn(startNode));
         boolean isWayExists = false;
         if (startNode == endNode) {
-            notify(l -> l.nodeOut(String.valueOf(startNode)));
+            notify(l -> l.nodeOut(startNode));
             isWayExists = true;
         } else {
 
@@ -52,7 +52,7 @@ public class BreadthFirstSearch<T> implements GraphWalker {
                     if (!color.containsKey(currentNeighbour)) {
                         try {
                             notify(l -> l.edgeForward(currentNode, currentNeighbour));
-                            notify(l -> l.nodeIn(String.valueOf(currentNeighbour)));
+                            notify(l -> l.nodeIn(currentNeighbour));
                             if (from.get(currentNode) != -1L)
                                 notify(l -> l.edgeBack(currentNode, from.get(currentNode)));
                             Thread.sleep(Launcher.stepSleepTime);
@@ -69,10 +69,10 @@ public class BreadthFirstSearch<T> implements GraphWalker {
                     if (currentNeighbour == endNode) {
                         isWayExists = true;
                         nodes.clear();
-                        notify(l -> l.nodeOut(String.valueOf(currentNeighbour)));
+                        notify(l -> l.nodeOut(currentNeighbour));
                         break;
                     }
-                    notify(l -> l.nodeOut(String.valueOf(currentNode)));
+                    notify(l -> l.nodeOut(currentNode));
                 }
             }
         }

@@ -3,8 +3,8 @@ package ru.itmo.sortvis;
 import java.awt.*;
 
 public interface GraphWalkerListener {
-    void nodeIn(String node);
-    void nodeOut(String node);
+    void nodeIn(long node);
+    void nodeOut(long node);
 
     void edgeForward(long i, long j);
     void edgeBack(long i, long j);

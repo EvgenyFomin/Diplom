@@ -37,13 +37,13 @@ public class GsGraphAdapter implements GraphModel<Node>, GraphWalkerListener {
         updateStat();
     }
 
-    public void nodeIn(String node) {
-        gsGraph.getNode(node).addAttribute("ui.class", "in");
+    public void nodeIn(long node) {
+        gsGraph.getNode(Long.toString(node)).addAttribute("ui.class", "in");
         updateStat();
     }
 
-    public void nodeOut(String node) {
-        gsGraph.getNode(node).addAttribute("ui.class", "out");
+    public void nodeOut(long node) {
+        gsGraph.getNode(Long.toString(node)).addAttribute("ui.class", "out");
         updateStat();
     }
 

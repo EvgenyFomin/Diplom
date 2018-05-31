@@ -48,7 +48,7 @@ public class DepthFirstSearch<T> implements GraphWalker {
     }
 
     private void depthFirstSearch(long u) {
-        notify(l -> l.nodeIn(String.valueOf(u)));
+        notify(l -> l.nodeIn(u));
 
         color.put(u, Color.GRAY);
         if (Launcher.enableDebugOutput)
@@ -69,7 +69,7 @@ public class DepthFirstSearch<T> implements GraphWalker {
 
         try {
             Thread.sleep(Launcher.stepSleepTime);
-            notify(l -> l.nodeOut(String.valueOf(u)));
+            notify(l -> l.nodeOut(u));
             if (from.get(u) != -1L) {
                 notify(l -> l.edgeBack(u, from.get(u)));
             }

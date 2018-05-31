@@ -42,7 +42,7 @@ public class Dijkstra<T> implements GraphWalker {
         while (!nodePriorityQueue.isEmpty()) {
             long currentNode = nodePriorityQueue.poll();
             color.put(currentNode, Color.BLACK);
-            notify(l -> l.nodeIn(String.valueOf(currentNode)));
+            notify(l -> l.nodeIn(currentNode));
             if (from.get(currentNode) != -1L) {
                 notify(l -> l.edgeBack(currentNode, from.get(currentNode)));
             }
@@ -70,7 +70,7 @@ public class Dijkstra<T> implements GraphWalker {
             nodePriorityQueue.addAll(neighbours);
             neighbours.clear();
 
-            notify(l -> l.nodeOut(String.valueOf(currentNode)));
+            notify(l -> l.nodeOut(currentNode));
 
             try {
                 Thread.sleep(Launcher.stepSleepTime);
