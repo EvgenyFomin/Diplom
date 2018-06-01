@@ -1,5 +1,7 @@
 package ru.itmo.sortvis;
 
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
 import org.apache.commons.lang3.tuple.Pair;
 import org.graphstream.graph.Graph;
 import org.graphstream.graph.implementations.MultiGraph;
@@ -19,11 +21,37 @@ public class GsGraphAdapter implements GraphModel<Node>, GraphWalkerListener {
     private UpdateStatistics updateStatistics;
     private boolean isOrientedGraph;
 
-    public GsGraphAdapter(GraphModel<Node> delegateGraph) {
-        this.delegateGraph = delegateGraph;
+    private Statistics statistics;
+
+    public static class Statistics {
+        private long nodeIn = 0;
+        private long nodeOut = 0;
+        private long edgeForward = 0;
+        private long edgeBackward = 0;
+
+        @Override
+        public String toString() {
+            return new ToStringBuilder(this, ToStringStyle.NO_CLASS_NAME_STYLE)
+                    .append("nodeIn", nodeIn)
+                    .append("nodeOut", nodeOut)
+                    .append("edgeForward", edgeForward)
+                    .append("edgeBackward", edgeBackward)
+                    .toString();
+        }
     }
 
+    public GsGraphAdapter(GraphModel<Node> delegateGraph) {
+        this.delegateGraph = delegateGraph;
+        this.statistics = new Statistics();
+    }
+
+    // Ниже я определяю цвета ребер и вершин.
+    // Крашу их в какой-то цвет, когда иду вперед/назад по ребру, вхожу в вершину или выхожу из нее
+    // Используются css файлы из папки resources
+    // Пока вызываю эти методы из класса GraphWalker
+
     public void edgeForward(long i, long j) {
+        statistics.edgeForward++;
         if (gsGraph.getEdge(getGsEdgeId(i, j)) != null)
             gsGraph.getEdge(getGsEdgeId(i, j)).addAttribute("ui.class", "forward");
         else gsGraph.getEdge(getGsEdgeId(j, i)).addAttribute("ui.class", "forward");
@@ -31,6 +59,7 @@ public class GsGraphAdapter implements GraphModel<Node>, GraphWalkerListener {
     }
 
     public void edgeBack(long i, long j) {
+        statistics.edgeBackward++;
         if (gsGraph.getEdge(getGsEdgeId(i, j)) != null)
             gsGraph.getEdge(getGsEdgeId(i, j)).addAttribute("ui.class", "back");
         else gsGraph.getEdge(getGsEdgeId(j, i)).addAttribute("ui.class", "back");
@@ -38,21 +67,29 @@ public class GsGraphAdapter implements GraphModel<Node>, GraphWalkerListener {
     }
 
     public void nodeIn(long node) {
+        statistics.nodeIn++;
         gsGraph.getNode(Long.toString(node)).addAttribute("ui.class", "in");
         updateStat();
     }
 
     public void nodeOut(long node) {
+        statistics.nodeOut++;
         gsGraph.getNode(Long.toString(node)).addAttribute("ui.class", "out");
         updateStat();
     }
 
+    public void clearStatistics() {
+        statistics = new Statistics();
+    }
     @Override
     public void paintNode(long node, Color color) {
         gsGraph.getNode(Long.toString(node)).addAttribute("ui.style",
                 "fill-color: rgb(" + color.getRed() + ", " + color.getGreen() + ", " + color.getBlue() + "); ");
     }
 
+    public Statistics getStatistics() {
+        return statistics;
+    }
     @Override
     public void paintEdge(long node1, long node2, Color color) {
         if (gsGraph.getEdge(getGsEdgeId(node1, node2)) != null)
@@ -75,22 +112,22 @@ public class GsGraphAdapter implements GraphModel<Node>, GraphWalkerListener {
         gsGraph.addAttribute("ui.stylesheet", "url('file:///" + cssFileFullPath + "')");
 
         try {
-            for (long id : delegateGraph.getAllIds()) {
-                String nodeId = Long.toString(id);
-                double x = delegateGraph.getData(id).getLon() * 1000000;
-                double y = delegateGraph.getData(id).getLat() * 1000000;
-                gsGraph.addNode(nodeId).addAttribute("ui.label", "Node " + id);
+        for (long id : delegateGraph.getAllIds()) {
+            String nodeId = Long.toString(id);
+            double x = delegateGraph.getData(id).getLon() * 1000000;
+            double y = delegateGraph.getData(id).getLat() * 1000000;
+            gsGraph.addNode(nodeId).addAttribute("ui.label", "Node " + id);
 //            System.out.println(delegateGraph.getData(id).getLat() + " " + delegateGraph.getData(id).getLon());
 //            System.out.printf("Adding node %s: (%d, %d)%n", nodeId, x, y);
-                gsGraph.getNode(nodeId).setAttribute("xyz", x, y, 0);
-                gsGraph.getNode(nodeId).setAttribute("xyz", x, y, 0);
-            }
+            gsGraph.getNode(nodeId).setAttribute("xyz", x, y, 0);
+            gsGraph.getNode(nodeId).setAttribute("xyz", x, y, 0);
+        }
 
-            for (Pair<Long, Long> edge : delegateGraph.getEdges()) {
-                if (gsGraph.getEdge(edge.getRight() + "-" + edge.getLeft()) != null) {
+        for (Pair<Long, Long> edge : delegateGraph.getEdges()) {
+            if (gsGraph.getEdge(edge.getRight() + "-" + edge.getLeft()) != null) {
 //                System.out.println("Inverted edge exists, not adding: " + edge.getLeft() + "-" + edge.getRight());
-                    continue;
-                }
+                continue;
+            }
 //            System.out.println("Adding edge " + edge.getLeft() + "-" + edge.getRight());
                 gsGraph.addEdge(edge.getLeft() + "-" + edge.getRight(), Long.toString(edge.getLeft()), Long.toString(edge.getRight()), false);
             }

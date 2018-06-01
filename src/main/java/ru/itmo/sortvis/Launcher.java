@@ -84,6 +84,7 @@ public class Launcher {
                             UpdateStatistics updateStatistics0 = new UpdateStatistics(depthFirstSearch);
                             gsGraphAdapters[0].setStat(updateStatistics0);
                             depthFirstSearch.algorithm();
+                            System.out.println(gsGraphAdapters[0].getStatistics());
                         }
                     });
 //
