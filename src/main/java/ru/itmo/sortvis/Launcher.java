@@ -1,17 +1,20 @@
 package ru.itmo.sortvis;
 
 import ru.itmo.sortvis.XMLMapParser.JAXBReader;
-import ru.itmo.sortvis.XMLMapParser.XMLParser;
+import ru.itmo.sortvis.algo.DepthFirstSearch;
 import ru.itmo.sortvis.ui.DisplayGraph;
 
 import javax.swing.*;
-import javax.xml.bind.JAXBException;
-import java.io.File;
-import java.io.IOException;
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
+import java.util.List;
+import java.util.Set;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 public class Launcher {
+    public static final String ALGO_PACKAGE = "ru.itmo.sortvis";
+
     private static final GraphParserService graphParserService = new GraphParserService();
 
     private static final ExecutorService pool = Executors.newFixedThreadPool(10);
@@ -20,11 +23,9 @@ public class Launcher {
     public static boolean displayStatistics;
     public static boolean enableDebugOutput;
 
-    public static void launch(int stepSleepTime, boolean displayStatistics) {
+    public static void launch(List<Class<? extends GraphWalker>> algorithms, int stepSleepTime, boolean displayStatistics, String startNode, String endNode) {
         Launcher.stepSleepTime = stepSleepTime;
         Launcher.displayStatistics = displayStatistics;
-
-        Notifier notifier = new Notifier();
 
         System.setProperty("org.graphstream.ui.renderer", "org.graphstream.ui.j2dviewer.J2DGraphRenderer");
 
@@ -35,7 +36,7 @@ public class Launcher {
                 try {
                     JAXBReader reader = new JAXBReader();
                     GraphModel graphModel = null;
-                    int N = 4;
+                    int N = algorithms.size();
                     GraphModel[] graphModels = new GraphModel[N];
                     try {
                         // Плохой код
@@ -43,10 +44,9 @@ public class Launcher {
 //                        graphModels[1] = graphParserService.parse("src/main/resources/Graph.txt");
 //                        graphModels[2] = graphParserService.parse("src/main/resources/Graph.txt");
 //                        graphModels[3] = graphParserService.parse("src/main/resources/Graph.txt");
-                        graphModels[0] = reader.parse("src/main/resources/o-kotlin-north.osm");
-                        graphModels[1] = reader.parse("src/main/resources/o-kotlin-north.osm");
-                        graphModels[2] = reader.parse("src/main/resources/o-kotlin-north.osm");
-                        graphModels[3] = reader.parse("src/main/resources/o-kotlin-north.osm");
+                        for (int i = 0; i < graphModels.length; i++) {
+                            graphModels[i] = reader.parse("src/main/resources/o-kotlin-north.osm");
+                        }
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
@@ -74,42 +74,36 @@ public class Launcher {
                         }
                     });
 
+                    for (int i = 0; i < algorithms.size(); i++) {
+                        Class<? extends GraphWalker> algorithm = algorithms.get(i);
+                        runAlgorithm(algorithm, gsGraphAdapters[i], startNode, endNode);
+                    }
 
-//                // обход в глубину
-                    runTaskInBG(new Runnable() {
-                        @Override
-                        public void run() {
-                            DepthFirstSearch depthFirstSearch = new DepthFirstSearch(gsGraphAdapters[0], 892238166);
-                            depthFirstSearch.addListener(gsGraphAdapters[0]);
-                            UpdateStatistics updateStatistics0 = new UpdateStatistics(depthFirstSearch);
-                            gsGraphAdapters[0].setStat(updateStatistics0);
-                            depthFirstSearch.algorithm();
-                            System.out.println(gsGraphAdapters[0].getStatistics());
-                        }
-                    });
-//
-//                    runTaskInBG(new Runnable() {
-//                        @Override
-//                        public void run() {
-//                            BreadthFirstSearch breadthFirstSearch = new BreadthFirstSearch(gsGraphAdapters[1], 892238166, 1N55269899);
-//                            breadthFirstSearch.addListener(gsGraphAdapter);
-//                            UpdateStatistics updateStatistics = new UpdateStatistics(breadthFirstSearch);
-//                            gsGraphAdapter.setStat(updateStatistics);
-//                            breadthFirstSearch.algorithm();
-//
-//                        }
-//                    });
-//                    runTaskInBG(new Runnable() {
-//                        @Override
-//                        public void run() {
-//                            Dijkstra dijkstra = new Dijkstra(gsGraphAdapters[2], 892238166);
-//                            dijkstra.addListener(gsGraphAdapters[2]);
-//                            UpdateStatistics updateStatistics = new UpdateStatistics(dijkstra);
-//                            gsGraphAdapters[2].setStat(updateStatistics);
-//                            dijkstra.algorithm();
-//                        }
-//                    });
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+    }
 
+    private static void runAlgorithm(Class<? extends GraphWalker> clazz, GsGraphAdapter gsGraphAdapter, String startNode, String endNode) {
+        runTaskInBG(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    GraphWalker graphWalker;
+                    Constructor<? extends GraphWalker> constructor = (Constructor<? extends GraphWalker>) clazz.getConstructors()[0];
+                    if (endNode.isEmpty()) {
+                        graphWalker = constructor.newInstance(gsGraphAdapter, Long.valueOf(startNode));
+                    } else {
+                        graphWalker = constructor.newInstance(gsGraphAdapter, Long.valueOf(startNode), Long.valueOf(endNode));
+                    }
+
+                    graphWalker.addListener(gsGraphAdapter);
+                    UpdateStatistics updateStatistics0 = new UpdateStatistics(graphWalker);
+                    gsGraphAdapter.setStat(updateStatistics0);
+                    graphWalker.algorithm();
+                    System.out.println(gsGraphAdapter.getStatistics());
                 } catch (Exception e) {
                     e.printStackTrace();
                 }

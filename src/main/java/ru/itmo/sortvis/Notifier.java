@@ -5,11 +5,7 @@ import java.util.List;
 import java.util.function.Consumer;
 
 public class Notifier {
-    private final List<GraphWalkerListener> listeners;
-
-    public Notifier() {
-        listeners = new ArrayList<>();
-    }
+    private final List<GraphWalkerListener> listeners = new ArrayList<>();
 
     public void addListener(GraphWalkerListener l) {
         listeners.add(l);

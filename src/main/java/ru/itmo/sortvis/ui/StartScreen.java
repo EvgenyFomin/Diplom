@@ -1,11 +1,17 @@
 package ru.itmo.sortvis.ui;
 
+import org.reflections.Reflections;
+import ru.itmo.sortvis.GraphWalker;
 import ru.itmo.sortvis.Launcher;
+import ru.itmo.sortvis.Notifier;
 
 import javax.swing.*;
-import javax.xml.bind.JAXBException;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
+import java.util.List;
+
+import static ru.itmo.sortvis.Launcher.ALGO_PACKAGE;
 
 public class StartScreen {
     private JPanel rootPanel;
@@ -15,6 +21,10 @@ public class StartScreen {
     private JLabel stepSleepTimeLabel;
     private JLabel displayStatisticsLabel;
     private JCheckBox printDebugInfo;
+    private JList algorithmList;
+    private JTextField startNodeField;
+    private JTextField endNodeField;
+
 
     public StartScreen() {
         launchButton.addActionListener(new ActionListener() {
@@ -24,7 +34,8 @@ public class StartScreen {
                 boolean displayStatistics = displayStatisticsCheckbox.isSelected();
                 Launcher.enableDebugOutput = printDebugInfo.isSelected();
 
-                Launcher.launch(stepSleepTime, displayStatistics);
+                List selectedValuesList = algorithmList.getSelectedValuesList();
+                Launcher.launch(selectedValuesList, stepSleepTime, displayStatistics, startNodeField.getText(), endNodeField.getText());
             }
         });
     }
@@ -35,5 +46,14 @@ public class StartScreen {
         frame.setDefaultCloseOperation(WindowConstants.HIDE_ON_CLOSE);
         frame.pack();
         frame.setVisible(true);
+    }
+
+    private void createUIComponents() {
+        Reflections reflections = new Reflections(ALGO_PACKAGE);
+        ArrayList list = new ArrayList(reflections.getSubTypesOf(Notifier.class));
+        list.remove(GraphWalker.class);
+
+        this.algorithmList = new JList(list.toArray());
+        this.algorithmList.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
     }
 }

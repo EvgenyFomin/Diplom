@@ -2,8 +2,8 @@ package ru.itmo.sortvis;
 
 import java.util.HashMap;
 
-public interface GraphWalker {
-    public void algorithm();
+public abstract class GraphWalker extends Notifier {
+    public abstract void algorithm();
 
-    public HashMap<String, Object> statistics();
+    public abstract HashMap<String, Object> statistics();
 }

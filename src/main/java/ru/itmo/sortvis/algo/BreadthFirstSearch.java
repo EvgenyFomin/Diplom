@@ -1,11 +1,17 @@
-package ru.itmo.sortvis;
+package ru.itmo.sortvis.algo;
+
+import ru.itmo.sortvis.GraphModel;
+import ru.itmo.sortvis.GraphWalker;
+import ru.itmo.sortvis.GraphWalkerListener;
+import ru.itmo.sortvis.Launcher;
 
 import java.awt.*;
 import java.util.*;
 import java.util.List;
+import java.util.Queue;
 import java.util.function.Consumer;
 
-public class BreadthFirstSearch<T> implements GraphWalker {
+public class BreadthFirstSearch<T> extends GraphWalker {
     private GraphModel<T> graphModel;
     private HashMap<Long, Color> color = new HashMap<>();
     private HashMap<Long, Long> from = new HashMap<>();
@@ -13,11 +19,8 @@ public class BreadthFirstSearch<T> implements GraphWalker {
     private HashMap<Long, Integer> distance = new HashMap<>();
     private LinkedList<Long> way = new LinkedList<>();
 
-    private final List<GraphWalkerListener> listeners;
-
-    BreadthFirstSearch(GraphModel<T> graphModel, long startNode, long endNode) {
+    public BreadthFirstSearch(GraphModel<T> graphModel, long startNode, long endNode) {
         this.graphModel = graphModel;
-        this.listeners = new ArrayList<>();
         this.startNode = startNode;
         this.endNode = endNode;
     }
@@ -103,13 +106,5 @@ public class BreadthFirstSearch<T> implements GraphWalker {
     @Override
     public HashMap<String, Object> statistics() {
         return null;
-    }
-
-    public void addListener(GraphWalkerListener l) {
-        listeners.add(l);
-    }
-
-    private void notify(Consumer<GraphWalkerListener> consumer) {
-        listeners.forEach(consumer::accept);
     }
 }

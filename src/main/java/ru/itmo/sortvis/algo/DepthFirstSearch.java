@@ -1,18 +1,23 @@
-package ru.itmo.sortvis;
+package ru.itmo.sortvis.algo;
+
+import ru.itmo.sortvis.GraphModel;
+import ru.itmo.sortvis.GraphWalker;
+import ru.itmo.sortvis.Launcher;
+import ru.itmo.sortvis.Notifier;
 
 import java.awt.*;
 import java.util.*;
 import java.util.List;
 import java.util.function.Consumer;
 
-public class DepthFirstSearch<T> extends Notifier implements GraphWalker {
+public class DepthFirstSearch<T> extends GraphWalker {
     private GraphModel<T> graphModel;
     private HashMap<Long, Color> color = new HashMap<>();
     private HashMap<Long, Long> from = new HashMap<>();
-    private Set<Long> nodes = new HashSet<>(); // можно ли его не создавать
+    private Set<Long> nodes; // можно ли его не создавать
     private long startNode;
 
-    DepthFirstSearch(GraphModel<T> graphModel, long startNode) {
+    public DepthFirstSearch(GraphModel<T> graphModel, long startNode) {
         this.graphModel = graphModel;
         nodes = graphModel.getAllIds();
         this.startNode = startNode;
