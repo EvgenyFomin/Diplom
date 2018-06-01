@@ -24,6 +24,8 @@ public class Launcher {
         Launcher.stepSleepTime = stepSleepTime;
         Launcher.displayStatistics = displayStatistics;
 
+        Notifier notifier = new Notifier();
+
         System.setProperty("org.graphstream.ui.renderer", "org.graphstream.ui.j2dviewer.J2DGraphRenderer");
 
 
@@ -33,7 +35,6 @@ public class Launcher {
                 try {
                     JAXBReader reader = new JAXBReader();
                     GraphModel graphModel = null;
-                    GraphParserService graphParserService = new GraphParserService();
                     int N = 4;
                     GraphModel[] graphModels = new GraphModel[N];
                     try {

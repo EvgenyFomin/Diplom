@@ -15,13 +15,13 @@ public class JAXBReader {
     int countOfNodes;
     int countOfEdges;
     boolean isOrientedGraph = false;
-    private ArrayList<Bounds> bounds;
     private HashMap<Long, Set<Long>> adjList;
     private HashMap<Pair<Long, Long>, Integer> weight;
     Map<Long, Node> idToNode = new HashMap<>();
 
-    private List<Node> nodeList;
-    private List<Way> wayList;
+    private ArrayList<Node> nodeList;
+    private ArrayList<Way> wayList;
+    private ArrayList<Bounds> bounds;
     private double minlat, minlon, maxlat, maxlon;
     private boolean filterOut = true;
 

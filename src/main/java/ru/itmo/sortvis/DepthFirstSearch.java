@@ -5,19 +5,16 @@ import java.util.*;
 import java.util.List;
 import java.util.function.Consumer;
 
-public class DepthFirstSearch<T> implements GraphWalker {
+public class DepthFirstSearch<T> extends Notifier implements GraphWalker {
     private GraphModel<T> graphModel;
     private HashMap<Long, Color> color = new HashMap<>();
     private HashMap<Long, Long> from = new HashMap<>();
     private Set<Long> nodes = new HashSet<>(); // можно ли его не создавать
     private long startNode;
 
-    private final List<GraphWalkerListener> listeners;
-
     DepthFirstSearch(GraphModel<T> graphModel, long startNode) {
         this.graphModel = graphModel;
         nodes = graphModel.getAllIds();
-        this.listeners = new ArrayList<>();
         this.startNode = startNode;
     }
 
@@ -89,13 +86,4 @@ public class DepthFirstSearch<T> implements GraphWalker {
         stat.put("Size of Color", color.size());
         return stat;
     }
-
-    public void addListener(GraphWalkerListener l) {
-        listeners.add(l);
-    }
-
-    private void notify(Consumer<GraphWalkerListener> consumer) {
-        listeners.forEach(consumer::accept);
-    }
-
 }
