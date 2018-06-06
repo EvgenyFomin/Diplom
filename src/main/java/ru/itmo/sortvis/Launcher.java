@@ -68,7 +68,7 @@ public class Launcher {
                         @Override
                         public void run() {
                             for (int i = 0; i < N; i++) {
-                                DisplayGraph displayGraph = new DisplayGraph(gsGraphAdapters[i].getGsGraph());
+                                DisplayGraph displayGraph = new DisplayGraph(gsGraphAdapters[i]);
                                 displayGraph.display(i, N);
                             }
                         }

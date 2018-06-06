@@ -4,15 +4,16 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 import org.apache.commons.lang3.tuple.Pair;
 import org.graphstream.graph.Graph;
-import org.graphstream.graph.implementations.MultiGraph;
 import org.graphstream.graph.implementations.SingleGraph;
 import ru.itmo.sortvis.XMLMapParser.Node;
 
 import java.awt.*;
 import java.io.File;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 public class GsGraphAdapter implements GraphModel<Node>, GraphWalkerListener {
     private Graph gsGraph;
@@ -23,15 +24,21 @@ public class GsGraphAdapter implements GraphModel<Node>, GraphWalkerListener {
 
     private Statistics statistics;
 
+    private final List<StatisticsListener> statisticsListeners = new CopyOnWriteArrayList<>();
+
+    public void addStatisticsListener(StatisticsListener listener) {
+        statisticsListeners.add(listener);
+    }
+
     public static class Statistics {
-        private long nodeIn = 0;
-        private long nodeOut = 0;
-        private long edgeForward = 0;
-        private long edgeBackward = 0;
+        public long nodeIn = 0;
+        public long nodeOut = 0;
+        public long edgeForward = 0;
+        public long edgeBackward = 0;
 
         @Override
         public String toString() {
-            return new ToStringBuilder(this, ToStringStyle.NO_CLASS_NAME_STYLE)
+            return new ToStringBuilder(this, ToStringStyle.MULTI_LINE_STYLE)
                     .append("nodeIn", nodeIn)
                     .append("nodeOut", nodeOut)
                     .append("edgeForward", edgeForward)
@@ -81,6 +88,7 @@ public class GsGraphAdapter implements GraphModel<Node>, GraphWalkerListener {
     public void clearStatistics() {
         statistics = new Statistics();
     }
+
     @Override
     public void paintNode(long node, Color color) {
         gsGraph.getNode(Long.toString(node)).addAttribute("ui.style",
@@ -90,6 +98,7 @@ public class GsGraphAdapter implements GraphModel<Node>, GraphWalkerListener {
     public Statistics getStatistics() {
         return statistics;
     }
+
     @Override
     public void paintEdge(long node1, long node2, Color color) {
         if (gsGraph.getEdge(getGsEdgeId(node1, node2)) != null)
@@ -112,22 +121,22 @@ public class GsGraphAdapter implements GraphModel<Node>, GraphWalkerListener {
         gsGraph.addAttribute("ui.stylesheet", "url('file:///" + cssFileFullPath + "')");
 
         try {
-        for (long id : delegateGraph.getAllIds()) {
-            String nodeId = Long.toString(id);
-            double x = delegateGraph.getData(id).getLon() * 1000000;
-            double y = delegateGraph.getData(id).getLat() * 1000000;
-            gsGraph.addNode(nodeId).addAttribute("ui.label", "Node " + id);
+            for (long id : delegateGraph.getAllIds()) {
+                String nodeId = Long.toString(id);
+                double x = delegateGraph.getData(id).getLon() * 1000000;
+                double y = delegateGraph.getData(id).getLat() * 1000000;
+                gsGraph.addNode(nodeId).addAttribute("ui.label", "Node " + id);
 //            System.out.println(delegateGraph.getData(id).getLat() + " " + delegateGraph.getData(id).getLon());
 //            System.out.printf("Adding node %s: (%d, %d)%n", nodeId, x, y);
-            gsGraph.getNode(nodeId).setAttribute("xyz", x, y, 0);
-            gsGraph.getNode(nodeId).setAttribute("xyz", x, y, 0);
-        }
-
-        for (Pair<Long, Long> edge : delegateGraph.getEdges()) {
-            if (gsGraph.getEdge(edge.getRight() + "-" + edge.getLeft()) != null) {
-//                System.out.println("Inverted edge exists, not adding: " + edge.getLeft() + "-" + edge.getRight());
-                continue;
+                gsGraph.getNode(nodeId).setAttribute("xyz", x, y, 0);
+                gsGraph.getNode(nodeId).setAttribute("xyz", x, y, 0);
             }
+
+            for (Pair<Long, Long> edge : delegateGraph.getEdges()) {
+                if (gsGraph.getEdge(edge.getRight() + "-" + edge.getLeft()) != null) {
+//                System.out.println("Inverted edge exists, not adding: " + edge.getLeft() + "-" + edge.getRight());
+                    continue;
+                }
 //            System.out.println("Adding edge " + edge.getLeft() + "-" + edge.getRight());
                 gsGraph.addEdge(edge.getLeft() + "-" + edge.getRight(), Long.toString(edge.getLeft()), Long.toString(edge.getRight()), false);
             }
@@ -199,11 +208,15 @@ public class GsGraphAdapter implements GraphModel<Node>, GraphWalkerListener {
 
     private void updateStat() {
         stat = updateStatistics.getStat();
-        if (Launcher.enableDebugOutput)
+        if (Launcher.enableDebugOutput) {
             if (stat != null) {
                 for (Map.Entry<String, Object> obj : stat.entrySet()) {
                     System.out.println("                Statistics: " + obj.getKey() + " = " + obj.getValue());
                 }
             }
+        }
+        for (StatisticsListener statisticsListener : statisticsListeners) {
+            statisticsListener.statsUpdated(new StatisticsListener.AllStats(updateStatistics, statistics));
+        }
     }
 }
