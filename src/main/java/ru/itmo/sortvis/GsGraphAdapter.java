@@ -5,7 +5,10 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 import org.apache.commons.lang3.tuple.Pair;
 import org.graphstream.graph.Graph;
 import org.graphstream.graph.implementations.SingleGraph;
+import org.graphstream.ui.spriteManager.Sprite;
+import org.graphstream.ui.spriteManager.SpriteManager;
 import ru.itmo.sortvis.XMLMapParser.Node;
+import static org.graphstream.algorithm.Toolkit.*;
 
 import java.awt.*;
 import java.io.File;
@@ -21,6 +24,15 @@ public class GsGraphAdapter implements GraphModel<Node>, GraphWalkerListener {
     private HashMap<String, Object> stat;
     private UpdateStatistics updateStatistics;
     private boolean isOrientedGraph;
+    private String startNode, endNode;
+
+    public void setStartNode(String startNode) {
+        this.startNode = startNode;
+    }
+
+    public void setEndNode(String endNode) {
+        this.endNode = endNode;
+    }
 
     private Statistics statistics;
 
@@ -93,6 +105,7 @@ public class GsGraphAdapter implements GraphModel<Node>, GraphWalkerListener {
     public void paintNode(long node, Color color) {
         gsGraph.getNode(Long.toString(node)).addAttribute("ui.style",
                 "fill-color: rgb(" + color.getRed() + ", " + color.getGreen() + ", " + color.getBlue() + "); ");
+        updateStat();
     }
 
     public Statistics getStatistics() {
@@ -106,6 +119,7 @@ public class GsGraphAdapter implements GraphModel<Node>, GraphWalkerListener {
                     "fill-color: rgb(" + color.getRed() + ", " + color.getGreen() + ", " + color.getBlue() + "); ");
         else gsGraph.getEdge(getGsEdgeId(node2, node1)).addAttribute("ui.style",
                 "fill-color: rgb(" + color.getRed() + ", " + color.getGreen() + ", " + color.getBlue() + "); ");
+        updateStat();
     }
 
     @Override
@@ -155,6 +169,20 @@ public class GsGraphAdapter implements GraphModel<Node>, GraphWalkerListener {
                             gsGraph.getEdge(edge.getRight() + "-" + edge.getLeft()) == null)
                         gsGraph.addEdge(edge.getLeft() + "-" + edge.getRight(), Long.toString(edge.getLeft()), Long.toString(edge.getRight()));
                 }
+            }
+        }
+
+        if (Launcher.enableMarker) {
+            SpriteManager spriteManager = new SpriteManager(gsGraph);
+            Sprite spriteStart = spriteManager.addSprite(startNode);
+            Sprite spriteEnd = spriteManager.addSprite(endNode);
+//            double nodePos[] = nodePosition(gsGraph.getNode(Long.toString(892238166)));
+//            spriteStart.setPosition(nodePos[0], nodePos[1], 0);
+            spriteStart.attachToNode(startNode);
+            if (endNode != null && !endNode.equals("")) {
+//                nodePos = nodePosition(gsGraph.getNode(endNode));
+//                spriteEnd.setPosition(nodePos[0]/1000000, nodePos[1]/1000000, 0);
+                spriteEnd.attachToNode(endNode);
             }
         }
     }

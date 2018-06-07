@@ -24,6 +24,7 @@ public class StartScreen {
     private JList algorithmList;
     private JTextField startNodeField;
     private JTextField endNodeField;
+    private JCheckBox Marker;
 
 
     public StartScreen() {
@@ -32,10 +33,12 @@ public class StartScreen {
             public void actionPerformed(ActionEvent e) {
                 int stepSleepTime = Integer.valueOf(stepSleepTimeField.getText());
                 boolean displayStatistics = displayStatisticsCheckbox.isSelected();
-                Launcher.enableDebugOutput = printDebugInfo.isSelected();
+                boolean enableDebugOutput = printDebugInfo.isSelected();
+                boolean enableMarker = Marker.isSelected();
 
                 List selectedValuesList = algorithmList.getSelectedValuesList();
-                Launcher.launch(selectedValuesList, stepSleepTime, displayStatistics, startNodeField.getText(), endNodeField.getText());
+                Launcher.launch(selectedValuesList, stepSleepTime, displayStatistics, enableDebugOutput, enableMarker,
+                        startNodeField.getText(), endNodeField.getText());
             }
         });
     }

@@ -22,10 +22,14 @@ public class Launcher {
     public static int stepSleepTime;
     public static boolean displayStatistics;
     public static boolean enableDebugOutput;
+    public static boolean enableMarker;
 
-    public static void launch(List<Class<? extends GraphWalker>> algorithms, int stepSleepTime, boolean displayStatistics, String startNode, String endNode) {
+    public static void launch(List<Class<? extends GraphWalker>> algorithms, int stepSleepTime, boolean displayStatistics,
+                              boolean enableDebugOutput, boolean enableMarker, String startNode, String endNode) {
         Launcher.stepSleepTime = stepSleepTime;
         Launcher.displayStatistics = displayStatistics;
+        Launcher.enableDebugOutput = enableDebugOutput;
+        Launcher.enableMarker = enableMarker;
 
         System.setProperty("org.graphstream.ui.renderer", "org.graphstream.ui.j2dviewer.J2DGraphRenderer");
 
@@ -61,6 +65,8 @@ public class Launcher {
                     GsGraphAdapter[] gsGraphAdapters = new GsGraphAdapter[N];
                     for (int i = 0; i < N; i++) {
                         gsGraphAdapters[i] = new GsGraphAdapter(graphModels[i]);
+                        gsGraphAdapters[i].setStartNode(startNode);
+                        gsGraphAdapters[i].setEndNode(endNode);
                         gsGraphAdapters[i].initGraph();
                     }
 

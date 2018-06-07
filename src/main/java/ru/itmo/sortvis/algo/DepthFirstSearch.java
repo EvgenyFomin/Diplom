@@ -3,12 +3,9 @@ package ru.itmo.sortvis.algo;
 import ru.itmo.sortvis.GraphModel;
 import ru.itmo.sortvis.GraphWalker;
 import ru.itmo.sortvis.Launcher;
-import ru.itmo.sortvis.Notifier;
 
 import java.awt.*;
 import java.util.*;
-import java.util.List;
-import java.util.function.Consumer;
 
 public class DepthFirstSearch<T> extends GraphWalker {
     private GraphModel<T> graphModel;
@@ -89,6 +86,7 @@ public class DepthFirstSearch<T> extends GraphWalker {
     public HashMap<String, Object> statistics() {
         HashMap<String, Object> stat = new HashMap<>();
         stat.put("Size of Color", color.size());
+        stat.put("Size of from", from.size());
         return stat;
     }
 }
