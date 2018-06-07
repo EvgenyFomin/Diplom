@@ -175,14 +175,14 @@ public class GsGraphAdapter implements GraphModel<Node>, GraphWalkerListener {
         if (Launcher.enableMarker) {
             SpriteManager spriteManager = new SpriteManager(gsGraph);
             Sprite spriteStart = spriteManager.addSprite(startNode);
-            Sprite spriteEnd = spriteManager.addSprite(endNode);
-//            double nodePos[] = nodePosition(gsGraph.getNode(Long.toString(892238166)));
-//            spriteStart.setPosition(nodePos[0], nodePos[1], 0);
-            spriteStart.attachToNode(startNode);
+            double nodePos[] = nodePosition(gsGraph.getNode(startNode));
+            spriteStart.setPosition(nodePos[0], nodePos[1], 0);
+//            spriteStart.attachToNode(startNode); 892238166
             if (endNode != null && !endNode.equals("")) {
-//                nodePos = nodePosition(gsGraph.getNode(endNode));
-//                spriteEnd.setPosition(nodePos[0]/1000000, nodePos[1]/1000000, 0);
-                spriteEnd.attachToNode(endNode);
+                Sprite spriteEnd = spriteManager.addSprite(endNode);
+                nodePos = nodePosition(gsGraph.getNode(endNode));
+                spriteEnd.setPosition(nodePos[0], nodePos[1], 0);
+//                spriteEnd.attachToNode(endNode);
             }
         }
     }
