@@ -51,7 +51,7 @@ node.out {
 
 sprite {
 	shape: box;
-	size: 32px, 52px;
+	size: 32px, 104px;
 	fill-mode: image-scaled;
-	fill-image: url('Sprites/mapPinSmall.png');
+	fill-image: url('Sprites/marker.png');
 }

@@ -177,7 +177,7 @@ public class GsGraphAdapter implements GraphModel<Node>, GraphWalkerListener {
             Sprite spriteStart = spriteManager.addSprite(startNode);
             double nodePos[] = nodePosition(gsGraph.getNode(startNode));
             spriteStart.setPosition(nodePos[0], nodePos[1], 0);
-//            spriteStart.attachToNode(startNode); 892238166
+//            spriteStart.attachToNode(startNode); 892238166 4349032284
             if (endNode != null && !endNode.equals("")) {
                 Sprite spriteEnd = spriteManager.addSprite(endNode);
                 nodePos = nodePosition(gsGraph.getNode(endNode));
