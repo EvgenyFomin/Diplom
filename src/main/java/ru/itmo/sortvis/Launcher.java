@@ -23,21 +23,22 @@ public class Launcher {
     public static boolean displayStatistics;
     public static boolean enableDebugOutput;
     public static boolean enableMarker;
+    public static boolean enableNodesLabel;
     private static String graphPath;
 
 
 
     public static void launch(String graphPath, List<Class<? extends GraphWalker>> algorithms, int stepSleepTime, boolean displayStatistics,
-                              boolean enableDebugOutput, boolean enableMarker, String startNode, String endNode) {
+                              boolean enableDebugOutput, boolean enableMarker, boolean enableNodesLabel, String startNode, String endNode) {
         Launcher.stepSleepTime = stepSleepTime;
         Launcher.displayStatistics = displayStatistics;
         Launcher.enableDebugOutput = enableDebugOutput;
         Launcher.enableMarker = enableMarker;
+        Launcher.enableNodesLabel = enableNodesLabel;
 
         Launcher.graphPath = graphPath;
 
         System.setProperty("org.graphstream.ui.renderer", "org.graphstream.ui.j2dviewer.J2DGraphRenderer");
-
 
         runTaskInBG(new Runnable() {
             @Override

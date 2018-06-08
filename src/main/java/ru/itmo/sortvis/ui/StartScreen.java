@@ -28,6 +28,7 @@ public class StartScreen extends Component {
     private JCheckBox Marker;
     private JButton openButton;
     private JTextField graphPath;
+    private JCheckBox nodesLabel;
     private JFileChooser fileChooser;
     private String path;
 
@@ -53,13 +54,15 @@ public class StartScreen extends Component {
                 boolean displayStatistics = displayStatisticsCheckbox.isSelected();
                 boolean enableDebugOutput = printDebugInfo.isSelected();
                 boolean enableMarker = Marker.isSelected();
+                boolean enableNodesLabel = nodesLabel.isSelected();
+
                 if (path == null) {
                     JOptionPane.showConfirmDialog(StartScreen.this, "Select a graph file",
                             "Error", JOptionPane.CLOSED_OPTION, JOptionPane.INFORMATION_MESSAGE);
                 } else {
                     List selectedValuesList = algorithmList.getSelectedValuesList();
-                    Launcher.launch(path, selectedValuesList, stepSleepTime, displayStatistics, enableDebugOutput, enableMarker,
-                            startNodeField.getText(), endNodeField.getText());
+                    Launcher.launch(path, selectedValuesList, stepSleepTime, displayStatistics, enableDebugOutput,
+                            enableMarker, enableNodesLabel, startNodeField.getText(), endNodeField.getText());
                 }
             }
         });

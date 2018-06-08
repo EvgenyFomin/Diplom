@@ -1,52 +1,31 @@
 node { 
 	size: 3px;
-	/*fill-mode: gradient-radial;*/
     fill-color: black;
-    /*text-background-mode: plain;*/
-	text-mode: hidden;
+	text-mode: normal;
+    text-alignment: at-left;
 	z-index: 0;
 }
 
 edge {
     shape: line;
-    /*arrow-shape: arrow;*/
-    /*arrow-size: 3px, 2px;*/
-    /*text-background-mode: plain;*/
-    /*text-alignment: along;*/
-    /*text-color: red;*/
 }
 
 edge.forward {
     shape: line;
 	fill-color: yellow;
-	/*arrow-size: 5px, 2px;*/
 }
 
 edge.back {
     shape: line;
 	fill-color: red;
-	/*arrow-size: 5px, 2px;*/
 }
 
 node.in {
     fill-color: yellow;
-	/*size: 15px, 15px;
-	fill-mode: plain;
-    text-background-mode: plain;
-    text-alignment: under;
-	stroke-mode: plain;
-	stroke-color: blue;*/
 }
 
 node.out {
     fill-color: red;
-	/*size: 15px, 15px;
-	fill-mode: plain;
-	fill-color: red;
-    text-background-mode: plain;
-    text-alignment: under;
-	stroke-mode: plain;
-	stroke-color: blue;*/
 }
 
 sprite {

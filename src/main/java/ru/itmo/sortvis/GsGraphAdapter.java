@@ -8,7 +8,6 @@ import org.graphstream.graph.implementations.SingleGraph;
 import org.graphstream.ui.spriteManager.Sprite;
 import org.graphstream.ui.spriteManager.SpriteManager;
 import ru.itmo.sortvis.XMLMapParser.Node;
-import static org.graphstream.algorithm.Toolkit.*;
 
 import java.awt.*;
 import java.io.File;
@@ -141,11 +140,9 @@ public class GsGraphAdapter implements GraphModel<Node>, GraphWalkerListener {
                 String nodeId = Long.toString(id);
                 double x = delegateGraph.getData(id).getLon() * 1000000;
                 double y = delegateGraph.getData(id).getLat() * 1000000;
-                gsGraph.addNode(nodeId).addAttribute("ui.label", "Node " + id);
 //            System.out.println(delegateGraph.getData(id).getLat() + " " + delegateGraph.getData(id).getLon());
 //            System.out.printf("Adding node %s: (%d, %d)%n", nodeId, x, y);
-                gsGraph.getNode(nodeId).setAttribute("xyz", x, y, 0);
-                gsGraph.getNode(nodeId).setAttribute("xyz", x, y, 0);
+                gsGraph.addNode(nodeId).setAttribute("xyz", x, y, 0);
             }
 
             for (Pair<Long, Long> edge : delegateGraph.getEdges()) {
@@ -181,6 +178,12 @@ public class GsGraphAdapter implements GraphModel<Node>, GraphWalkerListener {
             if (endNode != null && !endNode.equals("")) {
                 Sprite spriteEnd = spriteManager.addSprite(endNode);
                 spriteEnd.attachToNode(endNode);
+            }
+        }
+
+        if (Launcher.enableNodesLabel) {
+            for (long id : delegateGraph.getAllIds()) {
+                gsGraph.getNode(Long.toString(id)).addAttribute("ui.label", "Node " + id);
             }
         }
     }
