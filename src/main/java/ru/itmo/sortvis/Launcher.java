@@ -13,6 +13,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 public class Launcher {
+
     public static final String ALGO_PACKAGE = "ru.itmo.sortvis";
 
     private static final GraphParserService graphParserService = new GraphParserService();
@@ -23,13 +24,18 @@ public class Launcher {
     public static boolean displayStatistics;
     public static boolean enableDebugOutput;
     public static boolean enableMarker;
+    private static String graphPath;
 
-    public static void launch(List<Class<? extends GraphWalker>> algorithms, int stepSleepTime, boolean displayStatistics,
+
+
+    public static void launch(String graphPath, List<Class<? extends GraphWalker>> algorithms, int stepSleepTime, boolean displayStatistics,
                               boolean enableDebugOutput, boolean enableMarker, String startNode, String endNode) {
         Launcher.stepSleepTime = stepSleepTime;
         Launcher.displayStatistics = displayStatistics;
         Launcher.enableDebugOutput = enableDebugOutput;
         Launcher.enableMarker = enableMarker;
+
+        Launcher.graphPath = graphPath;
 
         System.setProperty("org.graphstream.ui.renderer", "org.graphstream.ui.j2dviewer.J2DGraphRenderer");
 
@@ -49,7 +55,7 @@ public class Launcher {
 //                        graphModels[2] = graphParserService.parse("src/main/resources/Graph.txt");
 //                        graphModels[3] = graphParserService.parse("src/main/resources/Graph.txt");
                         for (int i = 0; i < graphModels.length; i++) {
-                            graphModels[i] = reader.parse("src/main/resources/o-kotlin-north.osm");
+                            graphModels[i] = reader.parse(graphPath);
                         }
                     } catch (Exception e) {
                         e.printStackTrace();

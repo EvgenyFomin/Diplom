@@ -6,6 +6,7 @@ import ru.itmo.sortvis.Launcher;
 import ru.itmo.sortvis.Notifier;
 
 import javax.swing.*;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
@@ -13,7 +14,7 @@ import java.util.List;
 
 import static ru.itmo.sortvis.Launcher.ALGO_PACKAGE;
 
-public class StartScreen {
+public class StartScreen extends Component {
     private JPanel rootPanel;
     private JTextField stepSleepTimeField;
     private JButton launchButton;
@@ -25,9 +26,26 @@ public class StartScreen {
     private JTextField startNodeField;
     private JTextField endNodeField;
     private JCheckBox Marker;
-
+    private JButton openButton;
+    private JTextField graphPath;
+    private JFileChooser fileChooser;
+    private String path;
 
     public StartScreen() {
+        fileChooser = new JFileChooser();
+        openButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                fileChooser.setDialogTitle("Select a directory");
+                fileChooser.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
+                int result = fileChooser.showOpenDialog(StartScreen.this);
+                if (result == JFileChooser.APPROVE_OPTION) {
+                    path = fileChooser.getSelectedFile().getAbsolutePath();
+                    graphPath.setText(path);
+                }
+            }
+        });
+
         launchButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -35,10 +53,14 @@ public class StartScreen {
                 boolean displayStatistics = displayStatisticsCheckbox.isSelected();
                 boolean enableDebugOutput = printDebugInfo.isSelected();
                 boolean enableMarker = Marker.isSelected();
-
-                List selectedValuesList = algorithmList.getSelectedValuesList();
-                Launcher.launch(selectedValuesList, stepSleepTime, displayStatistics, enableDebugOutput, enableMarker,
-                        startNodeField.getText(), endNodeField.getText());
+                if (path == null) {
+                    JOptionPane.showConfirmDialog(StartScreen.this, "Select a directory",
+                            "Error", JOptionPane.CLOSED_OPTION, JOptionPane.INFORMATION_MESSAGE);
+                } else {
+                    List selectedValuesList = algorithmList.getSelectedValuesList();
+                    Launcher.launch(path, selectedValuesList, stepSleepTime, displayStatistics, enableDebugOutput, enableMarker,
+                            startNodeField.getText(), endNodeField.getText());
+                }
             }
         });
     }
