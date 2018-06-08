@@ -5,8 +5,6 @@ import ru.itmo.sortvis.ui.DisplayGraph;
 
 import javax.swing.*;
 import java.lang.reflect.Constructor;
-import java.nio.file.FileSystems;
-import java.nio.file.Paths;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -20,13 +18,11 @@ public class Launcher {
     private static final ExecutorService pool = Executors.newFixedThreadPool(10);
 
     public static int stepSleepTime;
-    public static boolean displayStatistics;
+    static boolean displayStatistics;
     public static boolean enableDebugOutput;
-    public static boolean enableMarker;
-    public static boolean enableNodesLabel;
-    private static String graphPath;
-
-
+    static boolean enableMarker;
+    static boolean enableNodesLabel;
+    public static boolean isTxtGraph = false;
 
     public static void launch(String graphPath, List<Class<? extends GraphWalker>> algorithms, int stepSleepTime, boolean displayStatistics,
                               boolean enableDebugOutput, boolean enableMarker, boolean enableNodesLabel, String startNode, String endNode) {
@@ -36,8 +32,6 @@ public class Launcher {
         Launcher.enableMarker = enableMarker;
         Launcher.enableNodesLabel = enableNodesLabel;
 
-        Launcher.graphPath = graphPath;
-
         System.setProperty("org.graphstream.ui.renderer", "org.graphstream.ui.j2dviewer.J2DGraphRenderer");
 
         runTaskInBG(new Runnable() {
@@ -45,16 +39,14 @@ public class Launcher {
             public void run() {
                 try {
                     JAXBReader reader = new JAXBReader();
-                    GraphParserService parserService = new GraphParserService();
-                    GraphModel graphModel = null;
                     int N = algorithms.size();
                     GraphModel[] graphModels = new GraphModel[N];
                     System.out.println(getFileExtension(graphPath));
                     try {
                         if (getFileExtension(graphPath).equals(".txt")) {
-                            // Плохой код
                             for (int i = 0; i < graphModels.length; i++) {
-                                graphModels[i] = parserService.parse(graphPath);
+                                graphModels[i] = graphParserService.parse(graphPath);
+                                isTxtGraph = true;
                             }
                         } else if (getFileExtension(graphPath).equals(".osm") || getFileExtension(graphPath).equals(".xml")) {
                             for (int i = 0; i < graphModels.length; i++) {
@@ -85,13 +77,16 @@ public class Launcher {
                         public void run() {
                             for (int i = 0; i < N; i++) {
                                 DisplayGraph displayGraph = new DisplayGraph(gsGraphAdapters[i]);
-                                displayGraph.display(i, N);
+                                String algName = getFileExtension(algorithms.get(i).toString());
+                                algName = algName.substring(1);
+                                displayGraph.display(i, N, algName);
                             }
                         }
                     });
 
                     for (int i = 0; i < algorithms.size(); i++) {
                         Class<? extends GraphWalker> algorithm = algorithms.get(i);
+                        System.out.println(getFileExtension(algorithm.toString()));
                         runAlgorithm(algorithm, gsGraphAdapters[i], startNode, endNode);
                     }
 
@@ -136,7 +131,7 @@ public class Launcher {
     }
 
     private static String getFileExtension(String mystr) {
-        int index = mystr.indexOf('.');
+        int index = mystr.lastIndexOf('.');
         return index == -1 ? null : mystr.substring(index);
     }
 }

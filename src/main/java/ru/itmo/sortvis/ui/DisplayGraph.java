@@ -1,9 +1,9 @@
 package ru.itmo.sortvis.ui;
 
-import org.graphstream.graph.Graph;
 import org.graphstream.ui.view.View;
 import org.graphstream.ui.view.Viewer;
 import ru.itmo.sortvis.GsGraphAdapter;
+import ru.itmo.sortvis.Launcher;
 import ru.itmo.sortvis.StatisticsListener;
 
 import javax.swing.*;
@@ -16,15 +16,15 @@ public class DisplayGraph {
         this.graph = graph;
     }
 
-    public void display(int i, int N) {
+    public void display(int i, int N, String algName) {
         int height = (int) Toolkit.getDefaultToolkit().getScreenSize().getHeight();
         int width = (int) Toolkit.getDefaultToolkit().getScreenSize().getWidth();
 
-        JFrame jFrame = new JFrame(i + "");
+        JFrame jFrame = new JFrame(algName);
         jFrame.setSize(width / 2, height / 2);
         Viewer viewer = new Viewer(graph.getGsGraph(), Viewer.ThreadingModel.GRAPH_IN_ANOTHER_THREAD);
         View view = viewer.addDefaultView(false);   // false indicates "no JFrame".
-        if (graph.getCountOfNodes() <= 50)
+        if (Launcher.isTxtGraph)
             viewer.enableAutoLayout();
         JPanel statPanel = new JPanel();
         JLabel statLabel = new JLabel();
