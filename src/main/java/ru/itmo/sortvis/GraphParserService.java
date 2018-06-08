@@ -9,16 +9,17 @@ import java.util.*;
 public class GraphParserService {
     private HashMap<Long, Set<Long>> adjList;
     private HashMap<Pair<Long, Long>, Integer> weight;
+    private Map<Long, Long> map;
     private int countOfNodes;
     private int countOfEdges;
     private boolean isOrientedGraph;
 
     public GraphModel parse(String path) throws IOException {
         File file = new File(path);
-
-        Map<String, Integer> data = new HashMap<>();
         adjList = new HashMap<>();
         weight = new HashMap<>();
+        map = new HashMap<>();
+
         try (BufferedReader bufferedGraphReader = Files.newBufferedReader(file.toPath())) {
             String tmp = bufferedGraphReader.readLine().trim();
             isOrientedGraph = Boolean.parseBoolean(tmp);
@@ -29,7 +30,8 @@ public class GraphParserService {
             tmp = bufferedGraphReader.readLine();
             StringTokenizer nodes = new StringTokenizer(tmp);
             for (int i = 0; i < countOfNodes; i++) {
-                data.put(nodes.nextToken(), i);
+                String nextToken = nodes.nextToken();
+                map.put(Long.valueOf(nextToken), Long.valueOf(nextToken));
             }
 
             if (isOrientedGraph) {
@@ -89,7 +91,9 @@ public class GraphParserService {
                 }
             }
 
-            return new AdjListGraph(/*countOfNodes, countOfEdges, */isOrientedGraph, null, adjList, weight);
+
+
+            return new AdjListGraph<Long>(isOrientedGraph, map, adjList, weight);
         }
     }
 }

@@ -24,6 +24,8 @@ public class DisplayGraph {
         jFrame.setSize(width / 2, height / 2);
         Viewer viewer = new Viewer(graph.getGsGraph(), Viewer.ThreadingModel.GRAPH_IN_ANOTHER_THREAD);
         View view = viewer.addDefaultView(false);   // false indicates "no JFrame".
+        if (graph.getCountOfNodes() <= 50)
+            viewer.enableAutoLayout();
         JPanel statPanel = new JPanel();
         JLabel statLabel = new JLabel();
         statPanel.add(statLabel);

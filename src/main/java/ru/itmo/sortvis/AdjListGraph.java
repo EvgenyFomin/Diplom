@@ -64,7 +64,7 @@ public class AdjListGraph<T> implements GraphModel<T> {
 
     @Override
     public Set<Long> getAllIds() {
-        return adjList.keySet();
+        return nodes.keySet();
     }
 
     @Override

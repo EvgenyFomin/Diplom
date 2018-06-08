@@ -1,14 +1,13 @@
 package ru.itmo.sortvis;
 
 import ru.itmo.sortvis.XMLMapParser.JAXBReader;
-import ru.itmo.sortvis.algo.DepthFirstSearch;
 import ru.itmo.sortvis.ui.DisplayGraph;
 
 import javax.swing.*;
 import java.lang.reflect.Constructor;
-import java.lang.reflect.InvocationTargetException;
+import java.nio.file.FileSystems;
+import java.nio.file.Paths;
 import java.util.List;
-import java.util.Set;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -45,17 +44,21 @@ public class Launcher {
             public void run() {
                 try {
                     JAXBReader reader = new JAXBReader();
+                    GraphParserService parserService = new GraphParserService();
                     GraphModel graphModel = null;
                     int N = algorithms.size();
                     GraphModel[] graphModels = new GraphModel[N];
+                    System.out.println(getFileExtension(graphPath));
                     try {
-                        // Плохой код
-//                        graphModels[0] = graphParserService.parse("src/main/resources/Graph.txt");
-//                        graphModels[1] = graphParserService.parse("src/main/resources/Graph.txt");
-//                        graphModels[2] = graphParserService.parse("src/main/resources/Graph.txt");
-//                        graphModels[3] = graphParserService.parse("src/main/resources/Graph.txt");
-                        for (int i = 0; i < graphModels.length; i++) {
-                            graphModels[i] = reader.parse(graphPath);
+                        if (getFileExtension(graphPath).equals(".txt")) {
+                            // Плохой код
+                            for (int i = 0; i < graphModels.length; i++) {
+                                graphModels[i] = parserService.parse(graphPath);
+                            }
+                        } else if (getFileExtension(graphPath).equals(".osm") || getFileExtension(graphPath).equals(".xml")) {
+                            for (int i = 0; i < graphModels.length; i++) {
+                                graphModels[i] = reader.parse(graphPath);
+                            }
                         }
                     } catch (Exception e) {
                         e.printStackTrace();
@@ -129,5 +132,10 @@ public class Launcher {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    private static String getFileExtension(String mystr) {
+        int index = mystr.indexOf('.');
+        return index == -1 ? null : mystr.substring(index);
     }
 }

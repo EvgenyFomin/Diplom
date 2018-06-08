@@ -134,6 +134,8 @@ public class GsGraphAdapter implements GraphModel<Node>, GraphWalkerListener {
 
         gsGraph.addAttribute("ui.stylesheet", "url('file:///" + cssFileFullPath + "')");
 
+        isOrientedGraph = delegateGraph.isOrientedGraph();
+
         try {
             for (long id : delegateGraph.getAllIds()) {
                 String nodeId = Long.toString(id);
@@ -154,7 +156,7 @@ public class GsGraphAdapter implements GraphModel<Node>, GraphWalkerListener {
 //            System.out.println("Adding edge " + edge.getLeft() + "-" + edge.getRight());
                 gsGraph.addEdge(edge.getLeft() + "-" + edge.getRight(), Long.toString(edge.getLeft()), Long.toString(edge.getRight()), false);
             }
-        } catch (NullPointerException e) {
+        } catch (ClassCastException e) {
             for (long id : delegateGraph.getAllIds()) {
                 gsGraph.addNode(Long.toString(id));
             }
@@ -175,14 +177,10 @@ public class GsGraphAdapter implements GraphModel<Node>, GraphWalkerListener {
         if (Launcher.enableMarker) {
             SpriteManager spriteManager = new SpriteManager(gsGraph);
             Sprite spriteStart = spriteManager.addSprite(startNode);
-            double nodePos[] = nodePosition(gsGraph.getNode(startNode));
-            spriteStart.setPosition(nodePos[0], nodePos[1], 0);
-//            spriteStart.attachToNode(startNode); 892238166 4349032284
+            spriteStart.attachToNode(startNode);
             if (endNode != null && !endNode.equals("")) {
                 Sprite spriteEnd = spriteManager.addSprite(endNode);
-                nodePos = nodePosition(gsGraph.getNode(endNode));
-                spriteEnd.setPosition(nodePos[0], nodePos[1], 0);
-//                spriteEnd.attachToNode(endNode);
+                spriteEnd.attachToNode(endNode);
             }
         }
     }

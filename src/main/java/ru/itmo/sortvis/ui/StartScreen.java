@@ -36,7 +36,7 @@ public class StartScreen extends Component {
         openButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                fileChooser.setDialogTitle("Select a directory");
+                fileChooser.setDialogTitle("Select a file");
                 fileChooser.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
                 int result = fileChooser.showOpenDialog(StartScreen.this);
                 if (result == JFileChooser.APPROVE_OPTION) {
@@ -54,7 +54,7 @@ public class StartScreen extends Component {
                 boolean enableDebugOutput = printDebugInfo.isSelected();
                 boolean enableMarker = Marker.isSelected();
                 if (path == null) {
-                    JOptionPane.showConfirmDialog(StartScreen.this, "Select a directory",
+                    JOptionPane.showConfirmDialog(StartScreen.this, "Select a graph file",
                             "Error", JOptionPane.CLOSED_OPTION, JOptionPane.INFORMATION_MESSAGE);
                 } else {
                     List selectedValuesList = algorithmList.getSelectedValuesList();
